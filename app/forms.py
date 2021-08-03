@@ -1,7 +1,7 @@
 from django import forms
 from .models import Message
 
-class PostForm(forms.ModelForm):
+class DiscussionForm(forms.ModelForm):
     class Meta:
         model = Message
         exclude = ['date_created']
