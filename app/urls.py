@@ -7,6 +7,7 @@ from django.urls import path
 urlpatterns=[
   path("",views.index,name="index"),
   path("story/",views.create_story,name="story"),
+  path("technews/",views.add_tech_news,name="technews"),
 
 ]
 if settings.DEBUG:
