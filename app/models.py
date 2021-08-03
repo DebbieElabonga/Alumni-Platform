@@ -36,7 +36,7 @@ class GeneralAdmin(models.Model):
 #message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)
-  description = models,TextField()
+  description = models.TextField()
   date_created = models.DateTimeField()
 
   def __str__(self):
@@ -75,7 +75,7 @@ class Idea(models.Model):
   title = models.CharField(max_length=200)
   description = tiny_models.HTMLField()
   image1_path = models.ImageField(upload_to = 'Ideas/')
-  image2_path = models,ImageField(upload_to = 'Ideas/', blank = True, null = True)
+  image2_path = models.ImageField(upload_to = 'Ideas/', blank = True, null = True)
   date_created = models.DateTimeField()
   owner = models.ForeignKey(UserProfile, related_name='owner', on_delete=CASCADE)
   collaborators = models.ManyToManyField(UserProfile)
