@@ -1,9 +1,14 @@
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import url
+from . import views
 
 
 urlpatterns=[
   
+    url(r'discussion', views.Discussion, name='discussion'),
+    url(r'fundraiser', views.Fundraiser, name='fundraiser'),
+
 
 ]
 if settings.DEBUG:
