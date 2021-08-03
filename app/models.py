@@ -48,7 +48,7 @@ class Group(models.Model):
   description = models.TextField()
   date_created = models.DateTimeField()
   creator = models.ForeignKey(User, on_delete=CASCADE)
-  admin = models.ForeignKey(UserProfile, related_name = 'admin', on_delete= CASCADE)
+  admin = models.ForeignKey(UserProfile, related_name = 'admin', on_delete= CASCADE, null = True)
   members = models.ManyToManyField(UserProfile)
   is_private = models.BooleanField(default=False)
   discussion = models.ForeignKey(Message, on_delete=CASCADE)
