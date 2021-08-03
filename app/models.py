@@ -58,7 +58,7 @@ class Group(models.Model):
   description = models.TextField()
   date_created = models.DateTimeField(auto_now_add=True)
   creator = models.ForeignKey(User, on_delete=CASCADE)
-  admin = models.ForeignKey(UserProfile, related_name = 'admin', on_delete= CASCADE)
+  admin = models.ForeignKey(UserProfile, related_name = 'admin', on_delete= CASCADE, null = True)
   members = models.ManyToManyField(UserProfile)
   is_private = models.BooleanField(default=False)
   discussion = models.ForeignKey(Message, on_delete=CASCADE)
@@ -101,7 +101,7 @@ class Idea(models.Model):
   date_created = models.DateTimeField(auto_now_add=True)
   owner = models.ForeignKey(UserProfile, related_name='owner', on_delete=CASCADE)
   collaborators = models.ManyToManyField(UserProfile)
-  validity = models.DateTimeField()
+  validity = models.DateField()
   is_open = models.BooleanField(default=True)
 
   def __str__(self):
