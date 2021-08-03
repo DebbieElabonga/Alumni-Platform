@@ -46,7 +46,7 @@ class GeneralAdmin(models.Model):
 #message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)
-  description = models,TextField()
+  description = models.TextField()
   date_created = models.DateTimeField()
 
   def __str__(self):
@@ -107,7 +107,7 @@ class Idea(models.Model):
   def __str__(self):
     return self.title
 
-#Fundaraiser Model
+#Fundraiser Model
 class Fundraiser(models.Model):
   title = models.CharField(max_length=200)
   description = models.TextField()
