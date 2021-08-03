@@ -1,4 +1,4 @@
-from app.forms import SignupForm
+from app.forms import SignupForm, UserProfileForm
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
@@ -23,3 +23,14 @@ def signup(request):
     else:
         form = SignupForm()
     return render(request, 'registration/registration_form.html', {'form': form})
+
+@login_required(login_url='/accounts/login/')    
+def profile(request):
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        if  profile_form.is_valid():
+            profile_form.save()
+            return redirect('index')
+    else:
+        profile_form = UserProfileForm(instance=request.user)
+    return render(request, 'user_profile.html',{ "profile_form": profile_form})
