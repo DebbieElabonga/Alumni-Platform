@@ -1,1 +1,68 @@
-<h1>Moringa Alumni</h1>
+{%include 'base.html'%}
+{% block content %}
+
+<body style=" background-image: url('');
+    background-size: cover;
+    background-repeat:  no-repeat;
+    font-family: 'Comic Sans MS', cursive, sans-serif;">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    
+    <div class="container" id="background">
+        <div id="prog">
+            <h1
+                style="text-align:center; font-size:60px; font-family: 'Dancing Script', cursive; font-weight:bold; color: black;">
+                Moringa Alumni</h1>
+        </div>
+        <div id="opennote">
+            <h3 style="text-align:center; color: black;">Hello,</h3>
+            <p id="opennote"
+                style="text-align:center; font-family: 'Dancing Script', cursive; font-size: 50px; color: black;">
+                Welcome
+                to Moringa Alumni.</p>
+        </div>
+        <div class="container-fluid">
+            <div class="col-md-12 text-center">
+                <a href="{% url 'new-cohort' %}" class="btn btn-primary btn-md" style="text-align: center"> NEW COHORT
+                </a>
+            </div>
+            <!-- <section class="magazine-section">
+                {% for hood in all_hoods %}
+                <div class="col-lg-4">
+                    <div
+                        style="background-color: rgba(246, 249, 250, 0.123);box-sizing: border-box; margin-top:2%;box-shadow: 0vh 0vh 1vh gainsboro;">
+                        <div class="row" style="padding-top: 1%">
+                            <div class="col-md-12">
+                                <h4 style="font-weight:600; font-family: 'Dancing Script', cursive; font-size: 25px; color: white;">NAME: <a class="text-right"
+                                        style="text-decoration: none; font-family: 'Dancing Script', cursive; color: black;
+                                        ">{{hood.neighbourhood_name}}</a></h4>
+                            </div>
+                        </div>
+                        <div class="row" style="font-size:10pt;">
+                            <div class="col-md-6" style="padding-bottom: 2%;font-weight:600; font-family: 'Dancing Script', cursive; font-size: 20px; color: rgb(247, 42, 6);"> <img src="https://img.icons8.com/ios-glyphs/25/000000/map-pin.png"/>LOCATION:
+                                {{hood.neighbourhood_location}}
+                            </div>
+                        </div>
+                        <div class="">
+                            <a href=""><img src="{{hood.neighbourhood_photo.url}}" class="img-responsive"
+                                    alt="{{image.neighbourhood_name}}" style="width:100%;width:100%"></a>
+                        </div>
+                        <div style="padding-top:1%;padding-bottom:1%">
+                            {% if request.user.profile.neighbourhood == hood %}
+                            <a class="btn btn-success btn-small" href="{% url 'single-hood' hood.id %}">Explore
+                                Neighbourhood</a>
+                                <br>
+                            <a class="btn btn-danger" href="{% url 'leave-hood' hood.id %}">Leave Neighbourhood</a>
+                            {% elif not request.user.profile.neighbourhood %}
+                            <a class="btn btn-primary" href="{% url 'joinhood' hood.id %}">Join Neighbourhood</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </section> -->
+        </div>
+        {% endblock %}
+    </div>
+</body>
