@@ -7,6 +7,8 @@ from . import views
 urlpatterns=[
   
     url(r'discussion', views.Discussion, name='discussion'),
+    url(r'fundraiser', views.Fundraiser, name='fundraiser'),
+
 
 ]
 if settings.DEBUG:
