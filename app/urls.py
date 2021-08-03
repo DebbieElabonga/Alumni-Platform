@@ -5,7 +5,8 @@ from app import views
 
 
 urlpatterns=[
-  url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues')
+  url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
+  url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea')
 
 ]
 if settings.DEBUG:
