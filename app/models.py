@@ -79,7 +79,7 @@ class Idea(models.Model):
   date_created = models.DateTimeField()
   owner = models.ForeignKey(UserProfile, related_name='owner', on_delete=CASCADE)
   collaborators = models.ManyToManyField(UserProfile)
-  validity = models.DateTimeField()
+  validity = models.DateField()
   is_open = models.BooleanField(default=True)
 
   def __str__(self):
