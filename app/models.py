@@ -1,13 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import CharField, TextField
+from django.db.models.fields import TextField
 from django.db.models.fields.files import ImageField
 from tinymce import models as tiny_models
 
 # Create your models here.
 # Using django base user
 #-------------------------------------------------------------------------------------------
+#username
+#first_name
+#last_name
+#email
+#password1
+#password2
+
+#-----------------------------------------------------------------------
 #User profile model
 class UserProfile(models.Model):
   user = models.ForeignKey(User, on_delete=CASCADE)
@@ -17,6 +25,7 @@ class UserProfile(models.Model):
   def __str__(self):
       return self.user.username
 
+#General Admin Model
 class GeneralAdmin(models.Model):
   profile = models.ForeignKey(UserProfile, on_delete = CASCADE)
   is_general_admin = models.BooleanField(default=True)
@@ -24,6 +33,7 @@ class GeneralAdmin(models.Model):
   def __str__(self):
       return self.profile.user.username
 
+#message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)
   description = models,TextField()
@@ -32,7 +42,7 @@ class Message(models.Model):
   def __str__(self):
       return self.title
 
-
+#Group/Cohort Model
 class Group(models.Model):
   name = models.CharField(max_length=100)
   description = models.TextField()
@@ -42,21 +52,25 @@ class Group(models.Model):
   members = models.ManyToManyField(UserProfile)
   is_private = models.BooleanField(default=False)
   discussion = models.ForeignKey(Message, on_delete=CASCADE)
+  class Meta:
+    ordering = ['date_created']
 
   def __str__(self):
     return self.name
 
+#Story/News Model
 class Stories(models.Model):
   title = models.CharField(max_length=100)
   description = tiny_models.HTMLField()
   image_path = models.ImageField(upload_to = 'Stories/')
   date_created = models.DateTimeField()
   creator = models.ForeignKey(UserProfile, on_delete=CASCADE)
-  link = models.CharField(max_length=250)
+  link = models.CharField(max_length=250, null=True, blank=True)
 
   def __str__(self):
     return self.title
 
+#Idea for finding collaborators, ie developers, Co-founders, mentors
 class Idea(models.Model):
   title = models.CharField(max_length=200)
   description = tiny_models.HTMLField()
@@ -71,6 +85,7 @@ class Idea(models.Model):
   def __str__(self):
     return self.title
 
+#Fundaraiser Model
 class Fundraiser(models.Model):
   title = models.CharField(max_length=200)
   description = models.TextField()
@@ -82,6 +97,7 @@ class Fundraiser(models.Model):
   def __str__(self):
     return self.title
 
+# Donor Model- No relation to Already existing users.
 class Donor(models.Model):
   name = models.CharField(max_length=200)
   occupation = models.CharField(max_length=50 )
