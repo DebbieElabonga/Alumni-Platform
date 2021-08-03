@@ -1,9 +1,12 @@
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
+from django.urls import path
 
 
 urlpatterns=[
-  
+  path("",views.index,name="index"),
+  path("story/",views.create_story,name="story"),
 
 ]
 if settings.DEBUG:
