@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'template.html' %}
 {% load static %}
 {% block content %}
@@ -194,3 +195,70 @@
 	</script>
 	
 {% endblock content %}
+=======
+{%include 'base.html'%}
+{% block content %}
+
+<body style=" background-image: url('');
+    background-size: cover;
+    background-repeat:  no-repeat;
+    font-family: 'Comic Sans MS', cursive, sans-serif;">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    
+    <div class="container" id="background">
+        <div id="prog">
+            <h1
+                style="text-align:center; font-size:60px; font-family: 'Dancing Script', cursive; font-weight:bold; color: black;">
+                Moringa Alumni</h1>
+        </div>
+        <div id="opennote">
+            <h3 style="text-align:center; color: black;">Hello,</h3>
+            <p id="opennote"
+                style="text-align:center; font-family: 'Dancing Script', cursive; font-size: 50px; color: black;">
+                Welcome
+                to Moringa Alumni.</p>
+        </div>
+        <div class="container-fluid">
+            <div class="col-md-12 text-center">
+                <a href="{% url 'new-cohort' %}" class="btn btn-primary btn-md" style="text-align: center"> NEW COHORT
+                </a>
+            </div>
+            <section class="magazine-section">
+                {% for group in groups %}
+                <div class="col-lg-4">
+                    <div>
+                        
+                        <div class="row" style="padding-top: 1%">
+                            <div class="col-md-12">
+                                <h4 style="font-weight:600; font-family: 'Dancing Script', cursive; font-size: 25px; color: black;">NAME: <a class="text-right"
+                                        style="text-decoration: none; font-family: 'Dancing Script', cursive; color: black;
+                                        ">{{group.name}}</a></h4>
+                            </div>
+                        </div>
+                        <div class="row" style="font-size:10pt;">
+                            <div class="col-md-6" style="padding-bottom: 2%;font-weight:600; font-family: 'Dancing Script', cursive; font-size: 20px; color: rgba(101, 168, 80, 0.692);">Date Created:
+                                {{group.date_created}}
+                                Founder: {{group.creator}}
+                            </div>
+                        </div>
+                        <div style="padding-top:1%;padding-bottom:1%">
+                            {% if request.user.group == groups %}
+                            <a class="btn btn-success btn-small" href="">Explore Cohort</a>
+                                <br>
+                            <a class="btn btn-danger" href="{% url 'leave-cohort' group.id %}">Leave Cohort</a>
+                            {% elif not request.user.group %}
+                            <a class="btn btn-primary" href="{% url 'joincohort' group.id %}">Join Cohort</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </section>
+        </div>
+        {% endblock %}
+    </div>
+</body>
+{{stories}}
+>>>>>>> 00930735c0adb7558627555b5912e4716105f134
