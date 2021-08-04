@@ -4,11 +4,13 @@ from django.conf.urls import url
 from app import views
 from . import views
 from django.urls import path
-from django.conf.urls import url
 from . import views
 
 
 urlpatterns=[
+  url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
+  url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
+ 
   path("",views.index,name="index"),
   path("story/",views.create_story,name="story"),
   url(r'discussion', views.Discussion, name='discussion'),
