@@ -40,8 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
     'tinymce',
+<<<<<<< HEAD
+    'bootstrap3',
+=======
     'bootstrap3'
+>>>>>>> dev
 ]
 
 MIDDLEWARE = [
@@ -82,9 +87,10 @@ WSGI_APPLICATION = 'alumni.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER':config('DB_USER'),
-        'PASSWORD':config('DB_PASSWORD')
+        'NAME': 'alumni',
+        'USER':'postgres',
+        'PASSWORD':'chebichii1',
+        'HOST': 'localhost', 
     }
 }
 

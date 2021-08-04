@@ -61,7 +61,7 @@ class Group(models.Model):
   admin = models.ForeignKey(UserProfile, related_name = 'admin', on_delete= CASCADE, null = True)
   members = models.ManyToManyField(UserProfile)
   is_private = models.BooleanField(default=False)
-  discussion = models.ForeignKey(Message, on_delete=CASCADE)
+  discussion = models.ForeignKey(Message, on_delete=CASCADE, null=True)
   class Meta:
     ordering = ['date_created']
 
