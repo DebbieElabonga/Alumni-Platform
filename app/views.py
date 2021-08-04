@@ -1,13 +1,17 @@
-from app.models import Group, UserProfile,TechNews, Stories
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm
-from django.shortcuts import render, get_object_or_404,redirect
-from django.contrib.auth import login, authenticate
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 import datetime as dt
+
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from .models import Stories,UserProfile,TechNews
+from django.shortcuts import get_object_or_404, redirect, render
+
+from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
+                       SignupForm, UserProfileForm)
+from app.models import Group, Idea, Stories, TechNews, UserProfile
+
+from .models import Stories, TechNews, UserProfile
+
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -161,8 +165,10 @@ def create_story(request):
     return render(request,"storyform.html",{"form":form})
 
 
-from django.shortcuts import render,redirect
+from django.shortcuts import redirect, render
+
 from .forms import DiscussionForm, FundraiserForm
+
 
 # Create your views here.
 def Discussion(request):
