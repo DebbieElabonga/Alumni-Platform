@@ -65,3 +65,15 @@ def single_idea(request, id):
   }
 
   return render(request, 'singleidea.html', context)
+
+#view function that renders to admin dashboard
+def admin_dashboard(request):
+  '''
+  Renders admin dashboard
+  '''
+  title = 'General Admin Dashboard'
+
+  context = {
+    'title':title
+  }
+  return render(request, 'admin_dash/admin_dashboard.html', context)
