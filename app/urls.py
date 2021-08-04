@@ -23,7 +23,7 @@ urlpatterns=[
   url(r'discussion', views.Discussion, name='discussion'),
   url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues')
-
+  path("news/",views.TechNews,name="technews"),
 ]
 if settings.DEBUG:
   urlpatterns+=static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

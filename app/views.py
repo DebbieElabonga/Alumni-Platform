@@ -79,7 +79,7 @@ from app.forms import IdeaCreationForm
 from django.shortcuts import redirect, render
 from django.contrib import messages
 import datetime as dt
-from .forms import CreateStoryForm
+from .forms import CreateStoryForm,TechNewsForm
 from django.http import HttpResponseRedirect
 from .models import Stories,UserProfile,TechNews
 
@@ -168,6 +168,19 @@ def create_story(request):
 
 from django.shortcuts import render,redirect
 from .forms import DiscussionForm, FundraiserForm
+
+def TechNews(request):
+    form = TechNewsForm()
+    if request.method == 'POST':
+        form = TechNewsForm(request.POST or None,request.FILES)
+        if form.is_valid():
+            news = form.save(commit=False)
+            news.creator = request.user
+            news.save()
+        return HttpResponseRedirect(request.path_info)
+    else:
+        form = TechNewsForm()
+    return render(request,'newsform.html',{"form":form})
 
 # Create your views here.
 def Discussion(request):
