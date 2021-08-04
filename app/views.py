@@ -62,15 +62,15 @@ def cohort(request):
 @login_required(login_url='/accounts/login/')
 def join_cohort(request, id):
     group = get_object_or_404(Group, id=id)
-    request.user.group = group
-    request.user.save()
+    request.owner.profile.group = group
+    request.owner.profile.save()
     return redirect('index')
 
 @login_required(login_url='/accounts/login/')
 def leave_cohort(request, id):
     group = get_object_or_404(Group, id=id)
-    request.user.group = None
-    request.user.save()
+    request.owner.profile.group = None
+    request.owner.profile.save()
     messages.success(
         request, 'Success! You have succesfully exited this Cohort ')
     return redirect('index')
