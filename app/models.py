@@ -5,6 +5,7 @@ from django.db.models.fields import TextField
 from django.db.models.fields.files import ImageField
 from tinymce import models as tiny_models
 
+
 # Create your models here.
 # Using django base user
 #-------------------------------------------------------------------------------------------
