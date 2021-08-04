@@ -54,7 +54,12 @@ def single_idea(request, id):
   Renders a found idea object
   '''
   idea = Idea.objects.get(id = id)
-
+  if request.method == 'POST':
+    skills = request.POST.get('skills')
+    new_join = request.user
+    idea.collaborators.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
+    #send email of a user joining a team
+    
   context = {
     'idea':idea
   }
