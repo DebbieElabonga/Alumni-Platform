@@ -2,6 +2,10 @@ from app.models import Group, UserProfile
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import Idea
+from .models import Stories,TechNews
+from django.db.models import fields
+from .models import Fundraiser, Message
 
 # The signup form
 class SignupForm(UserCreationForm):
@@ -20,11 +24,7 @@ class CohortForm(forms.ModelForm):
     class Meta:
         model = Group 
         fields = [ 'name','description','is_private','admin']
-from .models import Idea
-from django import forms
-from .models import Stories,TechNews
-from django.db.models import fields
-from .models import Fundraiser, Message
+
 
 class IdeaCreationForm(forms.ModelForm):
   class Meta:

@@ -3,8 +3,6 @@ from django.conf.urls.static import static
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from . import views
-from app import views
-from . import views
 from django.urls import path
 from . import views
 
