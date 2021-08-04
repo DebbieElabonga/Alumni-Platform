@@ -40,17 +40,17 @@
                             </div>
                         </div>
                         <div class="row" style="font-size:10pt;">
-                            <div class="col-md-6" style="padding-bottom: 2%;font-weight:600; font-family: 'Dancing Script', cursive; font-size: 20px; color: rgb(247, 42, 6);">Date Created:
+                            <div class="col-md-6" style="padding-bottom: 2%;font-weight:600; font-family: 'Dancing Script', cursive; font-size: 20px; color: rgba(101, 168, 80, 0.692);">Date Created:
                                 {{group.date_created}}
                                 Founder: {{group.creator}}
                             </div>
                         </div>
                         <div style="padding-top:1%;padding-bottom:1%">
-                            {% if request.user.profile.group == group %}
+                            {% if request.user.group == groups %}
                             <a class="btn btn-success btn-small" href="">Explore Cohort</a>
                                 <br>
                             <a class="btn btn-danger" href="{% url 'leave-cohort' group.id %}">Leave Cohort</a>
-                            {% elif not request.user.profile.group %}
+                            {% elif not request.user.group %}
                             <a class="btn btn-primary" href="{% url 'joincohort' group.id %}">Join Cohort</a>
                             {% endif %}
                         </div>
