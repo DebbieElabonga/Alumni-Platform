@@ -46,12 +46,12 @@
                             </div>
                         </div>
                         <div style="padding-top:1%;padding-bottom:1%">
-                            {% if request.user.profile.neighbourhood == hood %}
+                            {% if request.user.profile.group == group %}
                             <a class="btn btn-success btn-small" href="">Explore Cohort</a>
                                 <br>
-                            <a class="btn btn-danger" href="">Leave Cohort</a>
-                            {% elif not request.user.profile.neighbourhood %}
-                            <a class="btn btn-primary" href="">Join Cohort</a>
+                            <a class="btn btn-danger" href="{% url 'leave-cohort' group.id %}">Leave Cohort</a>
+                            {% elif not request.user.profile.group %}
+                            <a class="btn btn-primary" href="{% url 'joincohort' group.id %}">Join Cohort</a>
                             {% endif %}
                         </div>
                     </div>

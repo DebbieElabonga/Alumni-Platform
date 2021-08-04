@@ -1,6 +1,6 @@
-from app.models import Group
+from app.models import Group, UserProfile
 from app.forms import CohortForm, SignupForm, UserProfileForm
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
@@ -47,6 +47,9 @@ def cohort(request):
             group.creator = request.user
             group.date_created = dt.datetime.now()
             group.save()
+            group.members.add(UserProfile.objects.get(user=request.user))
+            group.members.add(request.POST.get('admin'))
+            group.save()
             messages.success(request, 'A new Cohort has been created')
             return redirect('index')
         else:
@@ -55,3 +58,19 @@ def cohort(request):
     else:
         form = CohortForm()
     return render(request, 'cohort.html', {'form': form})
+
+@login_required(login_url='/accounts/login/')
+def join_cohort(request, id):
+    group = get_object_or_404(Group, id=id)
+    request.owner.profile.group = group
+    request.owner.profile.save()
+    return redirect('index')
+
+@login_required(login_url='/accounts/login/')
+def leave_cohort(request, id):
+    group = get_object_or_404(Group, id=id)
+    request.owner.profile.group = None
+    request.owner.profile.save()
+    messages.success(
+        request, 'Success! You have succesfully exited this Cohort ')
+    return redirect('index')
