@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{%block content%}
+<style>
+    #profile {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        border-radius: 50%;
+    }
+</style>
+<style>
+    #background3 {
+        background-image: url('https://images.unsplash.com/photo-1495368427887-e88d33a44e0f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=735&q=80');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+       
+    }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+
+<div class="container" id="background3">
+    <div class="col-sm-6 m-auto ">
+        <div class=" content-section container" style="padding-top: 100px;">
+            <div class="media">
+                <div class="col-sm-4">
+                    <div id="profile" class="rounded-circle">
+                        <img style="width: 120%; height: 120%;" src="{{user.photo_path.url }}" alt="">
+                    </div>
+                </div>
+                <hr>
+                <div class="media-body">
+                    <h2 style=" color: white; font-size: 50px; font-family: 'Dancing Script', cursive;">{{user.username}}</h2>
+                    <p style=" color: white; font-size: 30px;font-family: 'Dancing Script', cursive;"> Location: {{neighbourhood.neighbourhood_location}}</p>
+                    {% if request.user.profile.neighbourhood %}
+                    <p style="color: white; font-size: 35px; font-weight: bold; font-family: 'Dancing Script', cursive;">My Hood <a class="btn btn-sm btn-success" href="">{{ user.profile.neighbourhood_name }}</a>
+                    </p>
+                    {% endif %}
+                    <p style=" color: white;">{{user.profile.bio}}</p>
+                    <hr>
+                    <a href="">
+                        <button class="btn btn-primary" style=" font-size: 15px; font-family: 'Dancing Script', cursive;">Edit Profile</button>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endblock content%}
