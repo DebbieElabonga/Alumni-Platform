@@ -47,3 +47,16 @@ def meet_collegues(request):
 
   }
   return render(request, 'meetcollegues.html', context)
+
+#view function that renders to single idea page
+def single_idea(request, id):
+  '''
+  Renders a found idea object
+  '''
+  idea = Idea.objects.get(id = id)
+
+  context = {
+    'idea':idea
+  }
+
+  return render(request, 'singleidea.html', context)

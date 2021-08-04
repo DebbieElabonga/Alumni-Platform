@@ -31,7 +31,7 @@
           <p>{{idea.date_created|timesince}} ago</p>
          <p>Status: {{idea.is_open}}</p>
           <p>Valid until: {{idea.validity}}</p>
-            <a href=""><button>Collaborate</button></a>
+            <a href="{% url 'single_idea' idea.id %}"><button>Collaborate</button></a>
         </div>
         </div>
         <div class="card-image col-md-6" style="background-image: url('{{idea.image1_path.url}}');
