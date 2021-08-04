@@ -19,4 +19,4 @@ class UserProfileForm(forms.ModelForm):
 class CohortForm(forms.ModelForm):
     class Meta:
         model = Group 
-        fields = [ 'name','description','date_created','creator','members','is_private','discussion']
+        fields = [ 'name','description','is_private','admin']

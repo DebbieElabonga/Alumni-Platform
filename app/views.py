@@ -1,15 +1,18 @@
+from app.models import Group
 from app.forms import CohortForm, SignupForm, UserProfileForm
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+import datetime as dt
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
 def index(request):
+    groups = Group.objects.all()
 
-    return render(request,'index.html')
+    return render(request,'index.html', {'groups':groups})
 
 def signup(request):
     if request.method == 'POST':
@@ -40,11 +43,15 @@ def cohort(request):
     if request.method == 'POST':
         form = CohortForm(request.POST, request.FILES)
         if form.is_valid():
-            cohort = form.save(commit=False)
-            cohort.user = request.user
-            cohort.save()
+            group = form.save(commit=False)
+            group.creator = request.user
+            group.date_created = dt.datetime.now()
+            group.save()
             messages.success(request, 'A new Cohort has been created')
             return redirect('index')
+        else:
+            messages.warning(request, 'Invalid form')
+            return render(request, 'cohort.html', {'form': form})
     else:
         form = CohortForm()
     return render(request, 'cohort.html', {'form': form})
