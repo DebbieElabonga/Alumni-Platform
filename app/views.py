@@ -210,3 +210,15 @@ def Fundraiser(request):
     else:
         form = FundraiserForm()
     return render(request, 'new_fundraiser.html', {"form": form})
+#views to summary on the admin dashboard
+def summary(request):
+  '''
+  renders summary on admin dashboard
+  '''
+  title = 'admin dashboard summary'
+
+  context = {
+    'title':title
+  }
+
+  return render(request, 'admin_dash/dashboard.html', context)
