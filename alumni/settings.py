@@ -84,8 +84,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'alumni',
-        'USER':'postgres',
-        'PASSWORD':'chebichii1',
+        'USER':'moringa',
+        'PASSWORD':'Robert11',
         'HOST': 'localhost', 
     }
 }
@@ -127,8 +127,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
@@ -144,3 +145,4 @@ if os.getcwd() == '/app':
     DEBUG=False
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
