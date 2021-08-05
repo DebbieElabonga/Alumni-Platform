@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
 :root{
+  --lighter_green: rgba(96, 108, 56, .4);
   --light_green: rgb(96, 108, 56);
   --dark_green: rgb(40, 54, 24);
   --lighter_orange: rgb(254, 250, 224);
@@ -128,4 +129,9 @@ button{
 }
 .projects{
   margin: 20px 0;
+}
+.card-header{
+  background-color: var(--light_green);
+  color: white;
+  border: 1px solid white;
 }
