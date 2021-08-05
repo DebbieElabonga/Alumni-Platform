@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'bootstrap4',
     'django_bootstrap5',
+    
 ]
 
 MIDDLEWARE = [
@@ -87,6 +88,8 @@ DATABASES = {
 
         'NAME': config('DB_NAME'),
         'USER':config('DB_USER'),
+        'PASSWORD':config('DB_PASSWORD'),
+        #'HOST': config('DB_HOST'),
         'PASSWORD':config('DB_PASSWORD')
     }
 }

@@ -4,17 +4,25 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from .models import Idea, Stories,UserProfile,TechNews,Group
-from .forms import SignupForm,UserProfileForm,CohortForm,TechNewsForm,IdeaCreationForm,DiscussionForm,FundraiserForm,CreateStoryForm
-from django.shortcuts import redirect,render
+from django.shortcuts import get_object_or_404, redirect, render
+
+from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
+                       SignupForm, TechNewsForm, UserProfileForm)
+from app.models import Group, Idea, Stories, TechNews, UserProfile
+
+from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
+                    FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
+                    UserProfileForm)
+from .models import Group, Idea, Stories, TechNews, UserProfile
 
 # Create your views here.
-@login_required(login_url='/accounts/login/')
+
 def index(request):
     groups = Group.objects.all()
-
-    return render(request,'index.html', {'groups':groups})
-
+    stories = Stories.objects.order_by("-id")
+    #tech = TechNews.objects.all()
+    return render(request,'index.html', {'groups':groups,'stories':stories})
+    
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -62,22 +70,6 @@ def cohort(request):
     else:
         form = CohortForm()
     return render(request, 'cohort.html', {'form': form})
-
-# @login_required(login_url='/accounts/login/')
-# def join_cohort(request, id):
-#     group = get_object_or_404(Group, id=id)
-#     request.user.group = group
-#     request.user.save()
-#     return redirect('index')
-
-# @login_required(login_url='/accounts/login/')
-# def leave_cohort(request, id):
-#     group = get_object_or_404(Group, id=id)
-#     request.user.group = None
-#     request.user.save()
-#     messages.success(
-#         request, 'Success! You have succesfully exited this Cohort ')
-#     return redirect('index')
 
 # Create your views here.
 
@@ -142,13 +134,7 @@ def single_idea(request, id):
   return render(request, 'meetcollegues.html', context)
 
 
-# Create your views here.
 
-def index(request):
-    stories = Stories.objects.order_by("-id")
-    # technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
-    
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -164,8 +150,10 @@ def create_story(request):
     return render(request,"storyform.html",{"form":form})
 
 
-from django.shortcuts import render,redirect
+from django.shortcuts import redirect, render
+
 from .forms import DiscussionForm, FundraiserForm, TechNewsForm
+
 
 def TechNews(request):
     form = TechNewsForm()
