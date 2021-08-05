@@ -21,7 +21,7 @@ urlpatterns=[
 
 # Admin oriented views------------------------------------------------------------------------------ 
   url(r'^admin_dashboard/$', views.summary, name = 'admin_dashboard'),
-  url(r'^new_cohort/$', views.cohort, name='new-cohort'),
+  url(r'^new_cohort/$', views.cohort, name='new_cohort'),
   url(r'^fundraiser/$', views.Fundraiser, name='fundraiser'),   
   url(r'^discussion/$', views.Discussion, name='discussion'),
 ]
