@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
-from .models import Stories,UserProfile,TechNews
+from .models import Idea, Stories,UserProfile,TechNews
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -61,21 +61,21 @@ def cohort(request):
         form = CohortForm()
     return render(request, 'cohort.html', {'form': form})
 
-@login_required(login_url='/accounts/login/')
-def join_cohort(request, id):
-    group = get_object_or_404(Group, id=id)
-    request.user.group = group
-    request.user.save()
-    return redirect('index')
+# @login_required(login_url='/accounts/login/')
+# def join_cohort(request, id):
+#     group = get_object_or_404(Group, id=id)
+#     request.user.group = group
+#     request.user.save()
+#     return redirect('index')
 
-@login_required(login_url='/accounts/login/')
-def leave_cohort(request, id):
-    group = get_object_or_404(Group, id=id)
-    request.user.group = None
-    request.user.save()
-    messages.success(
-        request, 'Success! You have succesfully exited this Cohort ')
-    return redirect('index')
+# @login_required(login_url='/accounts/login/')
+# def leave_cohort(request, id):
+#     group = get_object_or_404(Group, id=id)
+#     request.user.group = None
+#     request.user.save()
+#     messages.success(
+#         request, 'Success! You have succesfully exited this Cohort ')
+#     return redirect('index')
 
 
 # Create your views here.

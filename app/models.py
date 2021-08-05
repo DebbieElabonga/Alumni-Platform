@@ -97,7 +97,7 @@ class Idea(models.Model):
   title = models.CharField(max_length=200)
   description = tiny_models.HTMLField()
   image1_path = models.ImageField(upload_to = 'Ideas/')
-  image2_path = models,ImageField(upload_to = 'Ideas/', blank = True, null = True)
+  image2_path = models.ImageField(upload_to = 'Ideas/', blank = True, null = True)
   date_created = models.DateTimeField(auto_now_add=True)
   owner = models.ForeignKey(UserProfile, related_name='owner', on_delete=CASCADE)
   collaborators = models.ManyToManyField(UserProfile)
