@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5%}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+
 {% if idea %}
 <div class="card">
   <div class="card-body col-md-6">
@@ -28,3 +34,5 @@
   </div>
 </div>
 {% endif %}
+
+{%endblock%}

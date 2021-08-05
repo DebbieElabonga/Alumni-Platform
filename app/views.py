@@ -24,12 +24,12 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('login')
+            return redirect('index')
     else:
         form = SignupForm()
     return render(request, 'registration/registration_form.html', {'form': form})
 
-@login_required(login_url='/accounts/login/')    
+   
 def profile(request):
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
@@ -38,7 +38,10 @@ def profile(request):
             return redirect('index')
     else:
         profile_form = UserProfileForm(instance=request.user)
-    return render(request, 'user_profile.html',{ "profile_form": profile_form})
+        context = { 
+            "profile_form": profile_form
+            }
+    return render(request, 'user_profile.html',context)
 
 def cohort(request):
     if request.method == 'POST':
@@ -124,6 +127,11 @@ def single_idea(request, id):
 
 
 
+def index(request):
+    stories = Stories.objects.order_by("-id")
+    # technews = TechNews.objects.order_by("-id")
+    return render(request,"index.html",{"stories":stories})
+    
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -140,7 +148,7 @@ def create_story(request):
 
 
 from django.shortcuts import render,redirect
-from .forms import DiscussionForm, FundraiserForm
+from .forms import DiscussionForm, FundraiserForm, TechNewsForm
 
 def TechNews(request):
     form = TechNewsForm()
