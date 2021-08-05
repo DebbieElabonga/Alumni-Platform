@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
-
 {% load bootstrap4 %}
-
 
 {%block content%}
 
 <div class="container">
-    <h3 class="text-center" style="font-family: 'Kanit', sans-serif;; padding-top:40px;">CREATE A FUNDRAISER</h3>
+    <h3>CREATE A FUNDRAISER</h3>
     <div class="col-sm-12 col-lg-6 m-auto card" style="background-color: beige;">
         <form action="{%url 'fundraiser'%}" method="post" enctype="multipart/form-data">
             {%csrf_token%}
