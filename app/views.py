@@ -1,5 +1,5 @@
-from app.models import Group, UserProfile,TechNews, Stories
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm
+from app.models import Group, UserProfile, Stories,Idea,Tech
+from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
@@ -7,15 +7,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
-from .models import Idea, Stories,UserProfile,TechNews
-
 # Create your views here.
 @login_required(login_url='/accounts/login/')
 def index(request):
     groups = Group.objects.all()
-
-    return render(request,'index.html', {'groups':groups})
-
+    stories = Stories.objects.order_by("-id")
+    tech = Tech.objects.all()
+    return render(request,'index.html', {'groups':groups,"stories":stories,"tech":tech})
+    
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -143,13 +142,7 @@ def single_idea(request, id):
   return render(request, 'meetcollegues.html', context)
 
 
-# Create your views here.
 
-def index(request):
-    stories = Stories.objects.order_by("-id")
-    # technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
-    
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
