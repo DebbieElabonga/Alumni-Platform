@@ -8,7 +8,7 @@ from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
 # Create your views here.
-@login_required(login_url='/accounts/login/')
+
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
