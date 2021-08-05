@@ -13,8 +13,6 @@ urlpatterns=[
   url('logout/',auth_views.LogoutView.as_view(), name='logout'),
   url('profile/', views.profile, name='profile'),
   url('new-cohort/', views.cohort, name='new-cohort'),
-  path('joincohort/<id>', views.join_cohort, name='joincohort'),
-  path('leave_cohort/<id>', views.leave_cohort, name='leave-cohort'),
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
@@ -23,6 +21,7 @@ urlpatterns=[
   url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   path("news/",views.TechNews,name="technews"),
+  url(r'^admin_dashboard/$', views.summary, name = 'admin_dashboard'),
 ]
 if settings.DEBUG:
   urlpatterns+=static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

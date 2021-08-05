@@ -14,6 +14,9 @@
 body{
   background-color: var(--lighter_orange);
 }
+.bold{
+  font-weight: bolder;
+}
 button{
   background-color: var(--orange);
   color: white;
@@ -96,4 +99,8 @@ button{
 }
 .main_pg{
   padding: 0;
+}
+/*styling dashboard*/
+.welcome_dash{
+  background-color: var(--white);
 }

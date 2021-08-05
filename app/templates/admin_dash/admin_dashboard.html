@@ -18,8 +18,6 @@
 </head>
 
 <body>
-
-  {% block content %}
   
   <div class="col-md-3 side_bar">
     <div class="title">
@@ -42,7 +40,7 @@
     </div>
     <button> Add Profile</button></a>
     <div class="admin_side">
-      <a href=""><div class='icons'><img src="{% static 'images/dashboard.png'%}" alt="" width='20px'>
+      <a href="{% url 'admin_dashboard' %}"><div class='icons'><img src="{% static 'images/dashboard.png'%}" alt="" width='20px'>
           <p>Dashboard</p>
         </div></a>
       <a href=""><div class='icons'><img src="{% static 'images/group.png'%}" alt="" width='22px'>
@@ -69,10 +67,12 @@
     </div>
     <hr>
 
-    <p>this is p</p>
-    <a href="">this is a</a>
+    {% block content %}
+
+    
+    {% endblock%}
   </div>
-  {% endblock%}
+  
 
   {% block scripts %}
 
