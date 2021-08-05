@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'bootstrap4',
     'django_bootstrap5',
+    
 ]
 
 MIDDLEWARE = [
@@ -86,8 +87,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
         'USER':config('DB_USER'),
+<<<<<<< HEAD
         'PASSWORD':config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
+=======
+        'PASSWORD':config('DB_PASSWORD')
+>>>>>>> dev
     }
 }
 

@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from . import views
+from django.urls import path
 
 urlpatterns=[
   url(r'^$',views.index,name="index"),
@@ -13,7 +14,7 @@ urlpatterns=[
   url(r'^logout/$',auth_views.LogoutView.as_view(), name='logout'),
 
 #User Oriented Views ------------------------------------------------------------------------------
-  url(r'^user_profile/$', views.profile, name='user_profile'),
+  url(r'^user_profile/$', views.profile, name='user_prhttps://meet.google.com/ivg-yobe-eoiofile'),
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^story/$',views.create_story,name='story'),
@@ -24,6 +25,13 @@ urlpatterns=[
   url(r'^new_cohort/$', views.cohort, name='new_cohort'),
   url(r'^fundraiser/$', views.Fundraiser, name='fundraiser'),   
   url(r'^discussion/$', views.Discussion, name='discussion'),
+  #url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
+  path("story/",views.create_story,name="story"),
+  url(r'^new_cohort/$', views.cohort, name='new-cohort'),
+  url(r'discussion', views.Discussion, name='discussion'),
+  url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
+  path("news/",views.TechNews,name="technews"),
+  
 ]
 if settings.DEBUG:
   urlpatterns+=static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -8,7 +8,7 @@ from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
 # Create your views here.
-@login_required(login_url='/accounts/login/')
+
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
@@ -127,11 +127,14 @@ def single_idea(request, id):
 
 
 
+<<<<<<< HEAD
 def index(request):
     stories = Stories.objects.order_by("-id")
     # technews = TechNews.objects.order_by("-id")
     return render(request,"index.html",{"stories":stories})
     
+=======
+>>>>>>> dev
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
