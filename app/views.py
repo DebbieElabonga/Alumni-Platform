@@ -11,6 +11,10 @@ from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
 from app.models import Group, Idea, Stories, TechNews, UserProfile
 
 from .models import Stories, TechNews, UserProfile
+from django.shortcuts import redirect, render
+
+from .forms import DiscussionForm, FundraiserForm
+
 
 
 # Create your views here.
@@ -165,9 +169,6 @@ def create_story(request):
     return render(request,"storyform.html",{"form":form})
 
 
-from django.shortcuts import redirect, render
-
-from .forms import DiscussionForm, FundraiserForm
 
 
 # Create your views here.
@@ -177,7 +178,8 @@ def Discussion(request):
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
-            discussion.user = current_user
+            discussion.creator = current_user
+            discussion.date_created = dt.datetime.now()
 
             discussion.save()
 
@@ -193,8 +195,8 @@ def Fundraiser(request):
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.user = current_user
-
+            fundraise.creator = current_user
+            fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
         return redirect('index')
