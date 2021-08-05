@@ -85,8 +85,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'alumni',
+<<<<<<< HEAD
         'USER':'moringa',
         'PASSWORD':'Sotik2020*',
+=======
+        'USER':'hamisi',
+        'PASSWORD':'1995',
+>>>>>>> 09b0da1fdb920309de8d77336765a2e3e7d6b4ca
         'HOST': 'localhost', 
     }
 }
@@ -128,8 +133,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )

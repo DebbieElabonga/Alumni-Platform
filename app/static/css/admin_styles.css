@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+:root{
+  --light_green: rgb(96, 108, 56);
+  --dark_green: rgb(40, 54, 24);
+  --lighter_orange: rgb(254, 250, 224);
+  --light_orange: rgb(221, 161, 94);
+  --orange: rgb(188, 108, 37);
+  --white:rgb(255, 255, 255);
+}
+*{
+  font-family: 'Nunito', sans-serif;
+  box-sizing: border-box;
+}
+body{
+  background-color: var(--lighter_orange);
+}
+.bold{
+  font-weight: bolder;
+}
+button{
+  background-color: var(--orange);
+  color: white;
+  border: 1px solid white;
+  border-radius:5px;
+  padding: 4px 8px;
+  font-weight: bolder;
+}
+.title{
+  text-align: left;
+  font-weight: bold;
+  font-size: large;
+}
+.side_bar{
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--dark_green);
+  color: white;
+  position: sticky;
+  --webkit-position:sticky;
+  top: 0;
+  box-shadow: 2px 2px 4px 2px var(--light_green);
+  border-right: 1px solid white;
+  z-index: 2;
+}
+.admin_side>a{
+  color: white;
+  font-weight: bolder;
+}
+.admin{
+  padding: 4px;
+  overflow: hidden;
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
+  margin: 20px;
+  padding: 10px;
+}
+.admin_image{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  background-color: var(--orange);
+}
+.admin_side{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.icons>p{
+  padding: 0 10px;
+}
+
+.icons{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+}
+.icons>img{
+  background-color: white;
+  padding: 1.5px;
+  box-sizing: content-box;
+  border-radius: 2px;
+}
+.search_bar{
+  background-color: var(--white);
+  padding: 12px;
+  border-bottom: 1px solid grey;
+}
+.main_pg{
+  padding: 0;
+}
+/*styling dashboard*/
+.welcome_dash{
+  background-color: var(--white);
+}
