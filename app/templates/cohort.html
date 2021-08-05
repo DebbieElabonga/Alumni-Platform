@@ -1,15 +1,15 @@
-{% extends 'base.html' %}
-{% load django_bootstrap5%}
-{% load bootstrap4 %}
+{% extends 'admin_dash/admin_dashboard.html' %}
 {% load static %}
-{% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-1"></div>
+{% load bootstrap3 %}
+
+{% block content%}
+
+    <div class="row-m-5">
+        <div class="col-md-12"></div>
         <div class="col-md-10 rgba-stylish-strong  p-4">
             <h3>NEW COHORT
             </h3>
-            <form style="color:white;" action="" method="post" enctype="multipart/form-data" novalidate>
+            <form  action="" method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 <button class="btn btn-primary btn-sm">Add new Cohort</button>
@@ -17,5 +17,5 @@
         </div>
         <div class="col-md-1"></div>
     </div>
-</div>
+
 {% endblock %}

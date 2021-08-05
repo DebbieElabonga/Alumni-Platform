@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+{% extends 'base.html' %}
+{% load django_bootstrap5%}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+
+{{form.media}}
+=======
 {% extends 'base.html'%}
 {% load static %}
 {% load bootstrap3 %}
@@ -6,6 +15,7 @@
 {%block content %}
 <!DOCTYPE html>
 <html>
+>>>>>>> dev
 
 <div class="container w-50 p-3">
   <form action="{%url 'story'%}" method="post" enctype="multipart/form-data">
@@ -15,6 +25,8 @@
     <input type="submit" class="btn btn-success btn-lg" value="Share">
   </form>
 </div>
+<<<<<<< HEAD
+=======
    {% block scripts %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   {% bootstrap_javascript %} {% endblock %}
@@ -22,4 +34,5 @@
 </body>
 
 </html>
+>>>>>>> dev
 {%endblock%}

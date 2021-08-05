@@ -1,4 +1,4 @@
-from app.models import Group, UserProfile, Stories,Idea,Tech
+from app.models import Group, UserProfile, Stories,Idea,TechNews
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
@@ -12,8 +12,8 @@ from django.http import HttpResponseRedirect
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
-    tech = Tech.objects.all()
-    return render(request,'index.html', {'groups':groups,"stories":stories,"tech":tech})
+    tech = TechNews.objects.all()
+    return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
     
 def signup(request):
     if request.method == 'POST':
@@ -62,22 +62,6 @@ def cohort(request):
     else:
         form = CohortForm()
     return render(request, 'cohort.html', {'form': form})
-
-# @login_required(login_url='/accounts/login/')
-# def join_cohort(request, id):
-#     group = get_object_or_404(Group, id=id)
-#     request.user.group = group
-#     request.user.save()
-#     return redirect('index')
-
-# @login_required(login_url='/accounts/login/')
-# def leave_cohort(request, id):
-#     group = get_object_or_404(Group, id=id)
-#     request.user.group = None
-#     request.user.save()
-#     messages.success(
-#         request, 'Success! You have succesfully exited this Cohort ')
-#     return redirect('index')
 
 # Create your views here.
 
@@ -143,6 +127,14 @@ def single_idea(request, id):
 
 
 
+<<<<<<< HEAD
+def index(request):
+    stories = Stories.objects.order_by("-id")
+    # technews = TechNews.objects.order_by("-id")
+    return render(request,"index.html",{"stories":stories})
+    
+=======
+>>>>>>> dev
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':

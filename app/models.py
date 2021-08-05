@@ -80,7 +80,7 @@ class Stories(models.Model):
   def __str__(self):
     return self.title
 
-class Tech(models.Model):
+class TechNews(models.Model):
   title = models.CharField(max_length=100)
   description = tiny_models.HTMLField()
   image_path = models.ImageField(upload_to = 'Stories/')
