@@ -66,14 +66,15 @@ def single_idea(request, id):
 
   return render(request, 'singleidea.html', context)
 
-#view function that renders to admin dashboard
-def admin_dashboard(request):
+#views to summary on the admin dashboard
+def summary(request):
   '''
-  Renders admin dashboard
+  renders summary on admin dashboard
   '''
-  title = 'General Admin Dashboard'
+  title = 'admin dashboard summary'
 
   context = {
     'title':title
   }
-  return render(request, 'admin_dash/admin_dashboard.html', context)
+
+  return render(request, 'admin_dash/dashboard.html', context)
