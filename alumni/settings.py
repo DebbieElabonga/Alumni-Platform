@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap3',
     'tinymce',
+    'bootstrap3',
+    
 ]
 
 MIDDLEWARE = [
@@ -83,8 +84,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'alumni',
-        'USER':'postgres',
-        'PASSWORD':'chebichii1',
+        'USER':'hamisi',
+        'PASSWORD':'1995',
         'HOST': 'localhost', 
     }
 }

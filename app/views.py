@@ -1,11 +1,13 @@
-from app.models import Group, UserProfile
-from app.forms import CohortForm, SignupForm, UserProfileForm
-from django.shortcuts import render, get_object_or_404
+from app.models import Group, UserProfile,TechNews, Stories
+from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm
+from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
+from django.http import HttpResponseRedirect
+from .models import Stories,UserProfile,TechNews
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -74,14 +76,6 @@ def leave_cohort(request, id):
     messages.success(
         request, 'Success! You have succesfully exited this Cohort ')
     return redirect('index')
-from app.models import UserProfile
-from app.forms import IdeaCreationForm
-from django.shortcuts import redirect, render
-from django.contrib import messages
-import datetime as dt
-from .forms import CreateStoryForm,TechNewsForm
-from django.http import HttpResponseRedirect
-from .models import Stories,UserProfile,TechNews
 
 # Create your views here.
 

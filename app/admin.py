@@ -1,6 +1,5 @@
-from app.models import GeneralAdmin, UserProfile
 from django.contrib import admin
-from .models import Stories,UserProfile,TechNews
+from .models import Stories,UserProfile,TechNews , GeneralAdmin
 # Register your models here.
 
 admin.site.register(GeneralAdmin)
