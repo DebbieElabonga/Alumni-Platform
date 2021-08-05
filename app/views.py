@@ -1,19 +1,27 @@
-from app.models import Group, UserProfile, Stories,Idea,TechNews
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm
-from django.shortcuts import render, get_object_or_404,redirect
-from django.contrib.auth import login, authenticate
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 import datetime as dt
+
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+
+from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
+                       SignupForm, TechNewsForm, UserProfileForm)
+from app.models import Group, Idea, Stories, TechNews, UserProfile
+
+from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
+                    FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
+                    UserProfileForm)
+from .models import Group, Idea, Stories, TechNews, UserProfile
+
 # Create your views here.
 
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
-    tech = TechNews.objects.all()
-    return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
+    #tech = TechNews.objects.all()
+    return render(request,'index.html', {'groups':groups,'stories':stories})
     
 def signup(request):
     if request.method == 'POST':
@@ -127,14 +135,6 @@ def single_idea(request, id):
 
 
 
-<<<<<<< HEAD
-def index(request):
-    stories = Stories.objects.order_by("-id")
-    # technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
-    
-=======
->>>>>>> dev
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -150,8 +150,10 @@ def create_story(request):
     return render(request,"storyform.html",{"form":form})
 
 
-from django.shortcuts import render,redirect
+from django.shortcuts import redirect, render
+
 from .forms import DiscussionForm, FundraiserForm, TechNewsForm
+
 
 def TechNews(request):
     form = TechNewsForm()
@@ -173,7 +175,8 @@ def Discussion(request):
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
-            discussion.user = current_user
+            discussion.creator = current_user
+            discussion.date_created = dt.datetime.now()
 
             discussion.save()
 
@@ -189,8 +192,8 @@ def Fundraiser(request):
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.user = current_user
-
+            fundraise.creator = current_user
+            fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
         return redirect('index')
