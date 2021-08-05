@@ -43,6 +43,11 @@ class CreateStoryForm(forms.ModelForm):
         fields = ['title','description','image_path','link']
 
 
+class TechNewsForm(forms.ModelForm):
+    class Meta:
+        model = TechNews
+        fields = ['title','description','image_path','link']
+
 
 class DiscussionForm(forms.ModelForm):
     class Meta:
