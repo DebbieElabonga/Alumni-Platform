@@ -144,8 +144,8 @@ def single_idea(request, id):
 
 def index(request):
     stories = Stories.objects.order_by("-id")
-    technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories,"technews":technews})
+    # technews = TechNews.objects.order_by("-id")
+    return render(request,"index.html",{"stories":stories})
     
 def create_story(request):
     form = CreateStoryForm()
@@ -163,7 +163,7 @@ def create_story(request):
 
 
 from django.shortcuts import render,redirect
-from .forms import DiscussionForm, FundraiserForm
+from .forms import DiscussionForm, FundraiserForm, TechNewsForm
 
 def TechNews(request):
     form = TechNewsForm()
