@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'tinymce',
     
     'app.apps.AppConfig',
+    'bootstrap3',
+    'bootstrap4',
+    'django_bootstrap5',
     
 ]
 
@@ -83,10 +86,11 @@ WSGI_APPLICATION = 'alumni.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'alumni',
-        'USER':'moringa',
-        'PASSWORD':'Robert11',
-        'HOST': 'localhost', 
+        'NAME': config('DB_NAME'),
+        'USER':config('DB_USER'),
+        'PASSWORD':config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+    
     }
 }
 
@@ -115,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 

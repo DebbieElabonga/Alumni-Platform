@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import JsonResponse, request
-from .forms import TechNewsForm,FundraiserForm,DiscussionForm
+from .forms import DiscussionForm, FundraiserForm, TechNewsForm
+
 
 
 import stripe
-from app.models import Group, UserProfile,TechNews, Stories
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm
+from app.models import Group, UserProfile, Stories,Idea,TechNews
+from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
@@ -14,15 +15,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
-from .models import Idea, Stories,UserProfile,TechNews
-
 # Create your views here.
-@login_required(login_url='/accounts/login/')
+
+stripe.api_key = "YOUR SECRET KEY"
+
 def index(request):
     groups = Group.objects.all()
-
-    return render(request,'index.html', {'groups':groups})
-
+    stories = Stories.objects.order_by("-id")
+    tech = TechNews.objects.all()
+    return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
+    
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -32,12 +34,12 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('login')
+            return redirect('index')
     else:
         form = SignupForm()
     return render(request, 'registration/registration_form.html', {'form': form})
 
-@login_required(login_url='/accounts/login/')    
+   
 def profile(request):
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
@@ -46,7 +48,10 @@ def profile(request):
             return redirect('index')
     else:
         profile_form = UserProfileForm(instance=request.user)
-    return render(request, 'user_profile.html',{ "profile_form": profile_form})
+        context = { 
+            "profile_form": profile_form
+            }
+    return render(request, 'user_profile.html',context)
 
 def cohort(request):
     if request.method == 'POST':
@@ -67,22 +72,6 @@ def cohort(request):
     else:
         form = CohortForm()
     return render(request, 'cohort.html', {'form': form})
-
-# @login_required(login_url='/accounts/login/')
-# def join_cohort(request, id):
-#     group = get_object_or_404(Group, id=id)
-#     request.user.group = group
-#     request.user.save()
-#     return redirect('index')
-
-# @login_required(login_url='/accounts/login/')
-# def leave_cohort(request, id):
-#     group = get_object_or_404(Group, id=id)
-#     request.user.group = None
-#     request.user.save()
-#     messages.success(
-#         request, 'Success! You have succesfully exited this Cohort ')
-#     return redirect('index')
 
 # Create your views here.
 
@@ -148,12 +137,11 @@ def single_idea(request, id):
 
 stripe.api_key = "YOUR SECRET KEY"
 
-# Create your views here.
 
 def index(request):
     stories = Stories.objects.order_by("-id")
-    technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories,"technews":technews})
+    # technews = TechNews.objects.order_by("-id")
+    return render(request,"index.html",{"stories":stories})
     
 def create_story(request):
     form = CreateStoryForm()
@@ -191,6 +179,10 @@ def Discussion(request):
         if form.is_valid():
             discussion = form.save(commit=False)
             discussion.user = current_user
+            
+def donation(request):
+
+	return render(request, 'donation.html')           
             
 def charge(request):
     
@@ -238,3 +230,8 @@ def summary(request):
   }
 
   return render(request, 'admin_dash/dashboard.html', context)
+
+
+def Fundraiser(request):
+    
+    return render(request,'new_fundraiser.html')
