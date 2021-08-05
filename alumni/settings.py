@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'tinymce',
     
     'app.apps.AppConfig',
-    'bootstrap3',
     
 ]
 

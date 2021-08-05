@@ -17,14 +17,7 @@ from django.contrib import admin
 from django.conf.urls import include, url
 
 urlpatterns = [
-<<<<<<< HEAD
-    path('admin/', admin.site.urls),
-    path('',include('app.urls')),
-    path('tinymce/', include('tinymce.urls')),
-
-=======
     url('admin/', admin.site.urls),
     url('',include('app.urls')),
     url('tinymce/', include('tinymce.urls'))
->>>>>>> 00930735c0adb7558627555b5912e4716105f134
 ]

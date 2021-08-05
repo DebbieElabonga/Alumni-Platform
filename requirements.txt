@@ -1,13 +1,10 @@
 asgiref==3.4.1
 confusable-homoglyphs==3.2.0
 dj-database-url==0.5.0
-<<<<<<< HEAD
 chardet==3.0.4
 
-=======
 Django==3.2.6
 django-bootstrap3==15.0.0
->>>>>>> 00930735c0adb7558627555b5912e4716105f134
 django-heroku==0.3.1
 django-registration==3.1.1
 django-tinymce==3.3.0
@@ -20,9 +17,4 @@ requests==2.23.0
 sqlparse==0.4.1
 stripe==2.43.0
 whitenoise==5.3.0
-<<<<<<< HEAD
 django-tinymce-3.3.0
-=======
-django-bootstrap3==15.0.0
-django-registration==3.1.1
->>>>>>> 00930735c0adb7558627555b5912e4716105f134
