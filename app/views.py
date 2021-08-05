@@ -1,9 +1,81 @@
-from app.models import UserProfile
-from app.forms import IdeaCreationForm
-from django.shortcuts import redirect, render
+from app.models import Group, UserProfile,TechNews, Stories
+from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm
+from django.shortcuts import render, get_object_or_404,redirect
+from django.contrib.auth import login, authenticate
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
-from .models import Idea
+from django.http import HttpResponseRedirect
+from .models import Stories,UserProfile,TechNews
+
+# Create your views here.
+@login_required(login_url='/accounts/login/')
+def index(request):
+    groups = Group.objects.all()
+
+    return render(request,'index.html', {'groups':groups})
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('login')
+    else:
+        form = SignupForm()
+    return render(request, 'registration/registration_form.html', {'form': form})
+
+@login_required(login_url='/accounts/login/')    
+def profile(request):
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        if  profile_form.is_valid():
+            profile_form.save()
+            return redirect('index')
+    else:
+        profile_form = UserProfileForm(instance=request.user)
+    return render(request, 'user_profile.html',{ "profile_form": profile_form})
+
+def cohort(request):
+    if request.method == 'POST':
+        form = CohortForm(request.POST, request.FILES)
+        if form.is_valid():
+            group = form.save(commit=False)
+            group.creator = request.user
+            group.date_created = dt.datetime.now()
+            group.save()
+            group.members.add(UserProfile.objects.get(user=request.user))
+            group.members.add(request.POST.get('admin'))
+            group.save()
+            messages.success(request, 'A new Cohort has been created')
+            return redirect('index')
+        else:
+            messages.warning(request, 'Invalid form')
+            return render(request, 'cohort.html', {'form': form})
+    else:
+        form = CohortForm()
+    return render(request, 'cohort.html', {'form': form})
+
+@login_required(login_url='/accounts/login/')
+def join_cohort(request, id):
+    group = get_object_or_404(Group, id=id)
+    request.user.group = group
+    request.user.save()
+    return redirect('index')
+
+@login_required(login_url='/accounts/login/')
+def leave_cohort(request, id):
+    group = get_object_or_404(Group, id=id)
+    request.user.group = None
+    request.user.save()
+    messages.success(
+        request, 'Success! You have succesfully exited this Cohort ')
+    return redirect('index')
 
 # Create your views here.
 
@@ -65,15 +137,76 @@ def single_idea(request, id):
   }
 
   return render(request, 'singleidea.html', context)
+  return render(request, 'meetcollegues.html', context)
 
-#view function that renders to admin dashboard
-def admin_dashboard(request):
-  '''
-  Renders admin dashboard
-  '''
-  title = 'General Admin Dashboard'
 
-  context = {
-    'title':title
-  }
-  return render(request, 'admin_dash/admin_dashboard.html', context)
+# Create your views here.
+
+def index(request):
+    stories = Stories.objects.order_by("-id")
+    technews = TechNews.objects.order_by("-id")
+    return render(request,"index.html",{"stories":stories,"technews":technews})
+    
+def create_story(request):
+    form = CreateStoryForm()
+    if request.method == 'POST':
+        form = CreateStoryForm(request.POST or None,request.FILES)
+        if form.is_valid():
+            story = form.save(commit=False)
+            story.creator = request.user
+            story.save()
+        return HttpResponseRedirect(request.path_info)
+
+    else:
+        form = CreateStoryForm()
+    return render(request,"storyform.html",{"form":form})
+
+
+from django.shortcuts import render,redirect
+from .forms import DiscussionForm, FundraiserForm
+
+def TechNews(request):
+    form = TechNewsForm()
+    if request.method == 'POST':
+        form = TechNewsForm(request.POST or None,request.FILES)
+        if form.is_valid():
+            news = form.save(commit=False)
+            news.creator = request.user
+            news.save()
+        return HttpResponseRedirect(request.path_info)
+    else:
+        form = TechNewsForm()
+    return render(request,'newsform.html',{"form":form})
+
+# Create your views here.
+def Discussion(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = DiscussionForm(request.POST, request.FILES)
+        if form.is_valid():
+            discussion = form.save(commit=False)
+            discussion.user = current_user
+
+            discussion.save()
+
+        return redirect('index')
+
+    else:
+        form = DiscussionForm()
+    return render(request, 'new_discussion.html', {"form": form})
+    
+def Fundraiser(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = FundraiserForm(request.POST, request.FILES)
+        if form.is_valid():
+            fundraise = form.save(commit=False)
+            fundraise.user = current_user
+
+            fundraise.save()
+
+        return redirect('index')
+
+    else:
+        form = FundraiserForm()
+    return render(request, 'new_fundraiser.html', {"form": form})
