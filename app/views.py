@@ -150,7 +150,9 @@ def single_idea(request, id):
 
 def index(request):
     stories = Stories.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
+    technews = TechNews.objects.order_by("-id")
+    return render(request,"index.html",{"stories":stories,"technews":technews})
+    
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
