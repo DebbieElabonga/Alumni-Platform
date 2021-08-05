@@ -1,15 +1,88 @@
-
 {% extends 'admin_dash/admin_dashboard.html' %}
 {% load static %}
 {% load bootstrap3 %}
 
 {% block content%}
 
-<div class="dashboard col-md-10">
-  <div class="welcome_dash m-2 p-4">
-    <h4 class="bold">Welcome to Alumni Dashboard</h4>
-    <h6>You are a General admin. You can do general administration</h6>
+<div class="dashboard col-md-12">
+  <div class="top_welcome mt-2  d-flex">
+    <div class="welcome_dash p-4">
+      <h4 class="bold">Welcome to Alumni Dashboard</h4>
+      <h6>You are a General admin. You can do general administration</h6>
+    </div>
+    <div class="lefter_welcome d-flex ml-auto p-4">
+      <p class="bold">View Complains</p><img src="{% static 'images/settings.png' %}" alt="" width="20px" height="20px"
+        class="ml-3">
+    </div>
   </div>
-</div>
+  <div class="totals col-md-12">
+    <div class="col-md-3">
+      <h4 class="bold">
+        Active Members: {{users.count}}
+      </h4>
+    </div>
+    <div class="col-md-3">
+      <h4 class="bold">
+        Active Projects: {{project.count}}
+      </h4>
+    </div>
+    <div class="col-md-3">
+      <h4 class="bold">
+        Active Groups: {{groups.count}}
+      </h4>
+    </div>
+  </div>
+  <div class="samples">
+    <div class="admins card col-md-4 p-0">
+      <div class="card-header">
+        <h4>General Admins:</h4>
+        <h6>Contact these admins incase you need assistance</h6>
+      </div>
+      <div class="card-body">
+        <!--loop upto 5 admin here-->
+        <div class="group_dets">
+          <img class="hidden" src="{% static 'images/group.png' %}" alt="admin pic" width="36px" height="36px">
+          <h5 class="names ml-4 bold">Picture</h5>
+          <h5 class="bold">Name</h5>
+          <h5 class="bold">Email Address</h5>
 
-{%endblock%}
+        </div>
+        <!--start loop-->
+        <div class="other_admin_dets">
+          <img src="{% static 'images/human-avatar-profle.png' %}" alt="admin pic" width="36px" height="36px">
+          <p class="names">Name Names - username</p>
+          <p>Email@address.com</p>
+        </div>
+        <!--end of loop-->
+      </div>
+    </div>
+    <div class="all_groups card col-md-4 ml-4 mr-4 p-0">
+      <div class="card-header">
+        <h4>Trending Groups:</h4>
+        <h6>Top 5 active groups</h6>
+      </div>
+      <div class="card-body">
+        <!--loop upto 5 admin here-->
+        <!--start loop-->
+        <div class="group_dets">
+          <h5 class="names bold">Name</h5>
+          <h5 class="bold">Admin</h5>
+          <h5 class="bold">Members</h5>
+        </div>
+          <!--loop group names-->
+          <div class="group_dets">
+            <p class="names ">Name names</p>
+            <p class="">Admin group</p>
+            <p class="">20 Members</p>
+          </div>
+
+          <!--end of loop-->
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  {%endblock%}

@@ -101,6 +101,25 @@ button{
   padding: 0;
 }
 /*styling dashboard*/
-.welcome_dash{
+.top_welcome, .totals>div{
   background-color: var(--white);
+  padding: 6px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+.totals{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5px 0px;
+  padding: 0;
+}
+.other_admin_dets, .group_dets{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.samples>.admins, .all_groups{
+  height: 360px;
+  overflow: hidden;
 }

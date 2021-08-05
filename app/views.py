@@ -218,7 +218,7 @@ def summary(request):
   '''
   renders summary on admin dashboard
   '''
-  title = 'admin dashboard summary'
+  title = 'Admin - Summary'
 
   context = {
     'title':title
