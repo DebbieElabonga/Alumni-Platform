@@ -95,7 +95,7 @@ button{
 .search_bar{
   background-color: var(--white);
   padding: 12px;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid rgb(200, 200, 200);
 }
 .main_pg{
   padding: 0;
@@ -103,15 +103,15 @@ button{
 /*styling dashboard*/
 .top_welcome, .totals>div{
   background-color: var(--white);
-  padding: 6px;
-  border: 1px solid gray;
+  border: 1px solid rgb(200, 200, 200);
   border-radius: 5px;
+  margin: 2px;
 }
 .totals{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 5px 0px;
+  margin: 14px 0px;
   padding: 0;
 }
 .other_admin_dets, .group_dets{
@@ -122,4 +122,10 @@ button{
 .samples>.admins, .all_groups{
   height: 360px;
   overflow: hidden;
+}
+.samples>div:nth-child(2){
+  margin: 0 40px;
+}
+.projects{
+  margin: 20px 0;
 }

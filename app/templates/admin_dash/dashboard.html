@@ -32,7 +32,7 @@
       </h4>
     </div>
   </div>
-  <div class="samples">
+  <div class="samples col-md-12 d-flex flex-row p-0 justify-content-space-between">
     <div class="admins card col-md-4 p-0">
       <div class="card-header">
         <h4>General Admins:</h4>
@@ -41,48 +41,107 @@
       <div class="card-body">
         <!--loop upto 5 admin here-->
         <div class="group_dets">
-          <img class="hidden" src="{% static 'images/group.png' %}" alt="admin pic" width="36px" height="36px">
-          <h5 class="names ml-4 bold">Picture</h5>
-          <h5 class="bold">Name</h5>
-          <h5 class="bold">Email Address</h5>
+          <h5 class="picture col-md-3">Picture</h5>
+          <h5 class="bold col-md-4">Name</h5>
+          <h5 class="bold col-md-5">Email Address</h5>
 
         </div>
         <!--start loop-->
-        <div class="other_admin_dets">
-          <img src="{% static 'images/human-avatar-profle.png' %}" alt="admin pic" width="36px" height="36px">
-          <p class="names">Name Names - username</p>
-          <p>Email@address.com</p>
+        <div class="other_admin_dets p-0">
+          <div class="col-md-3">
+            <img src="{% static 'images/human-avatar-profle.png' %}" alt="admin pic" width="36px" height="36px">
+          </div>
+
+          <p class="names col-md-4">Name Names - username</p>
+          <p class="col-md-5">Email@address.com</p>
         </div>
         <!--end of loop-->
       </div>
     </div>
-    <div class="all_groups card col-md-4 ml-4 mr-4 p-0">
+    <div class="all_groups card col-md-4 p-0">
       <div class="card-header">
         <h4>Trending Groups:</h4>
         <h6>Top 5 active groups</h6>
       </div>
-      <div class="card-body">
+      <div class="card-body p-0">
         <!--loop upto 5 admin here-->
         <!--start loop-->
         <div class="group_dets">
-          <h5 class="names bold">Name</h5>
-          <h5 class="bold">Admin</h5>
-          <h5 class="bold">Members</h5>
+          <h5 class="names bold col-md-4">Name</h5>
+          <h5 class="bold col-md-4">Admin</h5>
+          <h5 class="bold col-md-4">Members</h5>
         </div>
-          <!--loop group names-->
-          <div class="group_dets">
-            <p class="names ">Name names</p>
-            <p class="">Admin group</p>
-            <p class="">20 Members</p>
-          </div>
-
-          <!--end of loop-->
-
+        <!--loop group names-->
+        <div class="group_dets">
+          <p class="names col-md-4">{{group.name}}Name names</p>
+          <p class="col-md-4">Admin group</p>
+          <p class="col-md-4">20 Members</p>
         </div>
+
+        <!--end of loop-->
+
       </div>
+    </div>
+    <div class="top_articles card col-md-3 p-0 ml-auto">
+      <div class="card-header">
+        <h4>Top Articles:</h4>
+        <h6>Most Read Articles</h6>
+      </div>
+      <div class="card-body p-0">
+        <!--loop upto 5 admin here-->
+        <!--start loop-->
+        <div class="group_dets">
+          <h5 class="names bold col-md-4">Name</h5>
+          <h5 class="bold col-md-4">Admin</h5>
+          <h5 class="bold col-md-4">Members</h5>
+        </div>
+        <!--loop group names-->
+        <div class="group_dets">
+          <p class="names col-md-4">{{group.name}}Name names</p>
+          <p class="col-md-4">Admin group</p>
+          <p class="col-md-4">20 Members</p>
+        </div>
 
+        <!--end of loop-->
+
+      </div>
     </div>
 
   </div>
+  <div class="projects col-md-12 d-flex flex-row p-0 justify-content-space-between">
+    <div class="open_projects card col-md-12 p-0">
+      <div class="card-header">
+        <h4>Open Projects:</h4>
+        <h6>Projects that are still accepting members</h6>
+      </div>
+      <div class="card-body">
+        <!--loop upto 5 admin here-->
+        <div class="group_dets">
+          <h5 class="names bold col-md-2">Owner</h5>
+          <h5 class="bold col-md-4">Project</h5>
+          <h5 class="bold col-md-2">Date Created</h5>
+          <h5 class="bold col-md-2">Members</h5>
+          <h5 class="bold col-md-2">Action</h5>
+
+        </div>
+        <!--start loop-->
+        <div class="other_admin_dets">
+          <h5 class="names bold col-md-2">Name</h5>
+          <h5 class="col-md-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo, illo? Atque labore maxime
+            enim ut aut nemo libero veniam, praesentium debitis. Nesciunt non, excepturi quod corporis quasi officia
+            veniam voluptatum?</h5>
+          <h5 class="col-md-2">Date Created</h5>
+          <h5 class="col-md-2">2 Members</h5>
+          <div class="col-md-2">
+            <button class="btn">Close</button>
+          </div>
+
+
+        </div>
+        <!--end of loop-->
+      </div>
+    </div>
+  </div>
+  
 
   {%endblock%}
