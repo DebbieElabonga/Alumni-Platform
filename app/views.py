@@ -1,4 +1,4 @@
-from app.models import Group, UserProfile, Stories,Idea,Tech
+from app.models import Group, UserProfile, Stories,Idea,TechNews
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
-    tech = Tech.objects.all()
+    tech = TechNews.objects.all()
     return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
     
 def signup(request):
