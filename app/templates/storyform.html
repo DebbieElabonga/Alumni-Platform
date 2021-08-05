@@ -7,21 +7,8 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Add Story</title>
-  {{form.media}}
-
-{% block styles %} {% bootstrap_css %}
-  <link rel="stylesheet" href="{% static '' %}"> {% endblock %}
-
-</head>
-
-<body>
 <div class="container w-50 p-3">
-  <form  action="{%url 'story'%}" method="post" enctype="multipart/form-data">
+  <form action="{%url 'story'%}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     {% bootstrap_form form%}
