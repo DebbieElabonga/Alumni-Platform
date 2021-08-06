@@ -1,8 +1,7 @@
 from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
-from django.shortcuts import render, get_object_or_404,redirect
+from django.shortcuts import render,redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
@@ -44,7 +43,9 @@ def profile(request):
     return render(request, 'user_profile.html',context)
 
 def cohort(request):
+    title = "Cohorts"
     if request.method == 'POST':
+        
         form = CohortForm(request.POST, request.FILES)
         if form.is_valid():
             group = form.save(commit=False)
@@ -58,10 +59,10 @@ def cohort(request):
             return redirect('index')
         else:
             messages.warning(request, 'Invalid form')
-            return render(request, 'cohort.html', {'form': form})
+            return render(request, 'cohort.html', {'title':title,'form': form})
     else:
         form = CohortForm()
-    return render(request, 'cohort.html', {'form': form})
+    return render(request, 'cohort.html', {'title':title,'form': form})
 
 # Create your views here.
 
@@ -154,7 +155,7 @@ def TechNews(request):
         form = TechNewsForm()
     return render(request,'newsform.html',{"form":form})
 
-# Create your views here.
+# Start a discussion.
 def Discussion(request):
     current_user = request.user
     if request.method == 'POST':
@@ -173,6 +174,7 @@ def Discussion(request):
     return render(request, 'new_discussion.html', {"form": form})
     
 def Fundraiser(request):
+    title = 'Start A Fundraiser'
     current_user = request.user
     if request.method == 'POST':
         form = FundraiserForm(request.POST, request.FILES)
@@ -186,7 +188,7 @@ def Fundraiser(request):
 
     else:
         form = FundraiserForm()
-    return render(request, 'new_fundraiser.html', {"form": form})
+    return render(request, 'new_fundraiser.html', {'title':title,"form": form})
 #views to summary on the admin dashboard
 def summary(request):
     '''
@@ -222,3 +224,17 @@ def summary(request):
     }
 
     return render(request, 'admin_dash/dashboard.html', context)
+
+#view function that renders to invite members page
+def invite_members(request):
+    '''
+    renders invite member form
+    '''
+    title = 'Invite Members'
+    # form = InviteMemberForm
+
+    context = {
+        'title':title,
+    }
+
+    return render(request, 'invite_member.html', context)

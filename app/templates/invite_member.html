@@ -1,0 +1,29 @@
+{% extends 'admin_dash/admin_dashboard.html' %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content%}
+
+<div class="row-m-5">
+    <div class="col-md-12"></div>
+    <div class="col-md-10 rgba-stylish-strong  p-4">
+        <h3>Enter Details
+        </h3>
+        <form id="invite_members" action="{% url 'invite_members' %}" method="post">
+            {% csrf_token %}
+            <div class="invitee d-flex flex-row" style="width: 400px;">
+                <input type="text" name="first_name" placeholder="First Name" class="mr-4">
+                <input type="text" name="last name" placeholder="Last Name" class="ml-4">
+            </div>
+            <div class="invitee_email" style="width: 400px;">
+                <input type="text" name="user_emails" placeholder="Email Address">
+            </div>
+            <div class="d-flex">
+               <button type="submit" class="btn-outline-success ml-5 mr-5">Send Invite</button> <button class="ml-5">Upload CSV</button>
+            </div>
+        </form><br>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+{% endblock %}

@@ -14,6 +14,7 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   {%endblock%}
 </head>
 
@@ -55,7 +56,7 @@
           <p>Start Fundraiser</p>
         </div>
       </a>
-      <a href="">
+      <a href="{% url 'invite_members' %}">
         <div class='icons'><img src="{% static 'images/invite_members.png'%}" alt="" width='22px'>
           <p>Invite Members</p>
         </div>
