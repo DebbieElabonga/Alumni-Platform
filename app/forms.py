@@ -18,7 +18,7 @@ class SignupForm(UserCreationForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['user', 'photo_path', 'bio']
+        fields = ['photo_path', 'bio']
 
 class CohortForm(forms.ModelForm):
     class Meta:

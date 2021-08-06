@@ -213,3 +213,17 @@ def summary(request):
   }
 
   return render(request, 'admin_dash/dashboard.html', context)
+def profile_update(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST,request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.user = current_user
+            image.save()
+        return redirect('profile')
+
+    else:
+        form = UserProfileForm()
+        return render(request,'update_profile.html',{"form":form})
+

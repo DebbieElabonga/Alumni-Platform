@@ -15,6 +15,7 @@ urlpatterns=[
 
 #User Oriented Views ------------------------------------------------------------------------------
   url(r'^user_profile/$', views.profile, name='user_profile'),
+  url('edit/',views.profile_update,name='edit'),
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^story/$',views.create_story,name='story'),
