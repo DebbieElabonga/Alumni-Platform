@@ -173,5 +173,9 @@
     </div>
   </div>
 
+  {%endblock%}
+  {% block scripts %}
+  {{block.super}}
+  <script src="{% static 'js/scripts.js' %}"></script>
 
   {%endblock%}

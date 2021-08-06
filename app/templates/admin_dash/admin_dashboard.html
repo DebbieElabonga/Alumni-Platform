@@ -18,7 +18,7 @@
 </head>
 
 <body>
-  
+
   <div class="col-md-3 side_bar">
     <div class="title">
       Alumni
@@ -40,21 +40,31 @@
     </div>
     <button> Add Profile</button></a>
     <div class="admin_side">
-      <a href="{% url 'admin_dashboard' %}"><div class='icons'><img src="{% static 'images/dashboard.png'%}" alt="" width='20px'>
+      <a href="{% url 'admin_dashboard' %}">
+        <div class='icons'><img src="{% static 'images/dashboard.png'%}" alt="" width='20px'>
           <p>Dashboard</p>
-        </div></a>
-      <a href=""><div class='icons'><img src="{% static 'images/group.png'%}" alt="" width='22px'>
+        </div>
+      </a>
+      <a href="">
+        <div class='icons'><img src="{% static 'images/group.png'%}" alt="" width='22px'>
           <p>Create Cohort</p>
-        </div></a>
-      <a href=""><div class='icons'><img src="{% static 'images/fundraise.png'%}" alt="" width='22px'>
+        </div>
+      </a>
+      <a href="">
+        <div class='icons'><img src="{% static 'images/fundraise.png'%}" alt="" width='22px'>
           <p>Start Fundraiser</p>
-        </div></a>
-      <a href=""><div class='icons'><img src="{% static 'images/invite_members.png'%}" alt="" width='22px'>
+        </div>
+      </a>
+      <a href="">
+        <div class='icons'><img src="{% static 'images/invite_members.png'%}" alt="" width='22px'>
           <p>Invite Members</p>
-        </div></a>
-      <a href=""><div class='icons'><img src="{% static 'images/settings.png'%}" alt="" width='20px'>
+        </div>
+      </a>
+      <a href="">
+        <div class='icons'><img src="{% static 'images/settings.png'%}" alt="" width='20px'>
           <p>Settings</p>
-        </div></a>
+        </div>
+      </a>
     </div>
     <button> Logout</button>
   </div>
@@ -63,28 +73,29 @@
       <h4 class="bold ml-4">{{title}}</h4>
       <form action="" method="post" class="ml-auto">
         <input type="text" name="search_term" id="search_term" placeholder="Search...">
-        <button type="submit" class="btn-default" style="border: 0px;"><img src="{% static 'images/search.png'%}" alt="" width="20px" ></button>
+        <button type="submit" class="btn-default" style="border: 0px;"><img src="{% static 'images/search.png'%}" alt=""
+            width="20px"></button>
       </form>
     </div>
     <hr>
 
     {% block content %}
 
-    
+
     {% endblock%}
   </div>
-  
 
   {% block scripts %}
 
-  {%bootstrap_javascript%}
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"></script>
-  <script src="{% static 'js/scripts.js' %}"></script>
+  {%bootstrap_javascript%}
+  <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
   {%endblock%}
 </body>
 
