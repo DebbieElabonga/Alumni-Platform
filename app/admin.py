@@ -5,9 +5,6 @@ from .models import (Fundraiser, Message,GeneralAdmin,UserProfile,Stories,TechNe
 # Register your models here.
 admin.site.register(Fundraiser)
 admin.site.register(Message)
-
-
-
 admin.site.register(GeneralAdmin)
 admin.site.register(UserProfile)
 admin.site.register(Stories)
