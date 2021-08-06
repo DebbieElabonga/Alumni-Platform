@@ -258,9 +258,8 @@ def invite_members(request):
         f_name = request.POST.get('first_name')
         l_name = request.POST.get('last_name')
         email = request.POST.get('user_email')
-        username = f_name+(list(l_name))[0]
 
-        new_user = User(username = username, first_name = f_name, last_name = l_name, email = email, is_active = False)
+        new_user = User(first_name = f_name, last_name = l_name, email = email, is_active = False)
         new_user.save()
         current_site = get_current_site(request)
         domain = current_site.domain
@@ -302,10 +301,10 @@ def download_csv(request):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     filename = 'Invite_users.csv'
 
-    filepath = BASE_DIR + 'app/Files' + filename
-    path = open(filename, 'r')
+    filepath = BASE_DIR + '/app/Files/' + filename
+    path = open(filepath, 'r')
     mime_type = mimetypes.guess_type(filepath)
-    respone = HttpResponse(path, content_type = mime_type)
+    response = HttpResponse(path, content_type = mime_type)
     response['Content-Disposition'] = "attachment; filename=%s" % filename
 
     return response
