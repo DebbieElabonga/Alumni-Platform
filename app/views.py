@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render,redirect
+=======
+from django.shortcuts import render, redirect
+from django.urls import reverse
+import stripe
+from django.shortcuts import render, get_object_or_404,redirect
+>>>>>>> dev
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 import datetime as dt
+<<<<<<< HEAD
 from django.http import HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
 from .email import collaborate_new, send_invite
@@ -11,8 +19,25 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .utils import generate_token
 from django.utils.encoding import force_bytes, force_text
 from django.views import View
+=======
+
+
+from django.http import HttpResponseRedirect,request,JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
+from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
+                       SignupForm, TechNewsForm, UserProfileForm)
+from app.models import Group, Idea, Stories, TechNews, UserProfile
+
+from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
+                    FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
+                    UserProfileForm)
+from .models import Group, Idea, Stories, TechNews, UserProfile
+>>>>>>> dev
 
 # Create your views here.
+
+stripe.api_key = "YOUR SECRET KEY"
 
 def index(request):
     groups = Group.objects.all()
@@ -136,8 +161,14 @@ def single_idea(request, id):
     messages.success(request, 'You are Now a collaborator. The Owner has been Notified')  
     return redirect('meet_collegues')
 
+stripe.api_key = "YOUR SECRET KEY"
 
 
+def index(request):
+    stories = Stories.objects.order_by("-id")
+    # technews = TechNews.objects.order_by("-id")
+    return render(request,"index.html",{"stories":stories})
+    
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -148,9 +179,14 @@ def create_story(request):
             story.save()
         return HttpResponseRedirect(request.path_info)
 
+<<<<<<< HEAD
     else:
         form = CreateStoryForm()
     return render(request,"storyform.html",{"form":form})
+=======
+    return render(request, 'index.html')
+
+>>>>>>> dev
 
 def TechNews(request):
     form = TechNewsForm()
@@ -172,13 +208,46 @@ def Discussion(request):
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
+            discussion.user = current_user
+            
+def donation(request):
             discussion.creator = current_user
             discussion.date_created = dt.datetime.now()
 
-            discussion.save()
+	return render(request, 'donation.html')           
+            
+def charge(request):
+    
+	if request.method == 'POST':
+         print('Data:', request.POST)
 
-        return redirect('index')
+	amount = int(request.POST['amount']) 
 
+	customer = stripe.Customer.create(
+			email=request.POST['email'],
+			name=request.POST['nickname'],
+			source=request.POST['stripeToken']
+			)
+
+	charge = stripe.Charge.create(
+			customer=customer,
+			amount=amount*100,
+			currency='usd',
+			description="Donation"
+			)
+
+	return redirect(reverse('success', args=[amount]))
+
+
+def successMsg(request, args):
+	amount = args
+	return render(request, 'success.html', {'amount':amount})
+
+    # else:
+     
+    #     form = FundraiserForm()
+        
+    # return render(request, 'new_fundraiser.html', {"form": form})
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
@@ -194,11 +263,13 @@ def Fundraiser(request):
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
-        return redirect('index')
 
+<<<<<<< HEAD
     else:
         form = FundraiserForm()
     return render(request, 'new_fundraiser.html', {'title':title,"form": form})
+=======
+>>>>>>> dev
 #views to summary on the admin dashboard
 def summary(request):
     '''
@@ -234,6 +305,7 @@ def summary(request):
     }
 
     return render(request, 'admin_dash/dashboard.html', context)
+<<<<<<< HEAD
 
 #view function that renders to invite members page
 def invite_members(request):
@@ -283,3 +355,11 @@ class InviteUserView(View):
                                  'user is invited successfully')
             return redirect('user_profile.html')
         return render(request, 'user_profile.html')
+=======
+  return render(request, 'admin_dash/dashboard.html', context)
+
+
+def Fundraiser(request):
+    
+    return render(request,'new_fundraiser.html')
+>>>>>>> dev
