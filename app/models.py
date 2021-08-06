@@ -9,6 +9,7 @@ from django.dispatch import receiver
 
 
 
+
 # Create your models here.
 # Using django base user
 #-------------------------------------------------------------------------------------------
