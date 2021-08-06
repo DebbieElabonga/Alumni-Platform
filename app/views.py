@@ -239,15 +239,39 @@ def Fundraiser(request):
 
 #views to summary on the admin dashboard
 def summary(request):
-  '''
-  renders summary on admin dashboard
-  '''
-  title = 'admin dashboard summary'
+    '''
+    renders summary on admin dashboard
+    '''
+    title = 'Admin - Summary'
+    
+    users = UserProfile.get_users()
+    projects = Idea.get_projects()
+    groups = Group.get_groups()
+    admins = GeneralAdmin.get_admins()[:5]
+    articles = Stories.get_stories()
 
-  context = {
-    'title':title
-  }
+    def close_project():
+        project_id = request.POST.get('close_proj')
+        project = Idea.objects.filter(id = project_id)
+        if project:
+            project.update(is_open = False)
+    
+    if request.method == 'POST':
+        close_project()
 
+        return redirect('admin_dashboard')
+
+
+    context = {
+        'articles':articles,
+        'admins':admins,
+        'users':users,
+        'projects':projects,
+        'groups':groups,
+        'title':title
+    }
+
+    return render(request, 'admin_dash/dashboard.html', context)
   return render(request, 'admin_dash/dashboard.html', context)
 
 
