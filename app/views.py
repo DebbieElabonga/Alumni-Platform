@@ -1,3 +1,4 @@
+from django.http import response
 from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render,redirect
@@ -11,6 +12,11 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .utils import generate_token
 from django.utils.encoding import force_bytes, force_text
 from django.views import View
+import mimetypes
+import os
+from django.http.response import HttpResponse
+
+
 
 # Create your views here.
 
@@ -290,3 +296,16 @@ class InviteUserView(View):
                                  'user is invited successfully')
             return redirect('user_profile.html')
         return render(request, 'user_profile.html')
+#--------------------------------------------------------------------------------------------
+#function enabling dowloading of user csv file
+def download_csv(request):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filename = 'Invite_users.csv'
+
+    filepath = BASE_DIR + 'app/Files' + filename
+    path = open(filename, 'r')
+    mime_type = mimetypes.guess_type(filepath)
+    respone = HttpResponse(path, content_type = mime_type)
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+
+    return response

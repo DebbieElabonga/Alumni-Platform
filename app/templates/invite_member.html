@@ -19,8 +19,10 @@
                 <input type="text" name="user_email" placeholder="Email Address">
             </div>
             <div class="d-flex">
-                <button type="submit" class="btn-outline-success ml-5 mr-5">Send Invite</button> <button
-                    class="ml-5">Upload CSV</button>
+                <a href="{% url 'download_csv' %}">
+                    <button type="submit" class="btn-outline-success ml-5 mr-5">Send Invite</button> <button
+                        class="ml-5">Upload CSV</button>
+                </a>
             </div>
         </form><br>
     </div>
