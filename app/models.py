@@ -43,14 +43,7 @@ class GeneralAdmin(models.Model):
   def __str__(self):
       return self.profile.user.username
 
-#message/discussion Model
-class Message(models.Model):
-  title = models.CharField(max_length=100, blank=True, null=True)
-  description = models.TextField()
-  date_created = models.DateTimeField()
 
-  def __str__(self):
-      return self.title
 
 #Group/Cohort Model
 class Group(models.Model):
@@ -61,12 +54,41 @@ class Group(models.Model):
   admin = models.ForeignKey(UserProfile, related_name = 'admin', on_delete= CASCADE, null = True)
   members = models.ManyToManyField(UserProfile)
   is_private = models.BooleanField(default=False)
-  discussion = models.ForeignKey(Message, on_delete=CASCADE, null=True)
+  
   class Meta:
     ordering = ['date_created']
 
   def __str__(self):
     return self.name
+
+#message/discussion Model
+class Message(models.Model):
+  title = models.CharField(max_length=100, blank=True, null=True)
+  description = models.TextField()
+  date_created = models.DateTimeField(auto_now_add=True)
+  group = models.ForeignKey(Group, on_delete=CASCADE, null=True)
+  creator = models.ForeignKey(User, on_delete=CASCADE)
+
+  def __str__(self):
+      return self.title
+
+class Response(models.Model):
+  message = models.ForeignKey(Message, on_delete = models.CASCADE)
+  creator = models.ForeignKey(User, on_delete=CASCADE)
+  reply = models.TextField()
+  date_created = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+    return self.message
+
+  def save_response(self):
+    self.save()
+
+  @classmethod
+  def get_response(cls, message_id):
+    return cls.objects.filter(message = message_id).all()
+
+  
 
 #StoryModel
 class Stories(models.Model):
@@ -80,7 +102,7 @@ class Stories(models.Model):
   def __str__(self):
     return self.title
 
-class TechNews(models.Model):
+class Tech(models.Model):
   title = models.CharField(max_length=100)
   description = tiny_models.HTMLField()
   image_path = models.ImageField(upload_to = 'Stories/')

@@ -1,5 +1,5 @@
-from app.models import Group, UserProfile, Stories,Idea,TechNews
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm
+from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
+from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
@@ -7,12 +7,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
+
 # Create your views here.
 
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
-    tech = TechNews.objects.all()
+    tech = Tech.objects.all().order_by("-id")
     return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
     
 def signup(request):
@@ -127,14 +128,6 @@ def single_idea(request, id):
 
 
 
-<<<<<<< HEAD
-def index(request):
-    stories = Stories.objects.order_by("-id")
-    # technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
-    
-=======
->>>>>>> dev
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -167,21 +160,49 @@ def TechNews(request):
     return render(request,'newsform.html',{"form":form})
 
 # Create your views here.
-def Discussion(request):
+def Discussion(request, id):
     current_user = request.user
+    group = get_object_or_404(Group, pk=id)
     if request.method == 'POST':
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
-            discussion.user = current_user
-
+            discussion.creator = current_user
+            discussion.group = group
             discussion.save()
 
-        return redirect('index')
+        return redirect('all_discussions',group.id)
 
     else:
         form = DiscussionForm()
-    return render(request, 'new_discussion.html', {"form": form})
+    return render(request, 'new_discussion.html', {"form": form ,'group':group})
+
+def all_discussions(request, id):
+    group = get_object_or_404(Group, pk=id)
+    messages = Message.objects.filter(group = group)
+
+    return render(request, 'all_discussions.html', {'group':group , 'messages':messages})
+
+def reply(request, id):
+    user = request.user
+    message = get_object_or_404(Message, pk=id)
+    all_responses = Response.get_response(message.id)
+    if request.method == 'POST':
+        form = ResponseForm(request.POST, request.FILES)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.creator = user
+            reply.message = message
+            reply.save()
+
+        return  HttpResponseRedirect(request.path_info)
+        
+
+    else:
+        form = ResponseForm()
+    return render(request, 'reply.html', {'all_responses':all_responses,"form": form, 'message':message})
+
+
     
 def Fundraiser(request):
     current_user = request.user
