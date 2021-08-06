@@ -18,17 +18,17 @@
   <div class="totals col-md-12">
     <div class="col-md-3">
       <h4 class="bold">
-        Active Members: {{users.count}}
+       <img src="{% static 'images/pngwing.com.png'%}" alt="" width="40px"> Active Members: {{users.count}}
       </h4>
     </div>
     <div class="col-md-3">
       <h4 class="bold">
-        Active Projects: {{project.count}}
+        <img src="{% static 'images/project2.jpg'%}" alt="" width="40px">  Active Projects: {{project.count}}
       </h4>
     </div>
     <div class="col-md-3">
       <h4 class="bold">
-        Active Groups: {{groups.count}}
+        <img src="{% static 'images/group2.jpg'%}" alt="" width="40px"> Active Groups: {{groups.count}}
       </h4>
     </div>
   </div>
@@ -41,7 +41,7 @@
       <div class="card-body">
         <!--loop upto 5 admin here-->
         <div class="group_dets">
-          <h5 class="picture col-md-3">Picture</h5>
+          <h5 class="picture col-md-3">Pic</h5>
           <h5 class="bold col-md-4">Name</h5>
           <h5 class="bold col-md-5">Email Address</h5>
 
@@ -91,15 +91,13 @@
         <!--loop upto 5 admin here-->
         <!--start loop-->
         <div class="group_dets">
-          <h5 class="names bold col-md-4">Name</h5>
-          <h5 class="bold col-md-4">Admin</h5>
-          <h5 class="bold col-md-4">Members</h5>
+          <h5 class="names bold col-md-7">Title</h5>
+          <h5 class="bold col-md-5">Author</h5>
         </div>
         <!--loop group names-->
         <div class="group_dets">
-          <p class="names col-md-4">{{group.name}}Name names</p>
-          <p class="col-md-4">Admin group</p>
-          <p class="col-md-4">20 Members</p>
+          <p class="names col-md-7">{{group.name}}Tutle title</p>
+          <p class="col-md-5">Name name</p>
         </div>
 
         <!--end of loop-->

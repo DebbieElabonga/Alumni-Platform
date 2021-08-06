@@ -105,7 +105,7 @@ button{
 .top_welcome, .totals>div{
   background-color: var(--white);
   border: 1px solid rgb(200, 200, 200);
-  border-radius: 5px;
+  border-radius: 3px;
   margin: 2px;
 }
 .totals{
@@ -133,5 +133,12 @@ button{
 .card-header{
   background-color: var(--light_green);
   color: white;
-  border: 1px solid white;
+}
+.totals>div{
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, .3);
+  color: var(--dark_green);
+}
+.all_groups, .top_articles, .projects, .admins{
+  color: var(--dark_green);
+  font-size: .8em;
 }
