@@ -1,17 +1,12 @@
 from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
-<<<<<<< HEAD
-=======
-from django.shortcuts import render,redirect
 from django.shortcuts import render, redirect
->>>>>>> ft-admin
 from django.urls import reverse
 import stripe
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 import datetime as dt
-<<<<<<< HEAD
 from django.http import HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
 from .email import collaborate_new, send_invite
@@ -19,8 +14,6 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .utils import generate_token
 from django.utils.encoding import force_bytes, force_text
 from django.views import View
-=======
->>>>>>> ft-admin
 
 
 from django.http import HttpResponseRedirect,request,JsonResponse
