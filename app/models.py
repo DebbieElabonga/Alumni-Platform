@@ -80,7 +80,7 @@ class Stories(models.Model):
   def __str__(self):
     return self.title
 
-class TechNews(models.Model):
+class Tech(models.Model):
   title = models.CharField(max_length=100)
   description = tiny_models.HTMLField()
   image_path = models.ImageField(upload_to = 'Stories/')
@@ -131,3 +131,12 @@ class Donor(models.Model):
   def __str__(self):
     return self.title
 
+class Add_user(models.Model):
+  full_name = models.CharField(max_length=200)
+  username = models.CharField(max_length=20,default = 0)
+  student_id = models.CharField(max_length = 10, unique=True)
+  phone_number = models.CharField(max_length = 20, unique = True, default=None)
+  email = models.CharField(max_length=100, default=None)
+
+  def __str__(self):
+    return self.full_name

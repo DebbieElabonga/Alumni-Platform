@@ -1,4 +1,7 @@
-from app.models import Group, UserProfile, Stories,Idea,TechNews
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.views.generic.base import View
+from app.models import Group, UserProfile, Stories,Idea,Tech
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
@@ -7,12 +10,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode 
+from django.utils.encoding import force_bytes
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_text
+import threading
+from threading import Thread
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from app.utils import generate_token
+
 # Create your views here.
 @login_required(login_url='/accounts/login/')
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
-    tech = TechNews.objects.all()
+    tech = Tech.objects.all()
     return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
     
 def signup(request):
@@ -148,7 +162,7 @@ def create_story(request):
 
 
 from django.shortcuts import render,redirect
-from .forms import DiscussionForm, FundraiserForm, TechNewsForm
+from .forms import Add_userForm, DiscussionForm, FundraiserForm, TechNewsForm
 
 def TechNews(request):
     form = TechNewsForm()
@@ -207,3 +221,69 @@ def summary(request):
   }
 
   return render(request, 'admin_dash/dashboard.html', context)
+
+def create_user(request):
+    '''
+    View function to add a new students members into the alumni platform and send them an invitation email
+    '''
+    if request.method == 'POST':
+        form = Add_userForm(request.POST)
+        email = request.POST.get('email')
+        if form.is_valid():
+            user = form.save(commit = False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            email_subject = 'Invitation to Alumni Community'
+            message = render_to_string('invitation.html',
+                                    {
+                                        'user': user,
+                                        'domain': current_site.domain,
+                                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                        'token': generate_token.make_token(user)
+                                    }
+                                    )
+            email_message = EmailMessage(
+                email_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [email]
+            )
+            EmailThread(email_message).start()
+            messages.add_message(request, messages.SUCCESS,
+                                'invaitation sent  succesfully')
+            return redirect('registration')
+
+            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+            return redirect('/user_list/')
+    else:
+        form = Add_userForm()
+    return render(request, 'create_user.html', {"form": form})
+
+
+class InviteUserView(View):
+    '''
+    View function that generates a new token for each new user based on their uid
+    '''
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except Exception as identifier:
+            user = None
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 'user is invited successfully')
+            return redirect('')
+        return render(request, '')
+
+class EmailThread(threading.Thread):
+
+    def __init__(self, email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email_message.send()
