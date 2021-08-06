@@ -1,20 +1,26 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.http import JsonResponse, request
-from .forms import DiscussionForm, FundraiserForm, TechNewsForm
-
-
-
 import stripe
-from app.models import Group, UserProfile, Stories,Idea,TechNews
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
-from django.http import HttpResponseRedirect
+
+
+from django.http import HttpResponseRedirect,request,JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
+from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
+                       SignupForm, TechNewsForm, UserProfileForm)
+from app.models import Group, Idea, Stories, TechNews, UserProfile
+
+from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
+                    FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
+                    UserProfileForm)
+from .models import Group, Idea, Stories, TechNews, UserProfile
+
 # Create your views here.
 
 stripe.api_key = "YOUR SECRET KEY"
@@ -22,8 +28,8 @@ stripe.api_key = "YOUR SECRET KEY"
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
-    tech = TechNews.objects.all()
-    return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
+    #tech = TechNews.objects.all()
+    return render(request,'index.html', {'groups':groups,'stories':stories})
     
 def signup(request):
     if request.method == 'POST':
@@ -156,8 +162,6 @@ def create_story(request):
     return render(request, 'index.html')
 
 
-
-
 def TechNews(request):
     form = TechNewsForm()
     if request.method == 'POST':
@@ -181,6 +185,8 @@ def Discussion(request):
             discussion.user = current_user
             
 def donation(request):
+            discussion.creator = current_user
+            discussion.date_created = dt.datetime.now()
 
 	return render(request, 'donation.html')           
             
@@ -216,6 +222,19 @@ def successMsg(request, args):
     #     form = FundraiserForm()
         
     # return render(request, 'new_fundraiser.html', {"form": form})
+    else:
+        form = DiscussionForm()
+    return render(request, 'new_discussion.html', {"form": form})
+    
+def Fundraiser(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = FundraiserForm(request.POST, request.FILES)
+        if form.is_valid():
+            fundraise = form.save(commit=False)
+            fundraise.creator = current_user
+            fundraise.date_created = dt.datetime.now()
+            fundraise.save()
 
 
 #views to summary on the admin dashboard

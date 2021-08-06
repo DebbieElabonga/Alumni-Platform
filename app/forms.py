@@ -57,4 +57,4 @@ class DiscussionForm(forms.ModelForm):
 class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
-        fields = ('__all__')
+        exclude = ['date_created']
