@@ -1,0 +1,11 @@
+{% autoescape off%}
+Hello, {{user.first_name}}
+ You have been invited to join Alumni Community, 
+  A platform where you meet like minded people and build awesome stuff!
+
+To accept the invitation, please click the link below:
+http://{{domain}}{% url 'invitation' uidb64=uid token=token %}
+
+-- Alumni team
+
+{% endautoescape %}

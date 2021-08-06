@@ -49,12 +49,14 @@ urlpatterns=[
   url(r'^new_cohort/$', views.cohort, name='new_cohort'),
   url(r'^fundraiser/$', views.Fundraiser, name='fundraiser'),   
   url(r'^discussion/$', views.Discussion, name='discussion'),
-  #url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
-  path("story/",views.create_story,name="story"),
+  url(r'^invite_members/$', views.invite_members, name = 'invite_members'),
+  path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
+
+  url(r"^story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
-  url(r'discussion', views.Discussion, name='discussion'),
-  url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
-  path("news/",views.TechNews,name="technews"),
+  url(r'^discussion', views.Discussion, name='discussion'),
+  url(r'^fundraiser', views.Fundraiser, name='fundraiser'),   
+  url(r"^news/",views.TechNews,name="technews"),
   
 ]
 if settings.DEBUG:

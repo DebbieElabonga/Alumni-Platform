@@ -1,12 +1,25 @@
+<<<<<<< HEAD
+from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
+from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
+from django.shortcuts import render,redirect
+=======
 from django.shortcuts import render, redirect
 from django.urls import reverse
 import stripe
 from django.shortcuts import render, get_object_or_404,redirect
+>>>>>>> dev
 from django.contrib.auth import login, authenticate
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
+<<<<<<< HEAD
+from django.http import HttpResponseRedirect
+from django.contrib.sites.shortcuts import get_current_site
+from .email import collaborate_new, send_invite
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .utils import generate_token
+from django.utils.encoding import force_bytes, force_text
+from django.views import View
+=======
 
 
 from django.http import HttpResponseRedirect,request,JsonResponse
@@ -20,6 +33,7 @@ from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
                     FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
                     UserProfileForm)
 from .models import Group, Idea, Stories, TechNews, UserProfile
+>>>>>>> dev
 
 # Create your views here.
 
@@ -60,7 +74,9 @@ def profile(request):
     return render(request, 'user_profile.html',context)
 
 def cohort(request):
+    title = "Cohorts"
     if request.method == 'POST':
+        
         form = CohortForm(request.POST, request.FILES)
         if form.is_valid():
             group = form.save(commit=False)
@@ -74,10 +90,10 @@ def cohort(request):
             return redirect('index')
         else:
             messages.warning(request, 'Invalid form')
-            return render(request, 'cohort.html', {'form': form})
+            return render(request, 'cohort.html', {'title':title,'form': form})
     else:
         form = CohortForm()
-    return render(request, 'cohort.html', {'form': form})
+    return render(request, 'cohort.html', {'title':title,'form': form})
 
 # Create your views here.
 
@@ -128,18 +144,22 @@ def single_idea(request, id):
   Renders a found idea object
   '''
   idea = Idea.objects.get(id = id)
-  if request.method == 'POST':
-    skills = request.POST.get('skills')
-    new_join = request.user
-    idea.collaborators.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
-    #send email of a user joining a team
-    
-  context = {
-    'idea':idea
-  }
+  if idea.collaborators.id == request.user.id:
+      messages.success(request, 'You are already a collaborator to this project')
+  else:  
+    if request.method == 'POST':
+        skills = request.POST.get('skills')
+        new_join = request.user
+        idea.collaborators.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
 
-  return render(request, 'singleidea.html', context)
-  return render(request, 'meetcollegues.html', context)
+        #send email of a user joining a team
+        collaborate_new(new_join, idea, idea.owner.user.email, skills)
+    context = {
+        'idea':idea
+    }
+
+    messages.success(request, 'You are Now a collaborator. The Owner has been Notified')  
+    return redirect('meet_collegues')
 
 stripe.api_key = "YOUR SECRET KEY"
 
@@ -159,8 +179,14 @@ def create_story(request):
             story.save()
         return HttpResponseRedirect(request.path_info)
 
+<<<<<<< HEAD
+    else:
+        form = CreateStoryForm()
+    return render(request,"storyform.html",{"form":form})
+=======
     return render(request, 'index.html')
 
+>>>>>>> dev
 
 def TechNews(request):
     form = TechNewsForm()
@@ -175,7 +201,7 @@ def TechNews(request):
         form = TechNewsForm()
     return render(request,'newsform.html',{"form":form})
 
-# Create your views here.
+# Start a discussion.
 def Discussion(request):
     current_user = request.user
     if request.method == 'POST':
@@ -227,6 +253,7 @@ def successMsg(request, args):
     return render(request, 'new_discussion.html', {"form": form})
     
 def Fundraiser(request):
+    title = 'Start A Fundraiser'
     current_user = request.user
     if request.method == 'POST':
         form = FundraiserForm(request.POST, request.FILES)
@@ -237,6 +264,12 @@ def Fundraiser(request):
             fundraise.save()
 
 
+<<<<<<< HEAD
+    else:
+        form = FundraiserForm()
+    return render(request, 'new_fundraiser.html', {'title':title,"form": form})
+=======
+>>>>>>> dev
 #views to summary on the admin dashboard
 def summary(request):
     '''
@@ -272,9 +305,61 @@ def summary(request):
     }
 
     return render(request, 'admin_dash/dashboard.html', context)
+<<<<<<< HEAD
+
+#view function that renders to invite members page
+def invite_members(request):
+    '''
+    renders invite member form
+    '''
+    title = 'Invite Members'
+    if request.method == "POST":
+        f_name = request.POST.get('first_name')
+        l_name = request.POST.get('last_name')
+        email = request.POST.get('user_email')
+        username = f_name+(list(l_name))[0]
+
+        new_user = User(username = username, first_name = f_name, last_name = l_name, email = email, is_active = False)
+        new_user.save()
+        current_site = get_current_site(request)
+        domain = current_site.domain
+        uid = urlsafe_base64_encode(force_bytes(new_user.pk))
+        token = generate_token.make_token(new_user)
+        
+        send_invite(email, domain , uid, token)
+
+        messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+        return redirect('invite_members')
+
+
+    context = {
+        'title':title,
+    }
+
+    return render(request, 'invite_member.html', context)
+
+class InviteUserView(View):
+    '''
+    View function that generates a new token for each new user based on their uid
+    '''
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except Exception as identifier:
+            user = None
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 'user is invited successfully')
+            return redirect('user_profile.html')
+        return render(request, 'user_profile.html')
+=======
   return render(request, 'admin_dash/dashboard.html', context)
 
 
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
+>>>>>>> dev

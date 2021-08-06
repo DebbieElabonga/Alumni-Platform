@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Idea
 from .models import Stories,TechNews
-from django.db.models import fields
 from .models import Fundraiser, Message
 
 # The signup form

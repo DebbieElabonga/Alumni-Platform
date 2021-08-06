@@ -30,3 +30,13 @@ button{
   font-weight: bold;
   font-size: large;
 }
+.invitee>input, .invitee_email>input{
+  border-width: 0;
+  border-bottom: 1px solid  black;
+  margin-bottom: 30px;
+  font-size: 1.3em;
+  background-color: rgba(255, 255, 255, 0);
+}
+.invitee_email>input{
+  width: 120%;
+}
