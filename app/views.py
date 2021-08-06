@@ -1,20 +1,35 @@
-from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
+from django.shortcuts import render, redirect
+from django.urls import reverse
+import stripe
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
-from django.http import HttpResponseRedirect
+
+
+from django.http import HttpResponseRedirect,request,JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
+from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
+                       SignupForm, TechNewsForm, UserProfileForm)
+from app.models import Group, Idea, Stories, TechNews, UserProfile
+
+from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
+                    FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
+                    UserProfileForm)
+from .models import Group, Idea, Stories, TechNews, UserProfile
 
 # Create your views here.
+
+stripe.api_key = "YOUR SECRET KEY"
 
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
-    tech = Tech.objects.all().order_by("-id")
-    return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
+    #tech = TechNews.objects.all()
+    return render(request,'index.html', {'groups':groups,'stories':stories})
     
 def signup(request):
     if request.method == 'POST':
@@ -126,8 +141,14 @@ def single_idea(request, id):
   return render(request, 'singleidea.html', context)
   return render(request, 'meetcollegues.html', context)
 
+stripe.api_key = "YOUR SECRET KEY"
 
 
+def index(request):
+    stories = Stories.objects.order_by("-id")
+    # technews = TechNews.objects.order_by("-id")
+    return render(request,"index.html",{"stories":stories})
+    
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -138,13 +159,8 @@ def create_story(request):
             story.save()
         return HttpResponseRedirect(request.path_info)
 
-    else:
-        form = CreateStoryForm()
-    return render(request,"storyform.html",{"form":form})
+    return render(request, 'index.html')
 
-
-from django.shortcuts import render,redirect
-from .forms import DiscussionForm, FundraiserForm, TechNewsForm
 
 def TechNews(request):
     form = TechNewsForm()
@@ -167,12 +183,46 @@ def Discussion(request, id):
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
+            discussion.user = current_user
+            
+def donation(request):
             discussion.creator = current_user
-            discussion.group = group
-            discussion.save()
+            discussion.date_created = dt.datetime.now()
 
-        return redirect('all_discussions',group.id)
+	return render(request, 'donation.html')           
+            
+def charge(request):
+    
+	if request.method == 'POST':
+         print('Data:', request.POST)
 
+	amount = int(request.POST['amount']) 
+
+	customer = stripe.Customer.create(
+			email=request.POST['email'],
+			name=request.POST['nickname'],
+			source=request.POST['stripeToken']
+			)
+
+	charge = stripe.Charge.create(
+			customer=customer,
+			amount=amount*100,
+			currency='usd',
+			description="Donation"
+			)
+
+	return redirect(reverse('success', args=[amount]))
+
+
+def successMsg(request, args):
+	amount = args
+	return render(request, 'success.html', {'amount':amount})
+
+    # else:
+     
+    #     form = FundraiserForm()
+        
+    # return render(request, 'new_fundraiser.html', {"form": form})
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form ,'group':group})
@@ -210,24 +260,49 @@ def Fundraiser(request):
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.user = current_user
-
+            fundraise.creator = current_user
+            fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
-        return redirect('index')
 
-    else:
-        form = FundraiserForm()
-    return render(request, 'new_fundraiser.html', {"form": form})
 #views to summary on the admin dashboard
 def summary(request):
-  '''
-  renders summary on admin dashboard
-  '''
-  title = 'admin dashboard summary'
+    '''
+    renders summary on admin dashboard
+    '''
+    title = 'Admin - Summary'
+    
+    users = UserProfile.get_users()
+    projects = Idea.get_projects()
+    groups = Group.get_groups()
+    admins = GeneralAdmin.get_admins()[:5]
+    articles = Stories.get_stories()
 
-  context = {
-    'title':title
-  }
+    def close_project():
+        project_id = request.POST.get('close_proj')
+        project = Idea.objects.filter(id = project_id)
+        if project:
+            project.update(is_open = False)
+    
+    if request.method == 'POST':
+        close_project()
 
+        return redirect('admin_dashboard')
+
+
+    context = {
+        'articles':articles,
+        'admins':admins,
+        'users':users,
+        'projects':projects,
+        'groups':groups,
+        'title':title
+    }
+
+    return render(request, 'admin_dash/dashboard.html', context)
   return render(request, 'admin_dash/dashboard.html', context)
+
+
+def Fundraiser(request):
+    
+    return render(request,'new_fundraiser.html')

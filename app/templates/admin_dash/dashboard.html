@@ -1,15 +1,177 @@
-
 {% extends 'admin_dash/admin_dashboard.html' %}
 {% load static %}
 {% load bootstrap3 %}
 
 {% block content%}
 
-<div class="dashboard col-md-10">
-  <div class="welcome_dash m-2 p-4">
-    <h4 class="bold">Welcome to Alumni Dashboard</h4>
-    <h6>You are a General admin. You can do general administration</h6>
+<div class="dashboard col-md-12">
+  <div class="top_welcome mt-2  d-flex">
+    <div class="welcome_dash p-4">
+      <h4 class="bold">Welcome to Alumni Dashboard</h4>
+      <h6>You are a General admin. You can do general administration</h6>
+    </div>
+    <div class="lefter_welcome d-flex ml-auto p-4">
+      <p class="bold">View Complains</p><img src="{% static 'images/settings.png' %}" alt="" width="20px" height="20px"
+        class="ml-3">
+    </div>
   </div>
-</div>
+  <div class="totals col-md-12">
+    <div class="col-md-3">
+      <h4 class="bold">
+        <img src="{% static 'images/pngwing.com.png'%}" alt="" width="40px"> Active Members: {{users.count}}
+      </h4>
+    </div>
+    <div class="col-md-3">
+      <h4 class="bold">
+        <img src="{% static 'images/project2.jpg'%}" alt="" width="40px"> Active Projects: {{projects.count}}
+      </h4>
+    </div>
+    <div class="col-md-3">
+      <h4 class="bold">
+        <img src="{% static 'images/group2.jpg'%}" alt="" width="40px"> Active Groups: {{groups.count}}
+      </h4>
+    </div>
+  </div>
+  <div class="samples col-md-12 d-flex flex-row p-0 justify-content-space-between">
+    <div class="admins card col-md-4 p-0">
+      <div class="card-header">
+        <h4>General Admins:</h4>
+        <h6>Contact these admins incase you need assistance</h6>
+      </div>
+      <div class="card-body">
+        <!--loop upto 5 admin here-->
+        <div class="group_dets">
+          <h5 class="picture col-md-3">Image</h5>
+          <h5 class="bold col-md-4">Name</h5>
+          <h5 class="bold col-md-5">Email Address</h5>
 
-{%endblock%}
+        </div>
+        {% if admins %}
+        {% for admin in admins%}
+        <!--start loop-->
+
+        <div class="other_admin_dets p-0">
+          <div class="col-md-3">
+            <img
+              src="{% if admin.profile.photo_path %}{{admin.profile.photo_path.url}}{%else%}{% static 'images/human-avatar-profle.png' %}{%endif%}"
+              alt="admin pic" width="36px" height="36px">
+          </div>
+
+          <p class="names col-md-4">{{admin.profile.user.first_name}} {{admin.profile.user.last_name}}</p>
+          <p class="col-md-5">{{admin.profile.user.email}}</p>
+        </div>
+        {%endfor%}
+        {%else%}
+        <h3 class="text-center">No General Admins assigned </h3>
+        <!--end of loop-->
+        {%endif%}
+      </div>
+    </div>
+    <div class="all_groups card col-md-4 p-0">
+      <div class="card-header">
+        <h4>Trending Groups:</h4>
+        <h6>Top 5 active groups</h6>
+      </div>
+      <div class="card-body p-0">
+        <!--loop upto 5 admin here-->
+        <!--start loop-->
+        {% if groups %}
+        <div class="group_dets">
+          <h5 class="names bold col-md-4">Name</h5>
+          <h5 class="bold col-md-4">Admin</h5>
+          <h5 class="bold col-md-4">Members</h5>
+        </div>
+        <!--loop group names-->
+
+        {% for group in groups %}
+        <div class="group_dets">
+          <p class="names col-md-4">{{group.name}}</p>
+          <p class="col-md-4">{{group.admin.profile.user.username}}</p>
+          <p class="col-md-4">{{group.members.count}}</p>
+        </div>
+        {%endfor%}
+        {%else%}
+        <h3 class="text-center">No Groups Found</h3>
+        {%endif%}
+
+        <!--end of loop-->
+
+      </div>
+    </div>
+    <div class="top_articles card col-md-3 p-0 ml-auto">
+      <div class="card-header">
+        <h4>Top Articles:</h4>
+        <h6>Most Read Articles</h6>
+      </div>
+      <div class="card-body p-0">
+        <!--loop upto 5 admin here-->
+        <!--start loop-->
+        {% if articles %}
+        <div class="group_dets">
+          <h5 class="names bold col-md-7">Title</h5>
+          <h5 class="bold col-md-5">Author</h5>
+        </div>
+        <!--loop group names-->
+        {% for article in articles %}
+        <div class="group_dets">
+          <p class="names col-md-7">{{article.title}}</p>
+          <p class="col-md-5">{{article.creator.user.username}}</p>
+        </div>
+        {%endfor%}
+        {%else%}
+        <h3 class="text-center">No Articles Found</h3>
+        {%endif%}
+
+        <!--end of loop-->
+
+      </div>
+    </div>
+
+  </div>
+  <div class="projects col-md-12 d-flex flex-row p-0 justify-content-space-between">
+    <div class="open_projects card col-md-12 p-0">
+      <div class="card-header">
+        <h4>Open Projects:</h4>
+        <h6>Projects that are still accepting members</h6>
+      </div>
+      <div class="card-body">
+        <!--loop upto 5 admin here-->
+        {% if projects %}
+        <div class="group_dets">
+          <h5 class="names bold col-md-2">Owner</h5>
+          <h5 class="bold col-md-4">Project</h5>
+          <h5 class="bold col-md-2">Date Created</h5>
+          <h5 class="bold col-md-2">Members</h5>
+          <h5 class="bold col-md-2">Action</h5>
+
+        </div>
+        <!--start loop-->
+        {% for project in projects %}
+        <div class="other_admin_dets">
+          <h5 class="names bold col-md-2">{{project.owner.user.username}}</h5>
+          <h5 class="col-md-4">{{project.title}}</h5>
+          <h5 class="col-md-2">{{project.date_created}}</h5>
+          <h5 class="col-md-2">{{project.collaborators.count}}</h5>
+          <div class="col-md-2">
+            {%if project.is_open %}
+            <form action="{% url 'admin_dashboard' %}" method='POST'>
+              {%csrf_token%}
+              <input type="hidden" name="close_proj" value="{{project.id}}">
+              <button type="submit" id="close_project" class="btn">Close</button>
+            </form>
+            {%else%}
+            <p class="bold cold">Project Closed</p>
+            {%endif%}
+          </div>
+        </div>
+        {%endfor%}
+          {%else%}
+          <h3 class="text-center">No Projects Found</h3>
+          {%endif%}
+        <!--end of loop-->
+      </div>
+    </div>
+  </div>
+
+
+  {%endblock%}

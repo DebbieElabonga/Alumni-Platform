@@ -9,6 +9,7 @@ from django.dispatch import receiver
 
 
 
+
 # Create your models here.
 # Using django base user
 #-------------------------------------------------------------------------------------------
@@ -29,6 +30,14 @@ class UserProfile(models.Model):
   def __str__(self):
       return self.user.username
 
+  @classmethod
+  def get_users(cls):
+    try:
+      users = cls.objects.all()
+    except cls.DoesNotExist:
+      users = cls.objects.all()
+    return users
+
   #auto creates a user's profile once the user has registered
   @receiver(post_save, sender=User)
   def save_user(sender, instance, created, **kwargs):
@@ -43,6 +52,19 @@ class GeneralAdmin(models.Model):
   def __str__(self):
       return self.profile.user.username
 
+  @classmethod
+  def get_admins(cls):
+    try:
+      admins = cls.objects.all()
+    except cls.DoesNotExist:
+      admins = None
+    return admins
+
+#message/discussion Model
+class Message(models.Model):
+  title = models.CharField(max_length=100, blank=True, null=True)
+  description = models.TextField()
+  date_created = models.DateTimeField()
 
 
 #Group/Cohort Model
@@ -61,34 +83,13 @@ class Group(models.Model):
   def __str__(self):
     return self.name
 
-#message/discussion Model
-class Message(models.Model):
-  title = models.CharField(max_length=100, blank=True, null=True)
-  description = models.TextField()
-  date_created = models.DateTimeField(auto_now_add=True)
-  group = models.ForeignKey(Group, on_delete=CASCADE, null=True)
-  creator = models.ForeignKey(User, on_delete=CASCADE)
-
-  def __str__(self):
-      return self.title
-
-class Response(models.Model):
-  message = models.ForeignKey(Message, on_delete = models.CASCADE)
-  creator = models.ForeignKey(User, on_delete=CASCADE)
-  reply = models.TextField()
-  date_created = models.DateTimeField(auto_now_add=True)
-
-  def __str__(self):
-    return self.message
-
-  def save_response(self):
-    self.save()
-
   @classmethod
-  def get_response(cls, message_id):
-    return cls.objects.filter(message = message_id).all()
-
-  
+  def get_groups(cls):
+    try:
+      groups = cls.objects.all()
+    except cls.DoesNotExist:
+      groups = cls.objects.all()
+    return groups
 
 #StoryModel
 class Stories(models.Model):
@@ -101,6 +102,14 @@ class Stories(models.Model):
 
   def __str__(self):
     return self.title
+  
+  @classmethod
+  def get_stories(cls):
+    try:
+      stories = cls.objects.all()
+    except cls.DoesNotExist:
+      stories = cls.objects.all()
+    return stories
 
 class Tech(models.Model):
   title = models.CharField(max_length=100)
@@ -128,6 +137,14 @@ class Idea(models.Model):
 
   def __str__(self):
     return self.title
+
+  @classmethod
+  def get_projects(cls):
+    try:
+      projects = cls.objects.all()
+    except cls.DoesNotExist:
+      projects = cls.objects.all()
+    return projects
 
 #Fundraiser Model
 class Fundraiser(models.Model):
