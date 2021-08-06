@@ -1,5 +1,5 @@
-from app.models import Group, UserProfile,TechNews, Stories
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm
+from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
+from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect
@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
-from .models import Idea, Stories,UserProfile,TechNews
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -164,10 +163,6 @@ def create_story(request):
         form = CreateStoryForm()
     return render(request,"storyform.html",{"form":form})
 
-
-from django.shortcuts import render,redirect
-from .forms import DiscussionForm, FundraiserForm, TechNewsForm
-
 def TechNews(request):
     form = TechNewsForm()
     if request.method == 'POST':
@@ -215,13 +210,24 @@ def Fundraiser(request):
     return render(request, 'new_fundraiser.html', {"form": form})
 #views to summary on the admin dashboard
 def summary(request):
-  '''
-  renders summary on admin dashboard
-  '''
-  title = 'Admin - Summary'
+    '''
+    renders summary on admin dashboard
+    '''
+    title = 'Admin - Summary'
+    
+    users = UserProfile.get_users()
+    projects = Idea.get_projects()
+    groups = Group.get_groups()
+    admins = GeneralAdmin.get_admins()[:5]
+    articles = Stories.get_stories()
 
-  context = {
-    'title':title
-  }
+    context = {
+        'articles':articles,
+        'admins':admins,
+        'users':users,
+        'projects':projects,
+        'groups':groups,
+        'title':title
+    }
 
-  return render(request, 'admin_dash/dashboard.html', context)
+    return render(request, 'admin_dash/dashboard.html', context)

@@ -29,6 +29,14 @@ class UserProfile(models.Model):
   def __str__(self):
       return self.user.username
 
+  @classmethod
+  def get_users(cls):
+    try:
+      users = cls.objects.all()
+    except cls.DoesNotExist:
+      users = cls.objects.all()
+    return users
+
   #auto creates a user's profile once the user has registered
   @receiver(post_save, sender=User)
   def save_user(sender, instance, created, **kwargs):
@@ -42,6 +50,14 @@ class GeneralAdmin(models.Model):
 
   def __str__(self):
       return self.profile.user.username
+
+  @classmethod
+  def get_admins(cls):
+    try:
+      admins = cls.objects.all()
+    except cls.DoesNotExist:
+      admins = None
+    return admins
 
 #message/discussion Model
 class Message(models.Model):
@@ -68,6 +84,14 @@ class Group(models.Model):
   def __str__(self):
     return self.name
 
+  @classmethod
+  def get_groups(cls):
+    try:
+      groups = cls.objects.all()
+    except cls.DoesNotExist:
+      groups = cls.objects.all()
+    return groups
+
 #StoryModel
 class Stories(models.Model):
   title = models.CharField(max_length=100)
@@ -79,6 +103,14 @@ class Stories(models.Model):
 
   def __str__(self):
     return self.title
+  
+  @classmethod
+  def get_stories(cls):
+    try:
+      stories = cls.objects.all()
+    except cls.DoesNotExist:
+      stories = cls.objects.all()
+    return stories
 
 class TechNews(models.Model):
   title = models.CharField(max_length=100)
@@ -106,6 +138,14 @@ class Idea(models.Model):
 
   def __str__(self):
     return self.title
+
+  @classmethod
+  def get_projects(cls):
+    try:
+      projects = cls.objects.all()
+    except cls.DoesNotExist:
+      projects = cls.objects.all()
+    return projects
 
 #Fundraiser Model
 class Fundraiser(models.Model):
