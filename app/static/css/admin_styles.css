@@ -12,6 +12,9 @@
   font-family: 'Nunito', sans-serif;
   box-sizing: border-box;
 }
+.cold{
+  color: rgb(150, 150, 150);
+}
 body{
   background-color: var(--lighter_orange);
 }

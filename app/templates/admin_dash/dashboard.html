@@ -151,9 +151,13 @@
           <h5 class="names bold col-md-2">{{project.owner.user.username}}</h5>
           <h5 class="col-md-4">{{project.title}}</h5>
           <h5 class="col-md-2">{{project.date_created}}</h5>
-          <h5 class="col-md-2">{{project.colaborators.count}}</h5>
+          <h5 class="col-md-2">{{project.collaborators.count}}</h5>
           <div class="col-md-2">
-            <button class="btn">Close</button>
+            {%if project.is_open %}
+            <button id="close_project" class="btn">Close</button>
+            {%else%}
+            <p class="bold cold">Project Closed</p>
+            {%endif%}
           </div>
           {%endfor%}
           {%else%}
