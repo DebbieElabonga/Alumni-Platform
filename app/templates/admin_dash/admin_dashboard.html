@@ -38,19 +38,19 @@
         <h6>Member since {{user_profile.user.date_created}}</h6>
       </div>
     </div>
-    <button> Add Profile</button></a>
+    <a href="{% url 'user_profile' %}"><button> Add Profile</button></a>
     <div class="admin_side">
       <a href="{% url 'admin_dashboard' %}">
         <div class='icons'><img src="{% static 'images/dashboard.png'%}" alt="" width='20px'>
           <p>Dashboard</p>
         </div>
       </a>
-      <a href="">
+      <a href="{% url 'new_cohort' %}">
         <div class='icons'><img src="{% static 'images/group.png'%}" alt="" width='22px'>
           <p>Create Cohort</p>
         </div>
       </a>
-      <a href="">
+      <a href="{% url 'fundraiser' %}">
         <div class='icons'><img src="{% static 'images/fundraise.png'%}" alt="" width='22px'>
           <p>Start Fundraiser</p>
         </div>

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'bootstrap4',
     'django_bootstrap5',
+    
 ]
 
 MIDDLEWARE = [
@@ -82,12 +83,20 @@ WSGI_APPLICATION = 'alumni.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+
         'NAME': config('DB_NAME'),
         'USER':config('DB_USER'),
+        'PASSWORD':config('DB_PASSWORD'),
+        #'HOST': config('DB_HOST'),
         'PASSWORD':config('DB_PASSWORD')
     }
 }
 
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

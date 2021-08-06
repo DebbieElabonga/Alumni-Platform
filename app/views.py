@@ -2,19 +2,19 @@ from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
-from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
 
 # Create your views here.
-@login_required(login_url='/accounts/login/')
+
 def index(request):
     groups = Group.objects.all()
-
-    return render(request,'index.html', {'groups':groups})
-
+    stories = Stories.objects.order_by("-id")
+    #tech = TechNews.objects.all()
+    return render(request,'index.html', {'groups':groups,'stories':stories})
+    
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -62,22 +62,6 @@ def cohort(request):
     else:
         form = CohortForm()
     return render(request, 'cohort.html', {'form': form})
-
-# @login_required(login_url='/accounts/login/')
-# def join_cohort(request, id):
-#     group = get_object_or_404(Group, id=id)
-#     request.user.group = group
-#     request.user.save()
-#     return redirect('index')
-
-# @login_required(login_url='/accounts/login/')
-# def leave_cohort(request, id):
-#     group = get_object_or_404(Group, id=id)
-#     request.user.group = None
-#     request.user.save()
-#     messages.success(
-#         request, 'Success! You have succesfully exited this Cohort ')
-#     return redirect('index')
 
 # Create your views here.
 
@@ -142,13 +126,7 @@ def single_idea(request, id):
   return render(request, 'meetcollegues.html', context)
 
 
-# Create your views here.
 
-def index(request):
-    stories = Stories.objects.order_by("-id")
-    # technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
-    
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -183,7 +161,8 @@ def Discussion(request):
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
-            discussion.user = current_user
+            discussion.creator = current_user
+            discussion.date_created = dt.datetime.now()
 
             discussion.save()
 
@@ -199,8 +178,8 @@ def Fundraiser(request):
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.user = current_user
-
+            fundraise.creator = current_user
+            fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
         return redirect('index')
