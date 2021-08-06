@@ -5,6 +5,9 @@ from django.contrib.auth import login, authenticate
 from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
+from django.contrib.sites.shortcuts import get_current_site
+from .email import collaborate_new
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -117,7 +120,9 @@ def single_idea(request, id):
     skills = request.POST.get('skills')
     new_join = request.user
     idea.collaborators.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
+
     #send email of a user joining a team
+    collaborate_new(new_join, idea.owners.user.username, idea.owners.user.email, skills)
     
   context = {
     'idea':idea
@@ -231,9 +236,30 @@ def invite_members(request):
     renders invite member form
     '''
     title = 'Invite Members'
-    # form = InviteMemberForm
+    if request.method == "POST":
+        f_name = request.POST.get('first_name')
+        l_name = request.POST.get('last_name')
+        email = request.POST.get('user_email')
+
+        new_user = User(first_name = f_name, last_name = l_name, email = email, is_active = False)
+        new_user.save()
+        current_site = get_current_site(request)
+        email_subject = "Invitation to Alumni Community"
+        message = render_to_string('invitation_email.html',{
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': generate_token.make_token(user)
+            })
+            email_message = EmailMessage(
+                email_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [email])
+
 
     context = {
+        'form':form,
         'title':title,
     }
 

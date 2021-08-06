@@ -1,0 +1,10 @@
+You have a New Collaborator
+Hello, {{name}}
+{{new_collab.username}} is interested in your idea
+Name:{{new_collab.first_name}} {{new_collab.last_name}}
+Skills: {{skills}}
+Member Since: {{new_collab.date_created|timesince}}
+
+Contact your admin for more information.
+
+Keep Rocking!
