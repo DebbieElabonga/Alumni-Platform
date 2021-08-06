@@ -1,6 +1,7 @@
 from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render, redirect
+from django.shortcuts import render,redirect
 from django.urls import reverse
 import stripe
 from django.shortcuts import render, get_object_or_404,redirect
