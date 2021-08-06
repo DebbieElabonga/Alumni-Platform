@@ -7,9 +7,10 @@ import datetime as dt
 from django.http import HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
 from .email import collaborate_new, send_invite
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .utils import generate_token
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, force_text
+from django.views import View
 
 # Create your views here.
 
@@ -124,14 +125,13 @@ def single_idea(request, id):
     idea.collaborators.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
 
     #send email of a user joining a team
-    collaborate_new(new_join, idea.owners.user.username, idea.owners.user.email, skills)
-    
+    collaborate_new(new_join, idea, idea.owner.user.email, skills)
   context = {
     'idea':idea
   }
 
+  messages.success(request, 'You are Now a collaborator. The Owner has been Notified')  
   return render(request, 'singleidea.html', context)
-  return render(request, 'meetcollegues.html', context)
 
 
 
@@ -242,15 +242,16 @@ def invite_members(request):
         f_name = request.POST.get('first_name')
         l_name = request.POST.get('last_name')
         email = request.POST.get('user_email')
+        username = f_name+(list(l_name))[0]
 
-        new_user = User(first_name = f_name, last_name = l_name, email = email, is_active = False)
+        new_user = User(username = username, first_name = f_name, last_name = l_name, email = email, is_active = False)
         new_user.save()
         current_site = get_current_site(request)
         domain = current_site.domain
         uid = urlsafe_base64_encode(force_bytes(new_user.pk))
         token = generate_token.make_token(new_user)
         
-        send_invite(new_user, email, domain , uid, token)
+        send_invite(email, domain , uid, token)
 
         messages.success(request, f'Congratulations! You have succesfully Added a new User!')
         return redirect('invite_members')
@@ -261,3 +262,21 @@ def invite_members(request):
     }
 
     return render(request, 'invite_member.html', context)
+
+class InviteUserView(View):
+    '''
+    View function that generates a new token for each new user based on their uid
+    '''
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except Exception as identifier:
+            user = None
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 'user is invited successfully')
+            return redirect('user_profile.html')
+        return render(request, 'user_profile.html')
