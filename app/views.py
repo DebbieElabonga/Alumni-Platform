@@ -6,8 +6,10 @@ from django.contrib import messages
 import datetime as dt
 from django.http import HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
-from .email import collaborate_new
-from django.template.loader import render_to_string
+from .email import collaborate_new, send_invite
+from django.utils.http import urlsafe_base64_encode
+from .utils import generate_token
+from django.utils.encoding import force_bytes
 
 # Create your views here.
 
@@ -244,22 +246,17 @@ def invite_members(request):
         new_user = User(first_name = f_name, last_name = l_name, email = email, is_active = False)
         new_user.save()
         current_site = get_current_site(request)
-        email_subject = "Invitation to Alumni Community"
-        message = render_to_string('invitation_email.html',{
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': generate_token.make_token(user)
-            })
-            email_message = EmailMessage(
-                email_subject,
-                message,
-                settings.EMAIL_HOST_USER,
-                [email])
+        domain = current_site.domain
+        uid = urlsafe_base64_encode(force_bytes(new_user.pk))
+        token = generate_token.make_token(new_user)
+        
+        send_invite(new_user, email, domain , uid, token)
+
+        messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+        return redirect('invite_members')
 
 
     context = {
-        'form':form,
         'title':title,
     }
 

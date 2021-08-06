@@ -15,12 +15,12 @@ def send_notification(name,receiver):
     msg.send()
 
 #function sending email to an invitee email address
-def send_invite(name, receiver):
+def send_invite(user, receiver, domain , uid, token):
     subject = 'Invitation to Alumni Community'
     sender = 'bernard.kibet@student.moringaschool.com'
 
-    text_content = render_to_string('email/inviteemail.txt',{'name':name})
-    html_content = render_to_string('email/inviteemail.html',{'name':name})
+    text_content = render_to_string('email/inviteemail.txt',{'user':user, 'domain':domain, 'uid':uid, 'token':token})
+    html_content = render_to_string('email/inviteemail.html',{'user':user, 'domain':domain, 'uid':uid, 'token':token})
 
     msg = EmailMultiAlternatives(subject, text_content, sender, [receiver])
     msg.attach_alternative(html_content, 'text/html')
