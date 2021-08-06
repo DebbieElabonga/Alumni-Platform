@@ -34,7 +34,7 @@ class UserProfile(models.Model):
     try:
       users = cls.objects.all()
     except cls.DoesNotExist:
-      users = cls.objects.all()
+      users = None
     return users
 
   #auto creates a user's profile once the user has registered
@@ -89,7 +89,7 @@ class Group(models.Model):
     try:
       groups = cls.objects.all()
     except cls.DoesNotExist:
-      groups = cls.objects.all()
+      groups = None
     return groups
 
 #StoryModel
@@ -109,7 +109,7 @@ class Stories(models.Model):
     try:
       stories = cls.objects.all()
     except cls.DoesNotExist:
-      stories = cls.objects.all()
+      stories = None
     return stories
 
 class TechNews(models.Model):
@@ -140,11 +140,19 @@ class Idea(models.Model):
     return self.title
 
   @classmethod
-  def get_projects(cls):
+  def get_open_projects(cls):
     try:
-      projects = cls.objects.all()
+      projects = cls.objects.filter(is_open = True)
     except cls.DoesNotExist:
-      projects = cls.objects.all()
+      projects = None
+    return projects
+
+  @classmethod
+  def get_closed_projects(cls):
+    try:
+      projects = cls.objects.filter(is_open = False)
+    except cls.DoesNotExist:
+      projects = None
     return projects
 
 #Fundraiser Model

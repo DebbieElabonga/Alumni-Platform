@@ -207,10 +207,15 @@ def summary(request):
     title = 'Admin - Summary'
     
     users = UserProfile.get_users()
-    projects = Idea.get_projects()
+    active_users = User.objects.filter(is_active = True)
+    inactive_users = User.objects.filter(is_active = False)
+
+    projects = Idea.get_open_projects()
+    closed_projects = Idea.get_closed_projects()
     groups = Group.get_groups()
     admins = GeneralAdmin.get_admins()[:5]
     articles = Stories.get_stories()
+
 
     def close_project():
         project_id = request.POST.get('close_proj')
@@ -225,6 +230,8 @@ def summary(request):
 
 
     context = {
+        'inactive_users':inactive_users,
+        'closed_projects':closed_projects,
         'articles':articles,
         'admins':admins,
         'users':users,
