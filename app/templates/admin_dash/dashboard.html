@@ -154,7 +154,11 @@
           <h5 class="col-md-2">{{project.collaborators.count}}</h5>
           <div class="col-md-2">
             {%if project.is_open %}
-            <button id="close_project" class="btn">Close</button>
+            <form action="{% url 'admin_dashboard' %}" method='POST'>
+              {%csrf_token%}
+              <input type="hidden" name="close_proj" value="{{project.id}}">
+              <button type="submit" id="close_project" class="btn">Close</button>
+            </form>
             {%else%}
             <p class="bold cold">Project Closed</p>
             {%endif%}

@@ -221,6 +221,18 @@ def summary(request):
     admins = GeneralAdmin.get_admins()[:5]
     articles = Stories.get_stories()
 
+    def close_project():
+        project_id = request.POST.get('close_proj')
+        project = Idea.objects.filter(id = project_id)
+        if project:
+            project.update(is_open = False)
+    
+    if request.method == 'POST':
+        close_project()
+
+        return redirect('admin_dashboard')
+
+
     context = {
         'articles':articles,
         'admins':admins,
