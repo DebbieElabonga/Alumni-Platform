@@ -4,6 +4,8 @@ from django.conf.urls.static import static
 
 from django.urls.conf import path
 from . import views
+from .import views as user_views
+from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
@@ -43,12 +45,16 @@ urlpatterns=[
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^story/$',views.create_story,name='story'),
   url(r'^news/$',views.TechNews,name="technews"),
+  
+  
 
 # Admin oriented views------------------------------------------------------------------------------ 
   url(r'^admin_dashboard/$', views.summary, name = 'admin_dashboard'),
   url(r'^new_cohort/$', views.cohort, name='new_cohort'),
   url(r'^fundraiser/$', views.Fundraiser, name='fundraiser'),   
   url(r'^discussion/$', views.Discussion, name='discussion'),
+  url(r'^create_user/$',user_views.create_user,name='create_user'),
+  path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
   url(r'^invite_members/$', views.invite_members, name = 'invite_members'),
   path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
 
