@@ -1,3 +1,6 @@
+from django.core.files.base import File
+from app.models import GeneralAdmin, Group, UploadInvite, UserProfile, Stories, Idea, Tech, User
+from app.forms import CohortForm, InviteUsers, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, Tech, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render, redirect
@@ -15,6 +18,14 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .utils import generate_token
 from django.utils.encoding import force_bytes, force_text
 from django.views import View
+import mimetypes
+import os
+from django.http.response import HttpResponse
+import pandas as pd
+from csv import DictReader
+import random
+
+
 import threading
 
 from django.http import HttpResponseRedirect,request,JsonResponse
@@ -256,10 +267,15 @@ def summary(request):
     title = 'Admin - Summary'
     
     users = UserProfile.get_users()
-    projects = Idea.get_projects()
+    active_users = User.objects.filter(is_active = True)
+    inactive_users = User.objects.filter(is_active = False)
+
+    projects = Idea.get_open_projects()
+    closed_projects = Idea.get_closed_projects()
     groups = Group.get_groups()
     admins = GeneralAdmin.get_admins()[:5]
     articles = Stories.get_stories()
+
 
     def close_project():
         project_id = request.POST.get('close_proj')
@@ -274,6 +290,8 @@ def summary(request):
 
 
     context = {
+        'inactive_users':inactive_users,
+        'closed_projects':closed_projects,
         'articles':articles,
         'admins':admins,
         'users':users,
@@ -288,15 +306,13 @@ def summary(request):
 def invite_members(request):
     '''
     renders invite member form
+    invites single users
+    invotes multiple users
     '''
-    title = 'Invite Members'
-    if request.method == "POST":
-        f_name = request.POST.get('first_name')
-        l_name = request.POST.get('last_name')
-        email = request.POST.get('user_email')
-        username = f_name+(list(l_name))[0]
+    def invite_new_user(f_name, l_name, email):
 
-        new_user = User(username = username, first_name = f_name, last_name = l_name, email = email, is_active = False)
+        rando = random.randint(0, 1000)
+        new_user = User(username = f_name+l_name+str(rando), first_name = f_name, last_name = l_name, email = email, is_active = False)
         new_user.save()
         current_site = get_current_site(request)
         domain = current_site.domain
@@ -307,9 +323,34 @@ def invite_members(request):
 
         messages.success(request, f'Congratulations! You have succesfully Added a new User!')
         return redirect('invite_members')
+    title = 'Invite Members'
+    if 'single_invite' in request.POST and request.method == "POST":
+        f_name = request.POST.get('first_name')
+        l_name = request.POST.get('last_name')
+        email = request.POST.get('user_email')
 
+        #call the function that sends email to new users
+        invite_new_user(f_name, l_name, email)
+    form = InviteUsers
 
+    if 'multiple_invite' in request.POST and request.method == 'POST':
+        form = InviteUsers(request.POST, request.FILES)
+        if form.is_valid:
+            form.save()
+
+            form_to_read = UploadInvite.objects.all().last()
+
+            with open((form_to_read.file_path).path, 'r') as read_obj:
+                csv_dict_reader = DictReader(read_obj)
+                for row in csv_dict_reader:
+                    f_name = row['first_name']
+                    l_name = row['last_name']
+                    email = row['email']
+
+                    invite_new_user(f_name, l_name, email)
+       
     context = {
+        'form':form,
         'title':title,
     }
 
@@ -332,7 +373,22 @@ class InviteUserView(View):
                                  'user is invited successfully')
             return redirect('user_profile.html')
         return render(request, 'user_profile.html')
-        return render(request, 'admin_dash/dashboard.html', context)
+#--------------------------------------------------------------------------------------------
+#function enabling dowloading of user csv file
+def download_csv(request):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filename = 'Invite_users.csv'
+
+    filepath = BASE_DIR + '/app/Files/' + filename
+    path = open(filepath, 'r')
+    mime_type = mimetypes.guess_type(filepath)
+    response = HttpResponse(path, content_type = mime_type)
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+
+    return response
+
+    
+    return render(request, 'admin_dash/dashboard.html', context)
 
 def create_user(request):
     '''

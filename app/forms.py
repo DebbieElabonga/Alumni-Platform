@@ -1,7 +1,7 @@
-from app.models import Group, UserProfile
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import Idea, UploadInvite, Stories,Tech, Fundraiser, Message, Group, UserProfile
 from .models import Add_user, Idea
 from .models import Stories,Tech
 from django.db.models import fields
@@ -72,3 +72,8 @@ class Add_userForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'class':'form-conrtol'}),
         }
         exclude = ['date_created']
+
+class InviteUsers(forms.ModelForm):
+    class Meta:
+        model = UploadInvite
+        fields = ['file_path']

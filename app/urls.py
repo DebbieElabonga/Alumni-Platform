@@ -57,6 +57,7 @@ urlpatterns=[
   path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
   url(r'^invite_members/$', views.invite_members, name = 'invite_members'),
   path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
+  path('download_csv/', views.download_csv, name = 'download_csv'),
 
   url(r"^story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
