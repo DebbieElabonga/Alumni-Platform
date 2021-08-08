@@ -205,7 +205,7 @@ def donation(request):
             discussion.creator = current_user
             discussion.date_created = dt.datetime.now()
 
-	return render(request, 'donation.html')           
+    return render(request, 'donation.html')           
             
 def charge(request):
     
