@@ -37,11 +37,7 @@ from app.models import Group, Idea, Stories, Tech, UserProfile
 
 from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
                     FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
-<<<<<<< HEAD
-                    UserProfileForm)
-=======
                     UserProfileForm,Add_userForm)
->>>>>>> origin/dev
 from .models import Group, Idea, Stories, Tech, UserProfile
 
 # Create your views here.
