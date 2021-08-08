@@ -17,6 +17,7 @@ import os
 from django.http.response import HttpResponse
 import pandas as pd
 from csv import DictReader
+import random
 
 
 
@@ -258,17 +259,19 @@ def invite_members(request):
     invotes multiple users
     '''
     def invite_new_user(f_name, l_name, email):
-            new_user = User(first_name = f_name, last_name = l_name, email = email, is_active = False)
-            new_user.save()
-            current_site = get_current_site(request)
-            domain = current_site.domain
-            uid = urlsafe_base64_encode(force_bytes(new_user.pk))
-            token = generate_token.make_token(new_user)
-            
-            send_invite(email, domain , uid, token)
 
-            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
-            return redirect('invite_members')
+        rando = random.randint(0, 1000)
+        new_user = User(username = f_name+l_name+str(rando), first_name = f_name, last_name = l_name, email = email, is_active = False)
+        new_user.save()
+        current_site = get_current_site(request)
+        domain = current_site.domain
+        uid = urlsafe_base64_encode(force_bytes(new_user.pk))
+        token = generate_token.make_token(new_user)
+        
+        send_invite(email, domain , uid, token)
+
+        messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+        return redirect('invite_members')
     title = 'Invite Members'
     if 'single_invite' in request.POST and request.method == "POST":
         f_name = request.POST.get('first_name')
@@ -278,7 +281,7 @@ def invite_members(request):
         #call the function that sends email to new users
         invite_new_user(f_name, l_name, email)
     form = InviteUsers
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
     if 'multiple_invite' in request.POST and request.method == 'POST':
         form = InviteUsers(request.POST, request.FILES)
         if form.is_valid:
@@ -295,12 +298,12 @@ def invite_members(request):
 
                     invite_new_user(f_name, l_name, email)
        
-            context = {
-                'form':form,
-                'title':title,
-            }
+    context = {
+        'form':form,
+        'title':title,
+    }
 
-            return render(request, 'invite_member.html', context)
+    return render(request, 'invite_member.html', context)
 
 class InviteUserView(View):
     '''
