@@ -22,12 +22,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
                        SignupForm, TechNewsForm, UserProfileForm)
-from app.models import Group, Idea, Stories, TechNews, UserProfile
+from app.models import Group, Idea, Stories, Tech, UserProfile
 
 from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
                     FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
                     UserProfileForm)
-from .models import Group, Idea, Stories, TechNews, UserProfile
+from .models import Group, Idea, Stories, Tech, UserProfile
 
 # Create your views here.
 
@@ -201,11 +201,11 @@ def Discussion(request):
             discussion = form.save(commit=False)
             discussion.user = current_user
             
-def donation(request):
-            discussion.creator = current_user
-            discussion.date_created = dt.datetime.now()
+# def donation(request):
+#             discussion.creator = current_user
+#             discussion.date_created = dt.datetime.now()
 
-	return render(request, 'donation.html')           
+# 	    return render(request, 'donation.html')           
             
 def charge(request):
     
