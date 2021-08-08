@@ -1,6 +1,6 @@
-from django.http import response
-from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
+from django.core.files.base import File
+from app.models import GeneralAdmin, Group, UploadInvite, UserProfile, Stories, Idea, TechNews, User
+from app.forms import CohortForm, InviteUsers, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render,redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
@@ -15,6 +15,8 @@ from django.views import View
 import mimetypes
 import os
 from django.http.response import HttpResponse
+import pandas as pd
+from csv import DictReader
 
 
 
@@ -252,31 +254,53 @@ def summary(request):
 def invite_members(request):
     '''
     renders invite member form
+    invites single users
+    invotes multiple users
     '''
+    def invite_new_user(f_name, l_name, email):
+            new_user = User(first_name = f_name, last_name = l_name, email = email, is_active = False)
+            new_user.save()
+            current_site = get_current_site(request)
+            domain = current_site.domain
+            uid = urlsafe_base64_encode(force_bytes(new_user.pk))
+            token = generate_token.make_token(new_user)
+            
+            send_invite(email, domain , uid, token)
+
+            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+            return redirect('invite_members')
     title = 'Invite Members'
-    if request.method == "POST":
+    if 'single_invite' in request.POST and request.method == "POST":
         f_name = request.POST.get('first_name')
         l_name = request.POST.get('last_name')
         email = request.POST.get('user_email')
 
-        new_user = User(first_name = f_name, last_name = l_name, email = email, is_active = False)
-        new_user.save()
-        current_site = get_current_site(request)
-        domain = current_site.domain
-        uid = urlsafe_base64_encode(force_bytes(new_user.pk))
-        token = generate_token.make_token(new_user)
-        
-        send_invite(email, domain , uid, token)
+        #call the function that sends email to new users
+        invite_new_user(f_name, l_name, email)
+    form = InviteUsers
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if 'multiple_invite' in request.POST and request.method == 'POST':
+        form = InviteUsers(request.POST, request.FILES)
+        if form.is_valid:
+            form.save()
 
-        messages.success(request, f'Congratulations! You have succesfully Added a new User!')
-        return redirect('invite_members')
+            form_to_read = UploadInvite.objects.all().last()
 
+            with open((form_to_read.file_path).path, 'r') as read_obj:
+                csv_dict_reader = DictReader(read_obj)
+                for row in csv_dict_reader:
+                    f_name = row['first_name']
+                    l_name = row['last_name']
+                    email = row['email']
 
-    context = {
-        'title':title,
-    }
+                    invite_new_user(f_name, l_name, email)
+       
+            context = {
+                'form':form,
+                'title':title,
+            }
 
-    return render(request, 'invite_member.html', context)
+            return render(request, 'invite_member.html', context)
 
 class InviteUserView(View):
     '''
@@ -308,3 +332,5 @@ def download_csv(request):
     response['Content-Disposition'] = "attachment; filename=%s" % filename
 
     return response
+
+    

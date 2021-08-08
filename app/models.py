@@ -179,3 +179,9 @@ class Donor(models.Model):
   def __str__(self):
     return self.title
 
+#Invite user form model for storing uploaded csv
+class UploadInvite(models.Model):
+  file_path = models.FileField(upload_to='Files/')
+
+  def __str__(self):
+    return self.file_name

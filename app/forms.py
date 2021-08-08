@@ -1,10 +1,8 @@
-from app.models import Group, UserProfile
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Idea
-from .models import Stories,TechNews
-from .models import Fundraiser, Message
+from django.db.models import fields
+from .models import Idea, UploadInvite, Stories,TechNews, Fundraiser, Message, Group, UserProfile
 
 # The signup form
 class SignupForm(UserCreationForm):
@@ -57,3 +55,8 @@ class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
         exclude = ['date_created']
+
+class InviteUsers(forms.ModelForm):
+    class Meta:
+        model = UploadInvite
+        fields = ['file_path']
