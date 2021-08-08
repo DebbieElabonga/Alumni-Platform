@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
 :root{
+  --lighter_green: rgba(96, 108, 56, .4);
   --light_green: rgb(96, 108, 56);
   --dark_green: rgb(40, 54, 24);
   --lighter_orange: rgb(254, 250, 224);
@@ -10,6 +11,9 @@
 *{
   font-family: 'Nunito', sans-serif;
   box-sizing: border-box;
+}
+.cold{
+  color: rgb(150, 150, 150);
 }
 body{
   background-color: var(--lighter_orange);
@@ -95,12 +99,49 @@ button{
 .search_bar{
   background-color: var(--white);
   padding: 12px;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid rgb(200, 200, 200);
 }
 .main_pg{
   padding: 0;
 }
 /*styling dashboard*/
-.welcome_dash{
+.top_welcome, .totals>div{
   background-color: var(--white);
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 3px;
+  margin: 2px;
+}
+.totals{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 14px 0px;
+  padding: 0;
+}
+.other_admin_dets, .group_dets{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.samples>.admins, .all_groups{
+  height: 360px;
+  overflow: hidden;
+}
+.samples>div:nth-child(2){
+  margin: 0 40px;
+}
+.projects{
+  margin: 20px 0;
+}
+.card-header{
+  background-color: var(--light_green);
+  color: white;
+}
+.totals>div{
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, .3);
+  color: var(--dark_green);
+}
+.all_groups, .top_articles, .projects, .admins{
+  color: var(--dark_green);
+  font-size: .8em;
 }
