@@ -45,6 +45,7 @@ urlpatterns=[
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^story/$',views.create_story,name='story'),
   url(r'^news/$',views.TechNews,name="technews"),
+  url(r'^edit_creds/$', views.edit_details, name = 'edit_creds'),
   
   
 

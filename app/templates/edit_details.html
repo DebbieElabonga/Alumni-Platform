@@ -1,0 +1,34 @@
+{% extends 'admin_dash/admin_dashboard.html' %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content%}
+
+    <div class="row-m-5">
+        <div class="col-md-12"></div>
+        <div class="col-md-10 rgba-stylish-strong  p-4">
+            <h3>{% for message in messages%}
+              {{message}}
+              {%endfor%}
+            </h3>
+            {% if user %}
+            <form  action="{% url 'edit_details'%}" method="POST">
+              <input type="number" name="user_id" id="user_id" value="user.id">
+              user_id = request.POST.get('')
+              username = request.POST.get("username")
+              f_name = request.POST.get('f_name')
+              l_name = request.POST.get('l_name')
+              password = request.POST.get('password')
+              bio = request.POST.get('bio')
+              photo_path
+                
+                <button class="btn btn-outline-success">Save</button>
+            </form><br>
+            {%else%}
+            <h2>Your Account Does Not exist </h2>
+            {%endif%}
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+{% endblock %}

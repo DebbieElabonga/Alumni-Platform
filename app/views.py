@@ -369,9 +369,15 @@ class InviteUserView(View):
         if user is not None and generate_token.check_token(user, token):
             user.is_active = True
             user.save()
-            messages.add_message(request, messages.SUCCESS,
-                                 'user is invited successfully')
-            return redirect('user_profile.html')
+            messages.add_message(request, messages.SUCCESS, 'user is invited successfully')
+
+            context = {
+                'user':user
+            }
+            messages.success(request, 'Welcome. Edit or Confirm your details below')           
+            return render(request, 'user_profile.html', context)
+
+        messages.warning(request, 'User does Not Exist!')
         return render(request, 'user_profile.html')
 #--------------------------------------------------------------------------------------------
 #function enabling dowloading of user csv file
@@ -389,6 +395,30 @@ def download_csv(request):
 
     
     return render(request, 'admin_dash/dashboard.html', context)
+
+# view function that edits a users details when they accept initation.
+def edit_details(request):
+    '''
+    renders to edit page
+    '''
+    if request.method == 'POST' and 'save_default_details' in request.POST:
+        user_id = request.POST.get('user_id')
+        username = request.POST.get("username")
+        f_name = request.POST.get('f_name')
+        l_name = request.POST.get('l_name')
+        password = request.POST.get('password')
+        bio = request.POST.get('bio')
+        photo_path = request.POST.get('photo')
+
+        user_to_update = User.objects.filter(id = user_id)
+        user_to_update.update(username - username, first_name = f_name, last_name = l_name, password = password)
+        user_profile = UserProfile.objects.filter(user = user_to_update)
+        if user_profile:
+            user_profile.update(bio = bio, photo_path = photo_path)
+        else:
+            new_profile = UserProfile(user = user_to_update, bio = bio, photo_path = photo_path)
+            new_profile.save()
+
 
 def create_user(request):
     '''
