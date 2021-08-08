@@ -1,4 +1,4 @@
-from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
+from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, Tech, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render, redirect
 from django.shortcuts import render,redirect
@@ -15,19 +15,19 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .utils import generate_token
 from django.utils.encoding import force_bytes, force_text
 from django.views import View
-
+import threading
 
 from django.http import HttpResponseRedirect,request,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
                        SignupForm, TechNewsForm, UserProfileForm)
-from app.models import Group, Idea, Stories, TechNews, UserProfile
+from app.models import Group, Idea, Stories, Tech, UserProfile
 
 from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
                     FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
-                    UserProfileForm)
-from .models import Group, Idea, Stories, TechNews, UserProfile
+                    UserProfileForm,Add_userForm)
+from .models import Group, Idea, Stories, Tech, UserProfile
 
 # Create your views here.
 
@@ -201,46 +201,36 @@ def Discussion(request):
             discussion = form.save(commit=False)
             discussion.user = current_user
             
-def donation(request):
-            discussion.creator = current_user
-            discussion.date_created = dt.datetime.now()
-
-    return render(request, 'donation.html')           
+          
             
 def charge(request):
     
-	if request.method == 'POST':
+    if request.method == 'POST':
          print('Data:', request.POST)
 
-	amount = int(request.POST['amount']) 
+    amount = int(request.POST['amount']) 
 
-	customer = stripe.Customer.create(
-			email=request.POST['email'],
-			name=request.POST['nickname'],
-			source=request.POST['stripeToken']
-			)
+    customer = stripe.Customer.create(
+            email=request.POST['email'],
+            name=request.POST['nickname'],
+            source=request.POST['stripeToken']
+            )
 
-	charge = stripe.Charge.create(
-			customer=customer,
-			amount=amount*100,
-			currency='usd',
-			description="Donation"
-			)
+    charge = stripe.Charge.create(
+            customer=customer,
+            amount=amount*100,
+            currency='usd',
+            description="Donation"
+            )
 
-	return redirect(reverse('success', args=[amount]))
+    return redirect(reverse('success', args=[amount]))
 
 
 def successMsg(request, args):
-	amount = args
-	return render(request, 'success.html', {'amount':amount})
+    amount = args
+    return render(request, 'success.html', {'amount':amount})
 
-    # else:
-     
-    #     form = FundraiserForm()
-        
-    # return render(request, 'new_fundraiser.html', {"form": form})
-    else:
-        form = DiscussionForm()
+    form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
     
 def Fundraiser(request):
@@ -342,7 +332,7 @@ class InviteUserView(View):
                                  'user is invited successfully')
             return redirect('user_profile.html')
         return render(request, 'user_profile.html')
-  return render(request, 'admin_dash/dashboard.html', context)
+        return render(request, 'admin_dash/dashboard.html', context)
 
 def create_user(request):
     '''
@@ -413,3 +403,4 @@ class EmailThread(threading.Thread):
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
+
