@@ -1,4 +1,6 @@
 from django.contrib import admin
+from .models import Stories,UserProfile,Tech , GeneralAdmin
+# Register your models here.
 
 from .models import (Fundraiser, Message,GeneralAdmin,UserProfile,Stories,TechNews)
 
@@ -8,4 +10,4 @@ admin.site.register(Message)
 admin.site.register(GeneralAdmin)
 admin.site.register(UserProfile)
 admin.site.register(Stories)
-admin.site.register(TechNews)
+admin.site.register(Tech)

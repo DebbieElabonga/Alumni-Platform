@@ -2,8 +2,14 @@ from app.models import Group, UserProfile
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+<<<<<<< HEAD
+from .models import Add_user, Idea
+from .models import Stories,Tech
+from django.db.models import fields
+=======
 from .models import Idea
 from .models import Stories,TechNews
+>>>>>>> origin/dev
 from .models import Fundraiser, Message
 
 # The signup form
@@ -44,7 +50,7 @@ class CreateStoryForm(forms.ModelForm):
 
 class TechNewsForm(forms.ModelForm):
     class Meta:
-        model = TechNews
+        model = Tech
         fields = ['title','description','image_path','link']
 
 
@@ -56,4 +62,17 @@ class DiscussionForm(forms.ModelForm):
 class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
+        fields = ('__all__')
+
+class Add_userForm(forms.ModelForm):
+    class Meta:
+        model = Add_user
+        fields = ('full_name','student_id','phone_number','email')
+
+        widgets = {git merge dev
+            'full_name': forms.TextInput(attrs={'class':'form-conrtol'}),
+            'id_number': forms.TextInput(attrs={'class':'form-conrtol'}),
+            'phone_number': forms.TextInput(attrs={'class':'form-conrtol'}),
+            'email': forms.TextInput(attrs={'class':'form-conrtol'}),
+        }
         exclude = ['date_created']
