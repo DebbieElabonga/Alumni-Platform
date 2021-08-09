@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
-=======
 from django.core.files.base import File
 from app.models import GeneralAdmin, Group, UploadInvite, UserProfile, Stories, Idea, Tech, User
 from app.forms import CohortForm, InviteUsers, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
@@ -11,7 +9,6 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render,redirect
 from django.urls import reverse
 import stripe
->>>>>>> dev
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
@@ -213,7 +210,7 @@ def TechNews(request):
 # Create your views here.
 def Discussion(request, id):
 # Start a discussion.
-def Discussion(request):
+
     current_user = request.user
     group = get_object_or_404(Group, pk=id)
     if request.method == 'POST':
@@ -256,7 +253,7 @@ def reply(request, id):
     return render(request, 'reply.html', {'all_responses':all_responses,"form": form, 'message':message})
 
 
-            discussion.user = current_user
+    discussion.user = current_user
             
           
             
