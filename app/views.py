@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime as dt
+from .models import Message
 
 
 from django.http import HttpResponseRedirect,request,JsonResponse
@@ -186,10 +187,10 @@ def Discussion(request, id):
             discussion.user = current_user
             
 def donation(request):
-            discussion.creator = current_user
-            discussion.date_created = dt.datetime.now()
-
-	return render(request, 'donation.html')           
+    discussion.creator = current_user
+    discussion.date_created = dt.datetime.now()
+    
+    return render(request, 'donation.html')           
             
 def charge(request):
     
@@ -223,9 +224,9 @@ def successMsg(request, args):
     #     form = FundraiserForm()
         
     # return render(request, 'new_fundraiser.html', {"form": form})
-    else:
-        form = DiscussionForm()
-    return render(request, 'new_discussion.html', {"form": form ,'group':group})
+    # else:
+    #     form = DiscussionForm()
+    # return render(request, 'new_discussion.html', {"form": form ,'group':group})
 
 def all_discussions(request, id):
     group = get_object_or_404(Group, pk=id)
