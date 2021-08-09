@@ -5,7 +5,18 @@
 <br>
 <br>
 <div class="container">
+    <div class="row">
+        <div class="col-md-1">
+           <h5>Members</h5>   
+                {% for member in members %}
+                    {{member.user.username}}
+                {% endfor %}
+        </div>
+        <div class="col-md-1">
+            <a href="{% url 'leavecohort' group.id %}" class="btn btn-primary btn-sm">Leave Cohort</a>
+        </div>        
 
+        <div class="col-md-10">
 <div class="row">
     {% for message in messages %}
     <div class="col-md-4">
@@ -29,7 +40,7 @@
     {% endfor %}
 </div>
 </div>
-
+</div>
 
 
 

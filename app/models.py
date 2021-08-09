@@ -77,6 +77,10 @@ class Group(models.Model):
   def __str__(self):
     return self.name
 
+  @classmethod
+  def get_groups(cls):
+    return cls.objects.all()
+
 #message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)
@@ -136,13 +140,15 @@ class Stories(models.Model):
 class Tech(models.Model):
   title = models.CharField(max_length=100)
   description = tiny_models.HTMLField()
-  image_path = models.ImageField(upload_to = 'Stories/')
+  image_path = models.ImageField(upload_to = 'Stories/',null=True, blank=True)
   date_created = models.DateTimeField(auto_now_add=True)
   creator = models.ForeignKey(UserProfile, on_delete=CASCADE)
   link = models.CharField(max_length=250, null=True, blank=True)
   
   def __str__(self):
     return self.title
+  
+
 
 
 #Idea for finding collaborators, ie developers, Co-founders, mentors
