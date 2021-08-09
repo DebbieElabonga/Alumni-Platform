@@ -1,3 +1,8 @@
+from app.models import Group, UserProfile, Message, Response
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from .models import Idea
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -53,13 +58,17 @@ class TechNewsForm(forms.ModelForm):
 class DiscussionForm(forms.ModelForm):
     class Meta:
         model = Message
-        exclude = ['date_created']
+        exclude = ['date_created', 'group', 'creator']
 
 class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
         fields = ('__all__')
 
+class ResponseForm(forms.ModelForm):
+    class Meta:
+        model = Response
+        fields = ['reply']
 class Add_userForm(forms.ModelForm):
     class Meta:
         model = Add_user

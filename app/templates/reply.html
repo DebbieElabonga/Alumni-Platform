@@ -1,0 +1,41 @@
+{% extends 'base.html'%}
+{% load bootstrap3 %}
+
+
+{%block content%}
+
+
+<div class="container">
+    <div class="card mb-4" style="min-height:340px">
+
+        <h5 style="font-weight:600; font-size: 25px; color: black;"><a class="text-right"
+                style="text-decoration: none; color: black; ">{{ message.title}}</h5>
+        <p style="font-weight:200; font-size: 20px; color: black;"><a class="text-right"
+                style="text-decoration: none; color: black; ">{{ message.description}}</p>
+
+
+        <hr>
+        <div>
+            {% for response in all_responses %}
+            <ul>
+                <li>{{response.reply}}</li>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row">
+        <h3>ADD YOUR RESPONSE</h3>
+        <div class="col-sm-12 col-lg-6 m-auto card" style="background-color: beige;">
+            <form action="{%url 'reply' message.id %}" method="post" enctype="multipart/form-data">
+                {%csrf_token%}
+
+                {% bootstrap_form form%}
+                <input type="submit" class="btn btn-success btn-lg btn-center" value="Submit"><br><br>
+            </form>
+        </div>
+        <br>
+    </div>
+</div>
+
+{% endblock %}
