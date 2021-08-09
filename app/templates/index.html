@@ -2,6 +2,7 @@
 {% load django_bootstrap5%}
 {% load bootstrap4 %}
 {% load static %}
+
 {% block content %}
 
 <body style=" background-image: url('');
@@ -30,19 +31,47 @@
             <div class="row">
                 <div class="col-md-4">
                     <p style="text-align: center; font-size: 25px;">TECH NEWS</p>
+                    <div class="container">
+                    {% for news in tech %}
+                    <div class="card" style="width: 36rem; color: white;">
+                        <div style="background-color:rgb(99,124,51)" class="card-body">
+                          <h5 class="card-title"><b>{{news.title}}</b></h5>
+                          <p  class="card-text collapse" >{{news.description | truncatechars:200 | safe }}</p>
+                          <p>Posted {{news.date_created  | timesince }} ago</p>
+                          <a class="btn btn-light" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Read More ..
+                          </a>
+                          <div class="collapse" id="collapseExample">
+                            
+                                <p>{{news.description | safe }}</p>
+                            
+                          </div>
+                      </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                      <div class="col-md-12">
+                        <a href="{% url 'technews' %}" class="btn btn-success btn-md"> Add Tech News
+                        </a>
+                    </div>
+
                 </div>
+
+            <!-- ******************************************************************************* -->
                 <div class="col-md-4">
                     <p style="text-align:center; font-size: 25px;">SUCCESS STORIES</p>
                 </div>
                 <div class="col-md-4">
                     <p style="text-align: center; font-size: 25px;">COHORTS</p>
-                </div>
+                    
+                
+            </div>
+            <div class="col-md-12 text-center">
+                <a href="{% url 'new_cohort' %}" class="btn btn-primary btn-md" style="text-align: center"> NEW COHORT
+                </a>
             </div>
         </div>
-        <div class="col-md-12 text-center">
-            <a href="{% url 'new_cohort' %}" class="btn btn-primary btn-md" style="text-align: center"> NEW COHORT
-            </a>
-        </div>
+
     </div>
 </body>
 {% endblock %}

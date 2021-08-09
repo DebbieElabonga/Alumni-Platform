@@ -51,7 +51,7 @@ def index(request):
     stories = Stories.objects.order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
-    #tech = TechNews.objects.all()
+    tech = Tech.objects.all()
     return render(request,'index.html', {'groups':groups,'stories':stories})
     
 def signup(request):
@@ -104,7 +104,21 @@ def cohort(request):
         form = CohortForm()
     return render(request, 'cohort.html', {'title':title,'form': form})
 
-# Create your views here.
+
+def joincohort(request,id):
+    current_user = request.user.id
+    cohort = get_object_or_404(Group,pk=id)
+    
+    cohort.members.add(current_user)
+    return redirect("cohortdiscussions",id)
+
+def leavecohort(request,id):
+    current_user = request.user.id
+    cohort = get_object_or_404(Group,pk=id)
+    cohort.members.remove(current_user)
+
+    return redirect("index")
+
 
 #-----------------------------------------------------------------------------------------
 #view function that renders to meet_collegues template
@@ -173,11 +187,6 @@ def single_idea(request, id):
 stripe.api_key = "YOUR SECRET KEY"
 
 
-def index(request):
-    stories = Stories.objects.order_by("-id")
-    # technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
-    
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -221,17 +230,19 @@ def Discussion(request, id):
             discussion.group = group
             discussion.save()
 
-        return redirect('all_discussions',group.id)
+        return redirect('cohortdiscussions',group.id)
 
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form ,'group':group})
 
-def all_discussions(request, id):
+def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
+    members = group.members.all()
 
-    return render(request, 'all_discussions.html', {'group':group , 'messages':messages})
+
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
 
 def reply(request, id):
     user = request.user
