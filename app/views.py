@@ -24,13 +24,10 @@ from django.http.response import HttpResponse
 import pandas as pd
 from csv import DictReader
 import random
-
-
+from alumni.decorators import general_admin_required
 import threading
-
 from django.http import HttpResponseRedirect,request,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
                        SignupForm, TechNewsForm, UserProfileForm)
 from app.models import Group, Idea, Stories, Tech, UserProfile
@@ -66,7 +63,7 @@ def index(request):
 #         form = SignupForm()
 #     return render(request, 'registration/registration_form.html', {'form': form})
 
-   
+
 def profile(request):
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
@@ -209,7 +206,7 @@ def Discussion(request):
             discussion.user = current_user
             
           
-            
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
 def charge(request):
     
     if request.method == 'POST':
@@ -239,7 +236,8 @@ def successMsg(request, args):
 
     form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
-    
+
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
 def Fundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
@@ -256,6 +254,7 @@ def Fundraiser(request):
         form = FundraiserForm()
     return render(request, 'new_fundraiser.html', {'title':title,"form": form})
 #views to summary on the admin dashboard
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def summary(request):
     '''
     renders summary on admin dashboard
@@ -299,6 +298,7 @@ def summary(request):
     return render(request, 'admin_dash/dashboard.html', context)
 
 #view function that renders to invite members page
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def invite_members(request):
     '''
     renders invite member form
@@ -509,7 +509,7 @@ def edit_details(request):
 
 #     def run(self):
 #         self.email_message.send()
-
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
