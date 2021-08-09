@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .models import Message, Stories,UserProfile,Tech , GeneralAdmin
 from .models import Stories,UserProfile,Tech , GeneralAdmin
 # Register your models here.
 

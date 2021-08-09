@@ -83,6 +83,34 @@ class Group(models.Model):
   def __str__(self):
     return self.name
 
+#message/discussion Model
+class Message(models.Model):
+  title = models.CharField(max_length=100, blank=True, null=True)
+  description = models.TextField()
+  date_created = models.DateTimeField(auto_now_add=True)
+  group = models.ForeignKey(Group, on_delete=CASCADE, null=True)
+  creator = models.ForeignKey(User, on_delete=CASCADE)
+
+  def __str__(self):
+      return self.title
+
+class Response(models.Model):
+  message = models.ForeignKey(Message, on_delete = models.CASCADE)
+  creator = models.ForeignKey(User, on_delete=CASCADE)
+  reply = models.TextField()
+  date_created = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+    return self.message
+
+  def save_response(self):
+    self.save()
+
+  @classmethod
+  def get_response(cls, message_id):
+    return cls.objects.filter(message = message_id).all()
+
+  
   @classmethod
   def get_groups(cls):
     try:
