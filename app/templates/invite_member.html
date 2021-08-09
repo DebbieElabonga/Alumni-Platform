@@ -9,7 +9,7 @@
     <div class="col-md-10 rgba-stylish-strong  p-4">
         <h3>Enter Details
             {% for message in messages%}
-            {{messages}}
+            {{message|safe}}
             {% endfor %}
         </h3>
         <form id="invite_members" action="{% url 'invite_members' %}" method="post">
@@ -18,7 +18,7 @@
                 <input type="text" name="first_name" placeholder="First Name" class="mr-4">
                 <input type="text" name="last_name" placeholder="Last Name" class="ml-4">
             </div>
-            <div class="invitee_email" style="width: 400px;">
+            <div class="invitee invitee_email" style="width: 400px;">
                 <input type="text" name="user_email" placeholder="Email Address">
             </div>
             <button type="submit" name='single_invite' class="btn-outline-success ml-5 mr-5">Send Invite</button>

@@ -321,7 +321,7 @@ def invite_members(request):
         
         send_invite(email, domain , uid, token)
 
-        messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+        messages.success(request,'Congratulations! You have succesfully Invited New users!')
         return redirect('invite_members')
     title = 'Invite Members'
     if 'single_invite' in request.POST and request.method == "POST":
@@ -369,16 +369,22 @@ class InviteUserView(View):
         if user is not None and generate_token.check_token(user, token):
             user.is_active = True
             user.save()
-            messages.add_message(request, messages.SUCCESS, 'user is invited successfully')
-
+            messages.add_message(request, messages.SUCCESS, 'Welcome! You are now an active User.')
+            warning = 'You will not be able to edit this information when this window is closed or refreshed.'
             context = {
+                'edit_warning':warning,
                 'user':user
             }
-            messages.success(request, 'Welcome. Edit or Confirm your details below')           
-            return render(request, 'user_profile.html', context)
+            messages.success(request, '<h4>Edit or Confirm your details below </h4>')           
+            return render(request, 'edit_details.html', context)
+        is_expired = True
 
-        messages.warning(request, 'User does Not Exist!')
-        return render(request, 'user_profile.html')
+        context = {
+            'is_expired':is_expired
+        }  
+
+        messages.warning(request, 'Invitation Link has Expired!')
+        return render(request, 'edit_details.html', context)
 #--------------------------------------------------------------------------------------------
 #function enabling dowloading of user csv file
 def download_csv(request):
@@ -408,83 +414,99 @@ def edit_details(request):
         l_name = request.POST.get('l_name')
         password = request.POST.get('password')
         bio = request.POST.get('bio')
-        photo_path = request.POST.get('photo')
+        photo_path = request.FILES['photo']
 
-        user_to_update = User.objects.filter(id = user_id)
-        user_to_update.update(username - username, first_name = f_name, last_name = l_name, password = password)
-        user_profile = UserProfile.objects.filter(user = user_to_update)
+        user_to_update = User.objects.filter(id     = user_id)
+        user_to_update.update(username = username, first_name = f_name, last_name = l_name, password = password)
+        user_profile = UserProfile.objects.filter(user = user_id)
+
         if user_profile:
             user_profile.update(bio = bio, photo_path = photo_path)
         else:
             new_profile = UserProfile(user = user_to_update, bio = bio, photo_path = photo_path)
             new_profile.save()
-
-
-def create_user(request):
-    '''
-    View function to add a new students members into the alumni platform and send them an invitation email
-    '''
-    if request.method == 'POST':
-        form = Add_userForm(request.POST)
-        email = request.POST.get('email')
-        if form.is_valid():
-            user = form.save(commit = False)
-            user.is_active = False
-            user.save()
-            current_site = get_current_site(request)
-            email_subject = 'Invitation to Alumni Community'
-            message = render_to_string('invitation.html',
-                                    {
-                                        'user': user,
-                                        'domain': current_site.domain,
-                                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                                        'token': generate_token.make_token(user)
-                                    }
-                                    )
-            email_message = EmailMessage(
-                email_subject,
-                message,
-                settings.EMAIL_HOST_USER,
-                [email]
-            )
-            EmailThread(email_message).start()
-            messages.add_message(request, messages.SUCCESS,
-                                'invaitation sent  succesfully')
-            return redirect('registration')
-
-            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
-            return redirect('/user_list/')
+        
+        to_login = authenticate(username = user_to_update[0].username, password = user_to_update[0].password)
+        if to_login:
+            login(to_login)
+        else:
+            redirect('login')
+        messages.success(request, 'Your Account has been Updated successfully')
+        return redirect('user_profile')
     else:
-        form = Add_userForm()
-    return render(request, 'create_user.html', {"form": form})
+        direct_access = True
+        context = {
+            'direct_access':direct_access
+        }  
+        messages.warning(request, 'This Page can only be accessed through a valid invite link')
+        return render(request, 'edit_details.html', context)
 
 
-class InviteUserView(View):
-    '''
-    View function that generates a new token for each new user based on their uid
-    '''
-    def get(self, request, uidb64, token):
-        try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except Exception as identifier:
-            user = None
-        if user is not None and generate_token.check_token(user, token):
-            user.is_active = True
-            user.save()
-            messages.add_message(request, messages.SUCCESS,
-                                 'user is invited successfully')
-            return redirect('')
-        return render(request, '')
+# def create_user(request):
+#     '''
+#     View function to add a new students members into the alumni platform and send them an invitation email
+#     '''
+#     if request.method == 'POST':
+#         form = Add_userForm(request.POST)
+#         email = request.POST.get('email')
+#         if form.is_valid():
+#             user = form.save(commit = False)
+#             user.is_active = False
+#             user.save()
+#             current_site = get_current_site(request)
+#             email_subject = 'Invitation to Alumni Community'
+#             message = render_to_string('invitation.html',
+#                                     {
+#                                         'user': user,
+#                                         'domain': current_site.domain,
+#                                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+#                                         'token': generate_token.make_token(user)
+#                                     }
+#                                     )
+#             email_message = EmailMessage(
+#                 email_subject,
+#                 message,
+#                 settings.EMAIL_HOST_USER,
+#                 [email]
+#             )
+#             EmailThread(email_message).start()
+#             messages.add_message(request, messages.SUCCESS,
+#                                 'invaitation sent  succesfully')
+#             return redirect('registration')
 
-class EmailThread(threading.Thread):
+#             messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+#             return redirect('/user_list/')
+#     else:
+#         form = Add_userForm()
+#     return render(request, 'create_user.html', {"form": form})
 
-    def __init__(self, email_message):
-        self.email_message = email_message
-        threading.Thread.__init__(self)
 
-    def run(self):
-        self.email_message.send()
+# class InviteUserView(View):
+#     '''
+#     View function that generates a new token for each new user based on their uid
+#     '''
+#     def get(self, request, uidb64, token):
+#         try:
+#             uid = force_text(urlsafe_base64_decode(uidb64))
+#             user = User.objects.get(pk=uid)
+#         except Exception as identifier:
+#             user = None
+#         if user is not None and generate_token.check_token(user, token):
+#             user.is_active = True
+#             user.save()
+#             messages.add_message(request, messages.SUCCESS, 'user is invited successfully')
+
+#             return redirect('')
+#         return render(request, '')
+
+# class EmailThread(threading.Thread):
+
+#     def __init__(self, email_message):
+#         self.email_message = email_message
+#         threading.Thread.__init__(self)
+
+#     def run(self):
+#         self.email_message.send()
 
 def Fundraiser(request):
     

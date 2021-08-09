@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Idea, UploadInvite, Stories,Tech, Fundraiser, Message, Group, UserProfile
 from .models import Add_user, Idea
 from .models import Stories,Tech
-from django.db.models import fields
 from .models import Idea
 from .models import Fundraiser, Message
 
