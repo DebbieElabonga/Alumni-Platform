@@ -184,9 +184,9 @@ def create_story(request):
         form = CreateStoryForm(request.POST or None,request.FILES)
         if form.is_valid():
             story = form.save(commit=False)
-            story.creator = request.user
-            story.save()
-        return HttpResponseRedirect(request.path_info)
+            story.user = request.user
+            # story.save()
+        return redirect('index')
 
     else:
         form = CreateStoryForm()

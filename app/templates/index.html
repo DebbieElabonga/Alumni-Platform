@@ -13,13 +13,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
 
     <div class="container" id="background">
-        <div id="prog">
-            <h1
-                style="text-align:center; font-size:60px; font-family: 'Dancing Script', cursive; font-weight:bold; color: black;">
-                Moringa Alumni</h1>
-        </div>
+        <header class="blog-header py-3">
+            <div class="row flex-nowrap justify-content-between align-items-center">
+              <div class="col-6 pt-1">
+                <h1> Moringa Alumni Community</h1>
+                <img src="">
+              </div>
+              <div class="col-6 d-flex justify-content-end align-items-center">
+            
+                <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+              </div>
+            </div>
+          </header>
         <div id="opennote">
-            <h3 style="text-align:center; color: black;">Hello,</h3>
             <p id="opennote"
                 style="text-align:center; font-family: 'Dancing Script', cursive; font-size: 50px; color: black;">
                 Welcome
@@ -33,6 +39,29 @@
                 </div>
                 <div class="col-md-4">
                     <p style="text-align:center; font-size: 25px;">SUCCESS STORIES</p>
+                    <a href="{% url 'story' %}" class="btn btn-primary btn-md" style="text-align: center; margin-left: 130px; font-size: 15px;"> Share
+                        story</a>
+                            
+                    {% for story in stories %}
+                    <!-- <div class="modal fade" id="Stories" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content" style="background-color: rgb(36, 33, 33);">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-white" id="exampleModalCenterTitle" style="text-align: center; color: white; font-size: 30px; font-family: 'Dancing Script', cursive;">NEW BUSINESS</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"> <i class="fa fa-times-circle text-success"></i></span></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post" style="color: white;">
+                                    {% csrf_token%}
+                                    {% bootstrap_form form %}
+                                    <button type="submit" class="btn btn-md btn-success">Add</button>
+                                    <button type="button" class="btn btn-md btn-danger "data-dismiss="modal" style="float:right">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div> -->
+                    {% endfor %}
                 </div>
                 <div class="col-md-4">
                     <p style="text-align: center; font-size: 25px;">COHORTS</p>
@@ -40,8 +69,6 @@
             </div>
         </div>
         <div class="col-md-12 text-center">
-            <a href="{% url 'new_cohort' %}" class="btn btn-primary btn-md" style="text-align: center"> NEW COHORT
-            </a>
         </div>
     </div>
 </body>
