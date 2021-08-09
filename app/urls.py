@@ -35,7 +35,7 @@ urlpatterns=[
   url(r'^$',views.index,name="index"),
 
 #user authentication urls-------------------------------------------------------------------------------
-  url(r'^register/$',views.signup, name='registration'),
+  # url(r'^register/$',views.signup, name='registration'),
   url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
   url(r'^logout/$',auth_views.LogoutView.as_view(), name='logout'),
 
@@ -45,6 +45,7 @@ urlpatterns=[
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^story/$',views.create_story,name='story'),
   url(r'^news/$',views.TechNews,name="technews"),
+  url(r'^edit_creds/$', views.edit_details, name = 'edit_creds'),
   
   
 
@@ -62,8 +63,8 @@ urlpatterns=[
   url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   path("news/",views.TechNews,name="technews"),
   url(r'^discussion/$', views.Discussion, name='discussion'),
-  url(r'^create_user/$',user_views.create_user,name='create_user'),
-  path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
+  # # url(r'^create_user/$',user_views.create_user,name='create_user'),
+  # path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
   url(r'^invite_members/$', views.invite_members, name = 'invite_members'),
   path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
   path('download_csv/', views.download_csv, name = 'download_csv'),
