@@ -42,6 +42,7 @@
     {% if current_user %}
     <h3>Logged in as {{request_user.username}}</h3>
     {%endif%}
+    {% if not is_expired %}
     {%endif%}
     {%else%}
     <a href="{% url 'user_profile' %}">Edit Your Profile Here</a>
