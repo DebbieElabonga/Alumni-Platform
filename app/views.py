@@ -212,7 +212,7 @@ def TechNews(request):
             news = form.save(commit=False)
             news.creator = request.user
             news.save()
-        return HttpResponseRedirect(request.path_info)
+            return redirect('index')
     else:
         form = TechNewsForm()
     return render(request,'newsform.html',{"form":form})

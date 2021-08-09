@@ -123,7 +123,7 @@ class Stories(models.Model):
   description = tiny_models.HTMLField()
   image_path = models.ImageField(upload_to = 'Stories/')
   date_created = models.DateTimeField(auto_now_add=True)
-  creator = models.ForeignKey(UserProfile, on_delete=CASCADE)
+  creator = models.ForeignKey(User, on_delete=CASCADE)
   link = models.CharField(max_length=250, null=True, blank=True)
 
   def __str__(self):
@@ -142,7 +142,7 @@ class Tech(models.Model):
   description = tiny_models.HTMLField()
   image_path = models.ImageField(upload_to = 'Stories/',null=True, blank=True)
   date_created = models.DateTimeField(auto_now_add=True)
-  creator = models.ForeignKey(UserProfile, on_delete=CASCADE)
+  creator = models.ForeignKey(User, on_delete=CASCADE)
   link = models.CharField(max_length=250, null=True, blank=True)
   
   def __str__(self):
