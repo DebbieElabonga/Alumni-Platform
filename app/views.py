@@ -1,4 +1,4 @@
-from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
+from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, Tech, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render, redirect
 from django.shortcuts import render,redirect
@@ -201,11 +201,11 @@ def Discussion(request):
             discussion = form.save(commit=False)
             discussion.user = current_user
             
-def donation(request):
-            discussion.creator = current_user
-            discussion.date_created = dt.datetime.now()
+# def donation(request):
+#             discussion.creator = current_user
+#             discussion.date_created = dt.datetime.now()
 
-	return render(request, 'donation.html')           
+# 	return render(request, 'donation.html')           
             
 def charge(request):
     
@@ -234,14 +234,14 @@ def successMsg(request, args):
 	amount = args
 	return render(request, 'success.html', {'amount':amount})
 
-    # else:
+    # # else:
      
-    #     form = FundraiserForm()
+    # #     form = FundraiserForm()
         
-    # return render(request, 'new_fundraiser.html', {"form": form})
-    else:
-        form = DiscussionForm()
-    return render(request, 'new_discussion.html', {"form": form})
+    # # return render(request, 'new_fundraiser.html', {"form": form})
+    # else:
+    #     form = DiscussionForm()
+    # return render(request, 'new_discussion.html', {"form": form})
     
 def Fundraiser(request):
     title = 'Start A Fundraiser'
@@ -342,7 +342,7 @@ class InviteUserView(View):
                                  'user is invited successfully')
             return redirect('user_profile.html')
         return render(request, 'user_profile.html')
-  return render(request, 'admin_dash/dashboard.html', context)
+        return render(request, 'admin_dash/dashboard.html', context)
 
 def create_user(request):
     '''
