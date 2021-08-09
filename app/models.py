@@ -9,6 +9,7 @@ from django.dispatch import receiver
 
 
 
+
 # Create your models here.
 # Using django base user
 #-------------------------------------------------------------------------------------------
@@ -29,6 +30,14 @@ class UserProfile(models.Model):
   def __str__(self):
       return self.user.username
 
+  @classmethod
+  def get_users(cls):
+    try:
+      users = cls.objects.all()
+    except cls.DoesNotExist:
+      users = None
+    return users
+
   #auto creates a user's profile once the user has registered
   @receiver(post_save, sender=User)
   def save_user(sender, instance, created, **kwargs):
@@ -43,6 +52,19 @@ class GeneralAdmin(models.Model):
   def __str__(self):
       return self.profile.user.username
 
+  @classmethod
+  def get_admins(cls):
+    try:
+      admins = cls.objects.all()
+    except cls.DoesNotExist:
+      admins = None
+    return admins
+
+#message/discussion Model
+class Message(models.Model):
+  title = models.CharField(max_length=100, blank=True, null=True)
+  description = models.TextField()
+  date_created = models.DateTimeField()
 
 
 #Group/Cohort Model
@@ -89,6 +111,13 @@ class Response(models.Model):
     return cls.objects.filter(message = message_id).all()
 
   
+  @classmethod
+  def get_groups(cls):
+    try:
+      groups = cls.objects.all()
+    except cls.DoesNotExist:
+      groups = None
+    return groups
 
 #StoryModel
 class Stories(models.Model):
@@ -101,6 +130,14 @@ class Stories(models.Model):
 
   def __str__(self):
     return self.title
+  
+  @classmethod
+  def get_stories(cls):
+    try:
+      stories = cls.objects.all()
+    except cls.DoesNotExist:
+      stories = None
+    return stories
 
 class Tech(models.Model):
   title = models.CharField(max_length=100)
@@ -129,6 +166,22 @@ class Idea(models.Model):
   def __str__(self):
     return self.title
 
+  @classmethod
+  def get_open_projects(cls):
+    try:
+      projects = cls.objects.filter(is_open = True)
+    except cls.DoesNotExist:
+      projects = None
+    return projects
+
+  @classmethod
+  def get_closed_projects(cls):
+    try:
+      projects = cls.objects.filter(is_open = False)
+    except cls.DoesNotExist:
+      projects = None
+    return projects
+
 #Fundraiser Model
 class Fundraiser(models.Model):
   title = models.CharField(max_length=200)
@@ -153,3 +206,18 @@ class Donor(models.Model):
   def __str__(self):
     return self.title
 
+#Invite user form model for storing uploaded csv
+class UploadInvite(models.Model):
+  file_path = models.FileField(upload_to='Files/')
+
+  def __str__(self):
+    return self.file_name
+class Add_user(models.Model):
+  full_name = models.CharField(max_length=200)
+  username = models.CharField(max_length=20,default = 0)
+  student_id = models.CharField(max_length = 10, unique=True)
+  phone_number = models.CharField(max_length = 20, unique = True, default=None)
+  email = models.CharField(max_length=100, default=None)
+
+  def __str__(self):
+    return self.full_name
