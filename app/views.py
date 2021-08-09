@@ -265,7 +265,6 @@ def charge(request):
             name=request.POST['nickname'],
             source=request.POST['stripeToken']
             )
-
     charge = stripe.Charge.create(
             customer=customer,
             amount=amount*100,
