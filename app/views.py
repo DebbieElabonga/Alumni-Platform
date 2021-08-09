@@ -1,4 +1,7 @@
-from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, TechNews, User
+from django.core.files.base import File
+from app.models import GeneralAdmin, Group, UploadInvite, UserProfile, Stories, Idea, Tech, User
+from app.forms import CohortForm, InviteUsers, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
+from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, Tech, User
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
 from django.shortcuts import render, redirect
 from django.shortcuts import render,redirect
@@ -15,19 +18,27 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .utils import generate_token
 from django.utils.encoding import force_bytes, force_text
 from django.views import View
+import mimetypes
+import os
+from django.http.response import HttpResponse
+import pandas as pd
+from csv import DictReader
+import random
 
+
+import threading
 
 from django.http import HttpResponseRedirect,request,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
                        SignupForm, TechNewsForm, UserProfileForm)
-from app.models import Group, Idea, Stories, TechNews, UserProfile
+from app.models import Group, Idea, Stories, Tech, UserProfile
 
 from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
                     FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
-                    UserProfileForm)
-from .models import Group, Idea, Stories, TechNews, UserProfile
+                    UserProfileForm,Add_userForm)
+from .models import Group, Idea, Stories, Tech, UserProfile
 
 # Create your views here.
 
@@ -201,46 +212,36 @@ def Discussion(request):
             discussion = form.save(commit=False)
             discussion.user = current_user
             
-def donation(request):
-            discussion.creator = current_user
-            discussion.date_created = dt.datetime.now()
-
-	return render(request, 'donation.html')           
+          
             
 def charge(request):
     
-	if request.method == 'POST':
+    if request.method == 'POST':
          print('Data:', request.POST)
 
-	amount = int(request.POST['amount']) 
+    amount = int(request.POST['amount']) 
 
-	customer = stripe.Customer.create(
-			email=request.POST['email'],
-			name=request.POST['nickname'],
-			source=request.POST['stripeToken']
-			)
+    customer = stripe.Customer.create(
+            email=request.POST['email'],
+            name=request.POST['nickname'],
+            source=request.POST['stripeToken']
+            )
 
-	charge = stripe.Charge.create(
-			customer=customer,
-			amount=amount*100,
-			currency='usd',
-			description="Donation"
-			)
+    charge = stripe.Charge.create(
+            customer=customer,
+            amount=amount*100,
+            currency='usd',
+            description="Donation"
+            )
 
-	return redirect(reverse('success', args=[amount]))
+    return redirect(reverse('success', args=[amount]))
 
 
 def successMsg(request, args):
-	amount = args
-	return render(request, 'success.html', {'amount':amount})
+    amount = args
+    return render(request, 'success.html', {'amount':amount})
 
-    # else:
-     
-    #     form = FundraiserForm()
-        
-    # return render(request, 'new_fundraiser.html', {"form": form})
-    else:
-        form = DiscussionForm()
+    form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
     
 def Fundraiser(request):
@@ -266,10 +267,15 @@ def summary(request):
     title = 'Admin - Summary'
     
     users = UserProfile.get_users()
-    projects = Idea.get_projects()
+    active_users = User.objects.filter(is_active = True)
+    inactive_users = User.objects.filter(is_active = False)
+
+    projects = Idea.get_open_projects()
+    closed_projects = Idea.get_closed_projects()
     groups = Group.get_groups()
     admins = GeneralAdmin.get_admins()[:5]
     articles = Stories.get_stories()
+
 
     def close_project():
         project_id = request.POST.get('close_proj')
@@ -284,6 +290,8 @@ def summary(request):
 
 
     context = {
+        'inactive_users':inactive_users,
+        'closed_projects':closed_projects,
         'articles':articles,
         'admins':admins,
         'users':users,
@@ -298,15 +306,13 @@ def summary(request):
 def invite_members(request):
     '''
     renders invite member form
+    invites single users
+    invotes multiple users
     '''
-    title = 'Invite Members'
-    if request.method == "POST":
-        f_name = request.POST.get('first_name')
-        l_name = request.POST.get('last_name')
-        email = request.POST.get('user_email')
-        username = f_name+(list(l_name))[0]
+    def invite_new_user(f_name, l_name, email):
 
-        new_user = User(username = username, first_name = f_name, last_name = l_name, email = email, is_active = False)
+        rando = random.randint(0, 1000)
+        new_user = User(username = f_name+l_name+str(rando), first_name = f_name, last_name = l_name, email = email, is_active = False)
         new_user.save()
         current_site = get_current_site(request)
         domain = current_site.domain
@@ -317,9 +323,34 @@ def invite_members(request):
 
         messages.success(request, f'Congratulations! You have succesfully Added a new User!')
         return redirect('invite_members')
+    title = 'Invite Members'
+    if 'single_invite' in request.POST and request.method == "POST":
+        f_name = request.POST.get('first_name')
+        l_name = request.POST.get('last_name')
+        email = request.POST.get('user_email')
 
+        #call the function that sends email to new users
+        invite_new_user(f_name, l_name, email)
+    form = InviteUsers
 
+    if 'multiple_invite' in request.POST and request.method == 'POST':
+        form = InviteUsers(request.POST, request.FILES)
+        if form.is_valid:
+            form.save()
+
+            form_to_read = UploadInvite.objects.all().last()
+
+            with open((form_to_read.file_path).path, 'r') as read_obj:
+                csv_dict_reader = DictReader(read_obj)
+                for row in csv_dict_reader:
+                    f_name = row['first_name']
+                    l_name = row['last_name']
+                    email = row['email']
+
+                    invite_new_user(f_name, l_name, email)
+       
     context = {
+        'form':form,
         'title':title,
     }
 
@@ -342,9 +373,90 @@ class InviteUserView(View):
                                  'user is invited successfully')
             return redirect('user_profile.html')
         return render(request, 'user_profile.html')
-  return render(request, 'admin_dash/dashboard.html', context)
+#--------------------------------------------------------------------------------------------
+#function enabling dowloading of user csv file
+def download_csv(request):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filename = 'Invite_users.csv'
 
+    filepath = BASE_DIR + '/app/Files/' + filename
+    path = open(filepath, 'r')
+    mime_type = mimetypes.guess_type(filepath)
+    response = HttpResponse(path, content_type = mime_type)
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+
+    return response
+
+    
+    return render(request, 'admin_dash/dashboard.html', context)
+
+def create_user(request):
+    '''
+    View function to add a new students members into the alumni platform and send them an invitation email
+    '''
+    if request.method == 'POST':
+        form = Add_userForm(request.POST)
+        email = request.POST.get('email')
+        if form.is_valid():
+            user = form.save(commit = False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            email_subject = 'Invitation to Alumni Community'
+            message = render_to_string('invitation.html',
+                                    {
+                                        'user': user,
+                                        'domain': current_site.domain,
+                                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                        'token': generate_token.make_token(user)
+                                    }
+                                    )
+            email_message = EmailMessage(
+                email_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [email]
+            )
+            EmailThread(email_message).start()
+            messages.add_message(request, messages.SUCCESS,
+                                'invaitation sent  succesfully')
+            return redirect('registration')
+
+            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+            return redirect('/user_list/')
+    else:
+        form = Add_userForm()
+    return render(request, 'create_user.html', {"form": form})
+
+
+class InviteUserView(View):
+    '''
+    View function that generates a new token for each new user based on their uid
+    '''
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except Exception as identifier:
+            user = None
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 'user is invited successfully')
+            return redirect('')
+        return render(request, '')
+
+class EmailThread(threading.Thread):
+
+    def __init__(self, email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email_message.send()
 
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
+
