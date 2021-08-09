@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content%}
+<h2 style="font-weight:600; font-size: 25px; color: black;text-align: center;">Group : {{group.name}}</h2>
+<br>
+<br>
+<div class="container">
+
+<div class="row">
+    {% for message in messages %}
+    <div class="col-md-4">
+        <div class="card mb-4" style="min-height:340px">
+
+            <div class="card-body">
+                <h5 style="font-weight:600; font-size: 25px; color: black;"><a class="text-right"
+                    style="text-decoration: none; color: black; " class="card-title">{{ message.title}}</h5>
+                <p style="font-weight:100; font-size: 25px; color: black;"><a class="text-right"
+                    style="text-decoration: none; color: black; " class="card-text">{{message.description}}</p>
+                <h6 style="font-weight:100; font-size: 15px; color: black;"><a class="text-right"
+                    style="text-decoration: none; color: black; " class="card-text">{{message.date_created}}</h6>
+            <hr>
+             
+                <a href="{% url 'reply' message.id %}" class="btn btn-primary btn-sm">REPLY</a>
+              
+    
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+
+
+
+
+
+<br>
+<a href="{% url 'discussion' group.id %}" class="btn btn-primary btn-md" style="text-align: center"> ADD DISCUSSION
+</a>
+
+
+{% endblock %}
