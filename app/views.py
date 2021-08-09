@@ -48,21 +48,23 @@ def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
     #tech = TechNews.objects.all()
-    return render(request,'index.html', {'groups':groups,'stories':stories})
+    current_user = request.user
+    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories})
+
     
-def signup(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('index')
-    else:
-        form = SignupForm()
-    return render(request, 'registration/registration_form.html', {'form': form})
+# def signup(request):
+#     if request.method == 'POST':
+#         form = SignupForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             raw_password = form.cleaned_data.get('password1')
+#             user = authenticate(username=username, password=raw_password)
+#             login(request, user)
+#             return redirect('index')
+#     else:
+#         form = SignupForm()
+#     return render(request, 'registration/registration_form.html', {'form': form})
 
    
 def profile(request):
@@ -167,12 +169,6 @@ def single_idea(request, id):
     return redirect('meet_collegues')
 
 stripe.api_key = "YOUR SECRET KEY"
-
-
-def index(request):
-    stories = Stories.objects.order_by("-id")
-    # technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
     
 def create_story(request):
     form = CreateStoryForm()
@@ -407,6 +403,7 @@ def edit_details(request):
     '''
     renders to edit page
     '''
+    form_password = SignupForm
     if request.method == 'POST' and 'save_default_details' in request.POST:
         user_id = request.POST.get('user_id')
         username = request.POST.get("username")
@@ -416,8 +413,11 @@ def edit_details(request):
         bio = request.POST.get('bio')
         photo_path = request.FILES['photo']
 
-        user_to_update = User.objects.filter(id     = user_id)
-        user_to_update.update(username = username, first_name = f_name, last_name = l_name, password = password)
+        user_to_update = User.objects.filter(id = user_id)
+        user_to_update.update(username = username, first_name = f_name, last_name = l_name)
+        curr_user = User.objects.get(id = user_id)
+        curr_user.set_password(password)
+        curr_user.save()
         user_profile = UserProfile.objects.filter(user = user_id)
 
         if user_profile:
@@ -436,6 +436,7 @@ def edit_details(request):
     else:
         direct_access = True
         context = {
+            'form_password':form_password,
             'direct_access':direct_access
         }  
         messages.warning(request, 'This Page can only be accessed through a valid invite link')

@@ -15,11 +15,11 @@
         <form id="invite_members" action="{% url 'invite_members' %}" method="post">
             {% csrf_token %}
             <div class="invitee d-flex flex-row" style="width: 400px;">
-                <input type="text" name="first_name" placeholder="First Name" class="mr-4">
+                <input type="text" name="first_name" placeholder="First Name" class="mr-4" required>
                 <input type="text" name="last_name" placeholder="Last Name" class="ml-4">
             </div>
             <div class="invitee invitee_email" style="width: 400px;">
-                <input type="text" name="user_email" placeholder="Email Address">
+                <input type="text" name="user_email" placeholder="Email Address" required>
             </div>
             <button type="submit" name='single_invite' class="btn-outline-success ml-5 mr-5">Send Invite</button>
 

@@ -1,19 +1,20 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.forms import widgets
 from .models import Idea, UploadInvite, Stories,Tech, Fundraiser, Message, Group, UserProfile
 from .models import Add_user, Idea
 from .models import Stories,Tech
 from .models import Idea
 from .models import Fundraiser, Message
 
-# The signup form
-class SignupForm(UserCreationForm):
-    email = forms.EmailField(max_length=300, help_text='Required. Enter a valid email address.')
+#edit details form 
 
+class SignupForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'first_name', 'last_name', 'password1', 'password2')
+        
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
