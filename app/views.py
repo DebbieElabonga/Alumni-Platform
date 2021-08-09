@@ -96,7 +96,7 @@ def cohort(request):
             group.members.add(request.POST.get('admin'))
             group.save()
             messages.success(request, 'A new Cohort has been created')
-            return redirect('index')
+            return redirect('admin_dashboard')
         else:
             messages.warning(request, 'Invalid form')
             return render(request, 'cohort.html', {'title':title,'form': form})
