@@ -83,6 +83,9 @@ class Group(models.Model):
   def __str__(self):
     return self.name
 
+  @classmethod
+  def get_groups(cls):
+    return cls.objects.all()
 #message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)
