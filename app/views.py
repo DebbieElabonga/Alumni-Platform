@@ -48,6 +48,8 @@ def index(request):
     stories = Stories.objects.order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
+    
+    return render(request,'index.html', {'groups':groups,'stories':stories})
     current_user = request.user
     return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories})
 
@@ -503,71 +505,71 @@ def edit_details(request):
         return render(request, 'edit_details.html', context)
 
 
-# def create_user(request):
-#     '''
-#     View function to add a new students members into the alumni platform and send them an invitation email
-#     '''
-#     if request.method == 'POST':
-#         form = Add_userForm(request.POST)
-#         email = request.POST.get('email')
-#         if form.is_valid():
-#             user = form.save(commit = False)
-#             user.is_active = False
-#             user.save()
-#             current_site = get_current_site(request)
-#             email_subject = 'Invitation to Alumni Community'
-#             message = render_to_string('invitation.html',
-#                                     {
-#                                         'user': user,
-#                                         'domain': current_site.domain,
-#                                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#                                         'token': generate_token.make_token(user)
-#                                     }
-#                                     )
-#             email_message = EmailMessage(
-#                 email_subject,
-#                 message,
-#                 settings.EMAIL_HOST_USER,
-#                 [email]
-#             )
-#             EmailThread(email_message).start()
-#             messages.add_message(request, messages.SUCCESS,
-#                                 'invaitation sent  succesfully')
-#             return redirect('registration')
+def create_user(request):
+    '''
+    View function to add a new students members into the alumni platform and send them an invitation email
+    '''
+    if request.method == 'POST':
+        form = Add_userForm(request.POST)
+        email = request.POST.get('email')
+        if form.is_valid():
+            user = form.save(commit = False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            email_subject = 'Invitation to Alumni Community'
+            message = render_to_string('invitation.html',
+                                    {
+                                        'user': user,
+                                        'domain': current_site.domain,
+                                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                        'token': generate_token.make_token(user)
+                                    }
+                                    )
+            email_message = EmailMessage(
+                email_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [email]
+            )
+            EmailThread(email_message).start()
+            messages.add_message(request, messages.SUCCESS,
+                                'invaitation sent  succesfully')
+            return redirect('registration')
 
-#             messages.success(request, f'Congratulations! You have succesfully Added a new User!')
-#             return redirect('/user_list/')
-#     else:
-#         form = Add_userForm()
-#     return render(request, 'create_user.html', {"form": form})
+            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+            return redirect('/user_list/')
+    else:
+        form = Add_userForm()
+    return render(request, 'create_user.html', {"form": form})
 
 
-# class InviteUserView(View):
-#     '''
-#     View function that generates a new token for each new user based on their uid
-#     '''
-#     def get(self, request, uidb64, token):
-#         try:
-#             uid = force_text(urlsafe_base64_decode(uidb64))
-#             user = User.objects.get(pk=uid)
-#         except Exception as identifier:
-#             user = None
-#         if user is not None and generate_token.check_token(user, token):
-#             user.is_active = True
-#             user.save()
-#             messages.add_message(request, messages.SUCCESS, 'user is invited successfully')
+class InviteUserView(View):
+    '''
+    View function that generates a new token for each new user based on their uid
+    '''
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except Exception as identifier:
+            user = None
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.add_message(request, messages.SUCCESS, 'user is invited successfully')
 
-#             return redirect('')
-#         return render(request, '')
+            return redirect('')
+        return render(request, '')
 
-# class EmailThread(threading.Thread):
+class EmailThread(threading.Thread):
 
-#     def __init__(self, email_message):
-#         self.email_message = email_message
-#         threading.Thread.__init__(self)
+    def __init__(self, email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
 
-#     def run(self):
-#         self.email_message.send()
+    def run(self):
+        self.email_message.send()
 @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def Fundraiser(request):
     
