@@ -26,7 +26,6 @@ urlpatterns=[
   # url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   # url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   # url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
-  url("story/",views.create_story,name="story"),
 
   # url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
@@ -73,7 +72,7 @@ urlpatterns=[
 
   url(r"^story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
-  url(r'^fundraiser', views.Fundraiser, name='fundraiser'), 
+  url(r'^fundraiser', views.Fundraiser, name='fundraiser'),   
   path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
   path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
   

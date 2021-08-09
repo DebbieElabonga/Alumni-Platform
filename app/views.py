@@ -48,6 +48,8 @@ def index(request):
     stories = Stories.objects.order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
+    
+    return render(request,'index.html', {'groups':groups,'stories':stories})
     current_user = request.user
     return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories})
 
@@ -210,7 +212,7 @@ def TechNews(request):
             news = form.save(commit=False)
             news.creator = request.user
             news.save()
-        return HttpResponseRedirect(request.path_info)
+            return redirect('index')
     else:
         form = TechNewsForm()
     return render(request,'newsform.html',{"form":form})
