@@ -426,10 +426,11 @@ def edit_details(request):
             new_profile = UserProfile(user = user_to_update, bio = bio, photo_path = photo_path)
             new_profile.save()
         
-        to_login = authenticate(username = user_to_update[0].username, password = user_to_update[0].password)
-        if to_login:
-            login(to_login)
+        to_login = authenticate(request, username = username, password = password)
+        if to_login is not None:
+            login(request, to_login)
         else:
+            messages.warning('User details not Found')
             redirect('login')
         messages.success(request, 'Your Account has been Updated successfully')
         return redirect('user_profile')

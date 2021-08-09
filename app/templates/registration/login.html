@@ -11,8 +11,14 @@
       <h1>Welcome to Alumni Platform</h1>
       <h6>Meet people, Build awesome ideas...</h6>
     </div>
+    {%if user.is_authenticated %}
+    <h3>You are currently Logged in. <a href="{% url 'logout' %}">Log Out</a></h3>
+    {%else%}
     <div class="login_body">
       <h4 class="bold">Login</h4>
+      {% for message in messages %}
+      <h4 class="alert">{{message}}</h4>
+      {%endfor%}
       <form action="{% url 'login' %}" method='POST'>
         {% csrf_token %}
         <div class="invitee">
@@ -25,6 +31,7 @@
         </div>
       </form>
     </div>
+    {%endif%}
   </div>
   <div class="col-md-3"></div>
 </div>
