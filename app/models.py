@@ -60,12 +60,6 @@ class GeneralAdmin(models.Model):
       admins = None
     return admins
 
-#message/discussion Model
-class Message(models.Model):
-  title = models.CharField(max_length=100, blank=True, null=True)
-  description = models.TextField()
-  date_created = models.DateTimeField()
-
 
 #Group/Cohort Model
 class Group(models.Model):
