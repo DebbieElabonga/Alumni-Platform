@@ -1,3 +1,19 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5%}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+<div class="container" id="background">
+    <div id="prog">
+        <h1>Moringa Alumni</h1>
+    </div>
+    <div id="opennote">
+        <h3 style="text-align:center; color: black;">Hello,{{logged_user.username}}</h3>
+        <p id="opennote" style="text-align:center; font-size: 50px; color: black;">
+            Welcome
+            to Moringa Alumni.</p>
+    </div>
+    <div class="container-fluid">
 
 <body style=" background-image: url('');
     background-size: cover;
@@ -6,7 +22,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
-    
+
     <div class="container" id="background">
         <div id="prog">
             <h1
@@ -19,56 +35,35 @@
                 style="text-align:center; font-family: 'Dancing Script', cursive; font-size: 50px; color: black;">
                 Welcome
                 to Moringa Alumni.</p>
+        </div>
 
-{% extends 'base.html' %}
-{% load django_bootstrap5%}
-{% load bootstrap4 %}
-{% load static %}
-{% block content %}
-<div class="container" id="background">
-    <div id="prog">
-        <h1>Moringa Alumni</h1>
-    </div>
-    <div id="opennote">
-        <h3 style="text-align:center; color: black;">Hello,</h3>
-        <p id="opennote" style="text-align:center; font-size: 50px; color: black;">
-            Welcome
-            to Moringa Alumni.</p>
-    </div>
-    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <p style="text-align: center; font-size: 25px;">TECH NEWS</p>
+                </div>
+                <div class="col-md-4">
+                    <p style="text-align:center; font-size: 25px;">SUCCESS STORIES</p>
+                </div>
+                <div class="col-md-4">
+                    <p style="text-align: center; font-size: 25px;">COHORTS</p>
+                </div>
+            </div>
+        </div>
         <div class="col-md-12 text-center">
             <a href="{% url 'new_cohort' %}" class="btn btn-primary btn-md" style="text-align: center"> NEW COHORT
             </a>
         </div>
-        <section class="magazine-section">
-            {% for group in groups %}
-            <div class="col-lg-4">
-                <div>
-
-                    <div class="row" style="padding-top: 1%">
-                        <div class="col-md-12">
-                            <h4 style="font-weight:600; font-size: 25px; color: black;">NAME: <a class="text-right"
-                                    style="text-decoration: none; color: black;
-                                        ">{{group.name}}</a></h4>
-                        </div>
-                    </div>
-                    <div class="row" style="font-size:10pt;">
-                        <div class="col-md-6"
-                            style="padding-bottom: 2%;font-weight:600; font-size: 20px; color: rgba(101, 168, 80, 0.692);">
-                            Date Created:
-                            {{group.date_created}}
-                            Founder: {{group.creator}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </section>
     </div>
-    {% endblock %}
+    
 </div>
 {{stories}}
 
+<<<<<<< HEAD
 {{tecknews}}
 
+=======
+>>>>>>> dev
 {{tech}}
+</body>
+{% endblock %}
