@@ -18,12 +18,22 @@
   <div class="totals col-md-12">
     <div class="col-md-3">
       <h4 class="bold">
-        <img src="{% static 'images/pngwing.com.png'%}" alt="" width="40px"> Active Members: {{users.count}}
+        <img src="{% static 'images/pngwing.com.png'%}" alt="" width="40px">
+        <span> 
+          Total Members: {{users.count}}
+          <h6 class="bold cold">Inactive Members {{inactive_users.count}}</h6>
+        </span>
+       
       </h4>
+      
     </div>
     <div class="col-md-3">
       <h4 class="bold">
-        <img src="{% static 'images/project2.jpg'%}" alt="" width="40px"> Active Projects: {{projects.count}}
+        <img src="{% static 'images/project2.jpg'%}" alt="" width="40px">
+        <span> 
+          Active Projects: {{projects.count}}
+          <h6 class="bold cold">Closed Projects {{closed_projects.count}}</h6>
+        </span>
       </h4>
     </div>
     <div class="col-md-3">
@@ -150,7 +160,7 @@
         <div class="other_admin_dets">
           <h5 class="names bold col-md-2">{{project.owner.user.username}}</h5>
           <h5 class="col-md-4">{{project.title}}</h5>
-          <h5 class="col-md-2">{{project.date_created}}</h5>
+          <h5 class="col-md-2">{{project.date_created|date}}</h5>
           <h5 class="col-md-2">{{project.collaborators.count}}</h5>
           <div class="col-md-2">
             {%if project.is_open %}
@@ -173,5 +183,9 @@
     </div>
   </div>
 
+  {%endblock%}
+  {% block scripts %}
+  {{block.super}}
+  <script src="{% static 'js/scripts.js' %}"></script>
 
   {%endblock%}

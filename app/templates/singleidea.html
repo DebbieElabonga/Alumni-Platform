@@ -24,6 +24,9 @@
         <button class="btn btn-default" type="submit">Join Team</button>
       </form>
     </div>
+    {% for message in messages%}
+    <div class="alert alert-success">{{message}}</div>
+    {%endfor%}
   </div>
   <div class="card-image col-md-6" style="background-image: url('{{idea.image1_path.url}}');
                                                 background-position: center;

@@ -1,0 +1,12 @@
+{% autoescape off%}
+<h4>Hello, {{name}}</h4>
+<p>
+  You have been invited to join Alumni Community, <br>
+  A platform where you meet like minded people and build awesome stuff!</p>
+<p>
+  To accept the invitation, please click the link below:</p>
+http://{{domain}}{% url 'invitation' uidb64=uid token=token %}
+
+-- Alumni team
+
+{% endautoescape %}

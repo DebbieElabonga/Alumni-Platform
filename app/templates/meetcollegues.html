@@ -21,7 +21,9 @@
     </form>
   </div>
   <div class="col-md-4">
-
+    {% for message in messages%}
+    <div class="alert alert-success">{{message}}</div>
+    {%endfor%}
     {% for idea in ideas%}
     <div class="card">
       <div class="card-body col-md-6">
