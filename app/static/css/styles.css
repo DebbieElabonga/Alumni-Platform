@@ -30,7 +30,7 @@ button{
   font-weight: bold;
   font-size: large;
 }
-.invitee>input, .invitee_email>input{
+.invitee>input, .edit_dets>input .invitee_email>input{
   border-width: 0;
   border-bottom: 1px solid  black;
   margin-bottom: 30px;

@@ -26,13 +26,10 @@ from django.http.response import HttpResponse
 import pandas as pd
 from csv import DictReader
 import random
-
-
+from alumni.decorators import general_admin_required
 import threading
-
 from django.http import HttpResponseRedirect,request,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
                        SignupForm, TechNewsForm, UserProfileForm)
 from app.models import Group, Idea, Stories, Tech, UserProfile
@@ -51,24 +48,27 @@ def index(request):
     stories = Stories.objects.order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
-    #tech = TechNews.objects.all()
-    return render(request,'index.html', {'groups':groups,'stories':stories})
     
-def signup(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('index')
-    else:
-        form = SignupForm()
-    return render(request, 'registration/registration_form.html', {'form': form})
+    return render(request,'index.html', {'groups':groups,'stories':stories})
+    current_user = request.user
+    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories})
 
-   
+    
+# def signup(request):
+#     if request.method == 'POST':
+#         form = SignupForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             raw_password = form.cleaned_data.get('password1')
+#             user = authenticate(username=username, password=raw_password)
+#             login(request, user)
+#             return redirect('index')
+#     else:
+#         form = SignupForm()
+#     return render(request, 'registration/registration_form.html', {'form': form})
+
+
 def profile(request):
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
@@ -104,7 +104,21 @@ def cohort(request):
         form = CohortForm()
     return render(request, 'cohort.html', {'title':title,'form': form})
 
-# Create your views here.
+
+def joincohort(request,id):
+    current_user = request.user.id
+    cohort = get_object_or_404(Group,pk=id)
+    
+    cohort.members.add(current_user)
+    return redirect("cohortdiscussions",id)
+
+def leavecohort(request,id):
+    current_user = request.user.id
+    cohort = get_object_or_404(Group,pk=id)
+    cohort.members.remove(current_user)
+
+    return redirect("index")
+
 
 #-----------------------------------------------------------------------------------------
 #view function that renders to meet_collegues template
@@ -173,10 +187,6 @@ def single_idea(request, id):
 stripe.api_key = "YOUR SECRET KEY"
 
 
-def index(request):
-    stories = Stories.objects.order_by("-id")
-    # technews = TechNews.objects.order_by("-id")
-    return render(request,"index.html",{"stories":stories})
     
 def create_story(request):
     form = CreateStoryForm()
@@ -202,7 +212,7 @@ def TechNews(request):
             news = form.save(commit=False)
             news.creator = request.user
             news.save()
-        return HttpResponseRedirect(request.path_info)
+            return redirect('index')
     else:
         form = TechNewsForm()
     return render(request,'newsform.html',{"form":form})
@@ -221,17 +231,19 @@ def Discussion(request, id):
             discussion.group = group
             discussion.save()
 
-        return redirect('all_discussions',group.id)
+        return redirect('cohortdiscussions',group.id)
 
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form ,'group':group})
 
-def all_discussions(request, id):
+def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
+    members = group.members.all()
 
-    return render(request, 'all_discussions.html', {'group':group , 'messages':messages})
+
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
 
 def reply(request, id):
     user = request.user
@@ -256,7 +268,7 @@ def reply(request, id):
     discussion.user = current_user
             
           
-            
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
 def charge(request):
     
     if request.method == 'POST':
@@ -269,7 +281,6 @@ def charge(request):
             name=request.POST['nickname'],
             source=request.POST['stripeToken']
             )
-
     charge = stripe.Charge.create(
             customer=customer,
             amount=amount*100,
@@ -286,7 +297,8 @@ def successMsg(request, args):
 
     form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
-    
+
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
 def Fundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
@@ -303,6 +315,7 @@ def Fundraiser(request):
         form = FundraiserForm()
     return render(request, 'new_fundraiser.html', {'title':title,"form": form})
 #views to summary on the admin dashboard
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def summary(request):
     '''
     renders summary on admin dashboard
@@ -346,6 +359,7 @@ def summary(request):
     return render(request, 'admin_dash/dashboard.html', context)
 
 #view function that renders to invite members page
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def invite_members(request):
     '''
     renders invite member form
@@ -364,7 +378,7 @@ def invite_members(request):
         
         send_invite(email, domain , uid, token)
 
-        messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+        messages.success(request,'Congratulations! You have succesfully Invited New users!')
         return redirect('invite_members')
     title = 'Invite Members'
     if 'single_invite' in request.POST and request.method == "POST":
@@ -412,10 +426,22 @@ class InviteUserView(View):
         if user is not None and generate_token.check_token(user, token):
             user.is_active = True
             user.save()
-            messages.add_message(request, messages.SUCCESS,
-                                 'user is invited successfully')
-            return redirect('user_profile.html')
-        return render(request, 'user_profile.html')
+            messages.add_message(request, messages.SUCCESS, 'Welcome! You are now an active User.')
+            warning = 'You will not be able to edit this information when this window is closed or refreshed.'
+            context = {
+                'edit_warning':warning,
+                'user':user
+            }
+            messages.success(request, '<h4>Edit or Confirm your details below </h4>')           
+            return render(request, 'edit_details.html', context)
+        is_expired = True
+
+        context = {
+            'is_expired':is_expired
+        }  
+
+        messages.warning(request, 'Invitation Link has Expired!')
+        return render(request, 'edit_details.html', context)
 #--------------------------------------------------------------------------------------------
 #function enabling dowloading of user csv file
 def download_csv(request):
@@ -432,6 +458,52 @@ def download_csv(request):
 
     
     return render(request, 'admin_dash/dashboard.html', context)
+
+# view function that edits a users details when they accept initation.
+def edit_details(request):
+    '''
+    renders to edit page
+    '''
+    form_password = SignupForm
+    if request.method == 'POST' and 'save_default_details' in request.POST:
+        user_id = request.POST.get('user_id')
+        username = request.POST.get("username")
+        f_name = request.POST.get('f_name')
+        l_name = request.POST.get('l_name')
+        password = request.POST.get('password')
+        bio = request.POST.get('bio')
+        photo_path = request.FILES['photo']
+
+        user_to_update = User.objects.filter(id = user_id)
+        user_to_update.update(username = username, first_name = f_name, last_name = l_name)
+        curr_user = User.objects.get(id = user_id)
+        curr_user.set_password(password)
+        curr_user.save()
+        user_profile = UserProfile.objects.filter(user = user_id)
+
+        if user_profile:
+            user_profile.update(bio = bio, photo_path = photo_path)
+        else:
+            new_profile = UserProfile(user = user_to_update, bio = bio, photo_path = photo_path)
+            new_profile.save()
+        
+        to_login = authenticate(request, username = username, password = password)
+        if to_login is not None:
+            login(request, to_login)
+        else:
+            messages.warning('User details not Found')
+            redirect('login')
+        messages.success(request, 'Your Account has been Updated successfully')
+        return redirect('user_profile')
+    else:
+        direct_access = True
+        context = {
+            'form_password':form_password,
+            'direct_access':direct_access
+        }  
+        messages.warning(request, 'This Page can only be accessed through a valid invite link')
+        return render(request, 'edit_details.html', context)
+
 
 def create_user(request):
     '''
@@ -485,8 +557,8 @@ class InviteUserView(View):
         if user is not None and generate_token.check_token(user, token):
             user.is_active = True
             user.save()
-            messages.add_message(request, messages.SUCCESS,
-                                 'user is invited successfully')
+            messages.add_message(request, messages.SUCCESS, 'user is invited successfully')
+
             return redirect('')
         return render(request, '')
 
@@ -498,7 +570,7 @@ class EmailThread(threading.Thread):
 
     def run(self):
         self.email_message.send()
-
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
