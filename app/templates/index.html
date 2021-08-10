@@ -71,6 +71,7 @@
             <!-- ******************************************************************************* -->
                 <div class="col-md-4">
                     <p style="text-align:center; font-size: 25px;">SUCCESS STORIES</p>
+                    <a href="{% url 'story' %}" class="btn btn-primary btn-md" style="text-align: center"> Share Story</a><br>
                     {% for story in stories %}
                       <b>Title</b>{{story.title}}<br>
                        <b>Desc:</b> {{story.description}}<br>
