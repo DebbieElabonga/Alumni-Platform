@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import JsonResponse, request
 from .forms import DiscussionForm, FundraiserForm, TechNewsForm
-
+from django.conf import settings
 
 
 import stripe
@@ -17,7 +17,7 @@ import datetime as dt
 from django.http import HttpResponseRedirect
 # Create your views here.
 
-stripe.api_key = "YOUR SECRET KEY"
+
 
 def index(request):
     groups = Group.objects.all()
@@ -135,7 +135,7 @@ def single_idea(request, id):
   return render(request, 'singleidea.html', context)
   return render(request, 'meetcollegues.html', context)
 
-stripe.api_key = "YOUR SECRET KEY"
+
 
 
 def index(request):
@@ -180,6 +180,11 @@ def Discussion(request):
             discussion = form.save(commit=False)
             discussion.user = current_user
             
+            
+stripe.api_key = settings.STRIPE_SECRET_KEY
+STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
+
+          
 def donation(request):
 
 	return render(request, 'donation.html')           
@@ -235,3 +240,5 @@ def summary(request):
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
+  
+  
