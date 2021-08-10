@@ -47,11 +47,8 @@ def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
     tech = Tech.objects.all().order_by("-id")
-    return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
-    
-    return render(request,'index.html', {'groups':groups,'stories':stories})
     current_user = request.user
-    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories})
+    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories,'tech':tech})
 
     
 # def signup(request):
@@ -194,9 +191,9 @@ def create_story(request):
         form = CreateStoryForm(request.POST or None,request.FILES)
         if form.is_valid():
             story = form.save(commit=False)
-            story.user = request.user
-            # story.save()
-        return redirect('index')
+            story.creator = request.user
+            story.save()
+            return redirect('index')
 
     else:
         form = CreateStoryForm()
