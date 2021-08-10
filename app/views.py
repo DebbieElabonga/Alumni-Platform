@@ -8,14 +8,11 @@ from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,C
 from django.shortcuts import render, redirect
 from django.shortcuts import render,redirect
 from django.urls import reverse
-<<<<<<< HEAD
-=======
 from django.http import JsonResponse, request
 from .forms import DiscussionForm, FundraiserForm, TechNewsForm
 from django.conf import settings
 
 
->>>>>>> 7473af7179c2cdd14fe88c67fbbfceaa218a8e19
 import stripe
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
@@ -232,7 +229,6 @@ def Discussion(request, id):
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
-<<<<<<< HEAD
             discussion.creator = current_user
             discussion.group = group
             discussion.save()
@@ -247,8 +243,7 @@ def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
     members = group.members.all()
-=======
-            discussion.user = current_user
+    discussion.user = current_user
             
             
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -256,7 +251,6 @@ STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 
           
 def donation(request):
->>>>>>> 7473af7179c2cdd14fe88c67fbbfceaa218a8e19
 
 
     return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
@@ -322,7 +316,7 @@ def Fundraiser(request):
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.creator = current_user
+            fundraise.user = current_user
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
@@ -586,13 +580,7 @@ class EmailThread(threading.Thread):
 
     def run(self):
         self.email_message.send()
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
-def Fundraiser(request):
-    
-    return render(request,'new_fundraiser.html')
-<<<<<<< HEAD
 
-=======
+
   
   
->>>>>>> 7473af7179c2cdd14fe88c67fbbfceaa218a8e19
