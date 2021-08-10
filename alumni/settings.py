@@ -87,9 +87,9 @@ WSGI_APPLICATION = 'alumni.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'alumni',
-        'USER':'postgres',
-        'PASSWORD':'chebichii1',
+        'NAME': 'alumnus',
+        'USER':'moringa',
+        'PASSWORD':'Access',
         'HOST':'localhost',
     }
 }
