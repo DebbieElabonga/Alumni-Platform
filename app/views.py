@@ -8,6 +8,14 @@ from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,C
 from django.shortcuts import render, redirect
 from django.shortcuts import render,redirect
 from django.urls import reverse
+<<<<<<< HEAD
+=======
+from django.http import JsonResponse, request
+from .forms import DiscussionForm, FundraiserForm, TechNewsForm
+from django.conf import settings
+
+
+>>>>>>> 7473af7179c2cdd14fe88c67fbbfceaa218a8e19
 import stripe
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
@@ -41,7 +49,7 @@ from .models import Group, Idea, Stories, Tech, UserProfile
 
 # Create your views here.
 
-stripe.api_key = "YOUR SECRET KEY"
+
 
 def index(request):
     groups = Group.objects.all()
@@ -181,7 +189,7 @@ def single_idea(request, id):
     messages.success(request, 'You are Now a collaborator. The Owner has been Notified')  
     return redirect('meet_collegues')
 
-stripe.api_key = "YOUR SECRET KEY"
+
 
 
     
@@ -224,20 +232,14 @@ def Discussion(request, id):
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
-            discussion.creator = current_user
-            discussion.group = group
-            discussion.save()
+            discussion.user = current_user
+            
+            
+stripe.api_key = settings.STRIPE_SECRET_KEY
+STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 
-        return redirect('cohortdiscussions',group.id)
-
-    else:
-        form = DiscussionForm()
-    return render(request, 'new_discussion.html', {"form": form ,'group':group})
-
-def cohortdiscussions(request, id):
-    group = get_object_or_404(Group, pk=id)
-    messages = Message.objects.filter(group = group)
-    members = group.members.all()
+          
+def donation(request):
 
 
     return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
@@ -571,4 +573,5 @@ class EmailThread(threading.Thread):
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
-
+  
+  
