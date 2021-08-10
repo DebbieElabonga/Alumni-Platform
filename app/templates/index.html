@@ -91,13 +91,15 @@
                                             class="card-img-top" alt="{{ hood.name }}">
                                         <p style="font-weight: 700;">Name: {{group.name}}</p>
                                         <p style="font-weight: 700;" >{{group.admin.profile.user.username}}</p>
-                                        <p style="font-weight: 700;" > Members: {{group.members.count}}</p>
-
-                                        <a href="{% url 'new_cohort' %}" class="btn btn-success btn-sm col-md-4"
-                                            style="text-align: center">
-                                            Join Cohort
-                                        </a>
+                                        <p style="font-weight: 700;" > Members: {{group.group.count}}</p>
+                                       
+                                        {% if request.user.userprofile.group == group %}
+                                        <small class="text-muted"><a href="{% url 'cohortdiscussions' group.id %}" class="btn btn-primary btn-sm">More</a></small>
+                                        {% elif not request.user.profile.hood %}
+                                        <small class="text-muted"><a href="{% url 'joincohort' group.id %}" class="btn btn-primary btn-sm">Join Cohort</a></small>
+                                        {% endif %}
                                     </div>
+                                </div>
 
 
                                     {%endfor%}    
