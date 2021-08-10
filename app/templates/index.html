@@ -4,17 +4,6 @@
 {% load static %}
 
 {% block content %}
-<div class="container" id="background">
-    <div id="prog">
-        <h1>Moringa Alumni</h1>
-    </div>
-    <div id="opennote">
-        <h3 style="text-align:center; color: black;">Hello,{{logged_user.username}}</h3>
-        <p id="opennote" style="text-align:center; font-size: 50px; color: black;">
-            Welcome
-            to Moringa Alumni.</p>
-    </div>
-    <div class="container-fluid">
 
 <body style=" background-image: url('');
     background-size: cover;
@@ -25,55 +14,58 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
 
     <div class="container" id="background">
-        <div id="prog">
-            <h1
-                style="text-align:center; font-size:60px; font-family: 'Dancing Script', cursive; font-weight:bold; color: black;">
-                Moringa Alumni</h1>
-        </div>
         <div id="opennote">
-            <h3 style="text-align:center; color: black;">Hello,</h3>
-            <p id="opennote"
-                style="text-align:center; font-family: 'Dancing Script', cursive; font-size: 50px; color: black;">
-                Welcome
-                to Moringa Alumni.</p>
+            <h3 style="text-align:center; color: black;">Hello,{{logged_user.username}}</h3>
+            <p id="opennote" style="text-align:center; font-size: 50px; color: black;"> Welcome to Moringa Alumni.</p>
         </div>
-
+        <hr>
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
                     <p style="text-align: center; font-size: 25px;">TECH NEWS</p>
                     <div class="container">
-                    {% for news in tech %}
-                    <div class="card" style="width: 36rem; color: white;">
-                        <div style="background-color:rgb(99,124,51)" class="card-body">
-                          <h5 class="card-title"><b>{{news.title}}</b></h5>
-                          <p  class="card-text collapse" >{{news.description | truncatechars:200 | safe }}</p>
-                          <p>Posted {{news.date_created  | timesince }} ago</p>
-                          <a class="btn btn-light" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            Read More ..
-                          </a>
-                          <div class="collapse" id="collapseExample">
-                            
-                                <p>{{news.description | safe }}</p>
-                            
-                          </div>
-                      </div>
-                      </div>
-                      {% endfor %}
+                        {% for news in tech %}
+                        <div class="card" style="width: 36rem; color: white;">
+                            <div style="background-color:rgb(99,124,51)" class="card-body">
+                                <h5 class="card-title"><b>{{news.title}}</b></h5>
+                                <p class="card-text collapse">{{news.description | truncatechars:200 | safe }}</p>
+                                <p>Posted {{news.date_created  | timesince }} ago</p>
+                                <a class="btn btn-light" data-toggle="collapse" href="#collapseExample" role="button"
+                                    aria-expanded="false" aria-controls="collapseExample">
+                                    Read More ..
+                                </a>
+                                <div class="collapse" id="collapseExample">
+
+                                    <p>{{news.description | safe }}</p>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
-                      <div class="col-md-12">
+                    <div class="col-md-12">
                         <a href="{% url 'technews' %}" class="btn btn-success btn-md"> Add Tech News
                         </a>
                     </div>
 
                 </div>
 
-            <!-- ******************************************************************************* -->
+                <!-- ******************************************************************************* -->
                 <div class="col-md-4">
                     <p style="text-align:center; font-size: 25px;">SUCCESS STORIES</p>
+                    <a href="{% url 'story' %}" class="btn btn-success btn-md"
+                        style="text-align: center; margin-left: 130px;"> Share Story</a>
+                    <br>
                     {% for story in stories %}
-                      <b>Title</b>{{story.title}}<br>
-                       <b>Desc:</b> {{story.description}}<br>
+                    <b>Title: </b>{{story.title}}<br>
+                    <b>Desc: </b> {{story.description}}<br>
+                    <div class="">
+                        <a href=""><img src="{{story.image_path.url}}" class="img-responsive" alt=""
+                                style="width:100%;width:100%"></a>
+                        <br>
+                        <a href="{{story.link}}" class="btn btn-primary btn-md" target="_blank"
+                            style="font-family: 'Special Elite', cursive;">Visit Link</a>
+                    </div>
                     {% endfor %}
 
                 </div>
@@ -98,22 +90,31 @@
                                         {% elif not request.user.profile.hood %}
                                         <small class="text-muted"><a href="{% url 'joincohort' group.id %}" class="btn btn-primary btn-sm">Join Cohort</a></small>
                                         {% endif %}
+                                        <p style="font-weight: 700;">{{group.admin.profile.user.username}}</p>
+                                        <p style="font-weight: 700;"> Members: {{group.members.count}}</p>
+
+                                        <a href="{% url 'new_cohort' %}" class="btn btn-success btn-sm col-md-4"
+                                            style="text-align: center">
+                                            Join Cohort
+                                        </a>
                                     </div>
                                 </div>
 
+                                </div>
+                                    {%endfor%}
 
-                                    {%endfor%}    
-                
-            </div>
-            <div class="col-md-12 text-center">
-                <a href="{% url 'new_cohort' %}" class="btn btn-primary btn-md" style="text-align: center"> NEW COHORT
-                </a>
+                                <div class="col-md-12 text-center">
+                                    <a href="{% url 'new_cohort' %}" class="btn btn-primary btn-md"
+                                        style="text-align: center"> NEW COHORT
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
-    
-</div>
 
 </body>
 {% endblock %}
