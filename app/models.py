@@ -83,25 +83,6 @@ class GeneralAdmin(models.Model):
     return admins
 
 
-#Group/Cohort Model
-class Group(models.Model):
-  name = models.CharField(max_length=100)
-  description = models.TextField()
-  date_created = models.DateTimeField(auto_now_add=True)
-  creator = models.ForeignKey(User, on_delete=CASCADE)
-  admin = models.ForeignKey(UserProfile, related_name = 'admin', on_delete= CASCADE, null = True)
-  members = models.ManyToManyField(UserProfile)
-  is_private = models.BooleanField(default=False)
-  
-  class Meta:
-    ordering = ['date_created']
-
-  def __str__(self):
-    return self.name
-
-  @classmethod
-  def get_groups(cls):
-    return cls.objects.all()
 
 #message/discussion Model
 class Message(models.Model):
