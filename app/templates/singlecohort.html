@@ -7,6 +7,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-1">
+<<<<<<< HEAD
+            <h3>Members</h3>
+            {% for member in members %}
+            {{member.user.username}}
+            {% endfor %}
+=======
             <p style="font-weight: 700;" > Members: {{members.count}}</p>
            <h5>Members</h5>   
             {% for member in members %}
@@ -14,43 +20,67 @@
             {%endfor%}
 
             
+>>>>>>> dev
         </div>
-        <div class="col-md-1">
-            <a href="{% url 'leavecohort' group.id %}" class="btn btn-primary btn-sm">Leave Cohort</a>
-        </div>        
+        <br>
+
+        
 
         <div class="col-md-10">
-<div class="row">
-    {% for message in messages %}
-    <div class="col-md-4">
-        <div class="card mb-4" style="min-height:340px">
+        </div>
+        <div class="row">
+            {% for message in messages %}
+            <div class="col-md-4">
 
-            <div class="card-body">
-                <h5 style="font-weight:600; font-size: 25px; color: black;"><a class="text-right"
-                    style="text-decoration: none; color: black; " class="card-title">{{ message.title}}</h5>
-                <p style="font-weight:100; font-size: 25px; color: black;"><a class="text-right"
-                    style="text-decoration: none; color: black; " class="card-text">{{message.description}}</p>
-                <h6 style="font-weight:100; font-size: 15px; color: black;"><a class="text-right"
-                    style="text-decoration: none; color: black; " class="card-text">{{message.date_created}}</h6>
-            <hr>
-             
-                <a href="{% url 'reply' message.id %}" class="btn btn-primary btn-sm">REPLY</a>
-              
-    
+                <div class="card mb-4" style="min-height:340px">
+
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Message</label>
+                                <h5 style="font-weight:600; font-size: 25px; color: black;"><a class="text-right"
+                                        style="text-decoration: none; color: black; "
+                                        class="card-title">{{ message.title}}</h5>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="comment">Description:</label>
+                                <textarea class="form-control" rows="5" id="comment">{{message.description}}</textarea>
+                            </div>
+
+
+                            <h6 style="font-weight:100; font-size: 15px; color: black;"><a class="text-right"
+                                    style="text-decoration: none; color: black; "
+                                    class="card-text">{{message.date_created}}</h6>
+                        </form>
+
+                        <hr>
+
+                        <a href="{% url 'reply' message.id %}" class="btn btn-success btn-sm">REPLY</a>
+
+
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
-</div>
-</div>
+    <div>
+        <a href="{% url 'leavecohort' group.id %}" class="btn btn-success btn-sm">Leave Cohort</a>
+    </div>
 </div>
 
 
 
 
 <br>
-<a href="{% url 'discussion' group.id %}" class="btn btn-primary btn-md" style="text-align: center"> ADD DISCUSSION
+<div class="col-md-12">
+
+
+<a href="{% url 'discussion' group.id %}" class="btn btn-success btn-md" style="text-align: center; align-items: center;"> ADD DISCUSSION
 </a>
+</div>
 
 
 {% endblock %}
