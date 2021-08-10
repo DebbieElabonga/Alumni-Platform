@@ -7,10 +7,13 @@
 <div class="container">
     <div class="row">
         <div class="col-md-1">
+            <p style="font-weight: 700;" > Members: {{members.count}}</p>
            <h5>Members</h5>   
-                {% for member in members %}
-                    {{member.user.username}}
-                {% endfor %}
+            {% for member in members %}
+                {{member.user}}
+            {%endfor%}
+
+            
         </div>
         <div class="col-md-1">
             <a href="{% url 'leavecohort' group.id %}" class="btn btn-primary btn-sm">Leave Cohort</a>

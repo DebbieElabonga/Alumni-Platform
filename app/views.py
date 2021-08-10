@@ -94,8 +94,7 @@ def cohort(request):
             group.creator = request.user
             group.date_created = dt.datetime.now()
             group.save()
-            group.members.add(UserProfile.objects.get(user=request.user))
-            group.members.add(request.POST.get('admin'))
+            group.creator.userprofile.group = group
             group.save()
             messages.success(request, 'A new Cohort has been created')
             return redirect('admin_dashboard')
@@ -108,16 +107,17 @@ def cohort(request):
 
 
 def joincohort(request,id):
-    current_user = request.user.id
+    current_user = request.user
     cohort = get_object_or_404(Group,pk=id)
-    
-    cohort.members.add(current_user)
+    current_user.userprofile.group = cohort
+    request.user.userprofile.save()
+    print(current_user.userprofile.group)
     return redirect("cohortdiscussions",id)
 
 def leavecohort(request,id):
-    current_user = request.user.id
-    cohort = get_object_or_404(Group,pk=id)
-    cohort.members.remove(current_user)
+    current_user = request.user
+    current_user.userprofile.group = None
+    request.user.userprofile.save()
 
     return redirect("index")
 
@@ -242,6 +242,7 @@ def Discussion(request, id):
 def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
+    members = UserProfile.objects.filter(group=group)
     members = group.members.all()
     discussion.user = current_user
             
@@ -254,6 +255,7 @@ def donation(request):
 
 
     return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
+    
 
 def reply(request, id):
     user = request.user
