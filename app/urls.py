@@ -26,8 +26,7 @@ urlpatterns=[
   # url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   # url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   # url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
-  url("story/",views.create_story,name="story"),
-  url(r'discussion', views.Discussion, name='discussion'),
+
   # url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
 
@@ -44,7 +43,7 @@ urlpatterns=[
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^story/$',views.create_story,name='story'),
-  url(r'^news/$',views.TechNews,name="technews"),
+
   url(r'^edit_creds/$', views.edit_details, name = 'edit_creds'),
   
   
@@ -58,10 +57,12 @@ urlpatterns=[
   path("story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
   path('discussion/<int:id>/', views.Discussion, name='discussion'),
-  path('all_discussions/<int:id>/', views.all_discussions, name = 'all_discussions'),
+  path('cohort/<int:id>/', views.cohortdiscussions, name = 'cohortdiscussions'),
   path('reply/<int:id>/', views.reply, name = 'reply'),
   url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   path("news/",views.TechNews,name="technews"),
+  url(r'^create_user/$',user_views.create_user,name='create_user'),
+  path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
   url(r'^discussion/$', views.Discussion, name='discussion'),
   # # url(r'^create_user/$',user_views.create_user,name='create_user'),
   # path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
@@ -71,9 +72,9 @@ urlpatterns=[
 
   url(r"^story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
-  url(r'^discussion', views.Discussion, name='discussion'),
   url(r'^fundraiser', views.Fundraiser, name='fundraiser'),   
-  url(r"^news/",views.TechNews,name="technews"),
+  path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
+  path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
   
 ]
 if settings.DEBUG:

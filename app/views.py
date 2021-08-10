@@ -26,13 +26,10 @@ from django.http.response import HttpResponse
 import pandas as pd
 from csv import DictReader
 import random
-
-
+from alumni.decorators import general_admin_required
 import threading
-
 from django.http import HttpResponseRedirect,request,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
                        SignupForm, TechNewsForm, UserProfileForm)
 from app.models import Group, Idea, Stories, Tech, UserProfile
@@ -50,10 +47,8 @@ def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
     tech = Tech.objects.all().order_by("-id")
-    return render(request,'index.html', {'groups':groups,'stories':stories,'tech':tech})
-    #tech = TechNews.objects.all()
     current_user = request.user
-    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories})
+    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories,'tech':tech})
 
     
 # def signup(request):
@@ -70,7 +65,7 @@ def index(request):
 #         form = SignupForm()
 #     return render(request, 'registration/registration_form.html', {'form': form})
 
-   
+
 def profile(request):
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
@@ -106,7 +101,21 @@ def cohort(request):
         form = CohortForm()
     return render(request, 'cohort.html', {'title':title,'form': form})
 
-# Create your views here.
+
+def joincohort(request,id):
+    current_user = request.user.id
+    cohort = get_object_or_404(Group,pk=id)
+    
+    cohort.members.add(current_user)
+    return redirect("cohortdiscussions",id)
+
+def leavecohort(request,id):
+    current_user = request.user.id
+    cohort = get_object_or_404(Group,pk=id)
+    cohort.members.remove(current_user)
+
+    return redirect("index")
+
 
 #-----------------------------------------------------------------------------------------
 #view function that renders to meet_collegues template
@@ -173,6 +182,8 @@ def single_idea(request, id):
     return redirect('meet_collegues')
 
 stripe.api_key = "YOUR SECRET KEY"
+
+
     
 def create_story(request):
     form = CreateStoryForm()
@@ -182,7 +193,7 @@ def create_story(request):
             story = form.save(commit=False)
             story.creator = request.user
             story.save()
-        return HttpResponseRedirect(request.path_info)
+            return redirect('index')
 
     else:
         form = CreateStoryForm()
@@ -198,7 +209,7 @@ def TechNews(request):
             news = form.save(commit=False)
             news.creator = request.user
             news.save()
-        return HttpResponseRedirect(request.path_info)
+            return redirect('index')
     else:
         form = TechNewsForm()
     return render(request,'newsform.html',{"form":form})
@@ -217,17 +228,19 @@ def Discussion(request, id):
             discussion.group = group
             discussion.save()
 
-        return redirect('all_discussions',group.id)
+        return redirect('cohortdiscussions',group.id)
 
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form ,'group':group})
 
-def all_discussions(request, id):
+def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
+    members = group.members.all()
 
-    return render(request, 'all_discussions.html', {'group':group , 'messages':messages})
+
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
 
 def reply(request, id):
     user = request.user
@@ -252,7 +265,7 @@ def reply(request, id):
     discussion.user = current_user
             
           
-            
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
 def charge(request):
     
     if request.method == 'POST':
@@ -265,7 +278,6 @@ def charge(request):
             name=request.POST['nickname'],
             source=request.POST['stripeToken']
             )
-
     charge = stripe.Charge.create(
             customer=customer,
             amount=amount*100,
@@ -282,7 +294,8 @@ def successMsg(request, args):
 
     form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
-    
+
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
 def Fundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
@@ -299,6 +312,7 @@ def Fundraiser(request):
         form = FundraiserForm()
     return render(request, 'new_fundraiser.html', {'title':title,"form": form})
 #views to summary on the admin dashboard
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def summary(request):
     '''
     renders summary on admin dashboard
@@ -342,6 +356,7 @@ def summary(request):
     return render(request, 'admin_dash/dashboard.html', context)
 
 #view function that renders to invite members page
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def invite_members(request):
     '''
     renders invite member form
@@ -487,72 +502,72 @@ def edit_details(request):
         return render(request, 'edit_details.html', context)
 
 
-# def create_user(request):
-#     '''
-#     View function to add a new students members into the alumni platform and send them an invitation email
-#     '''
-#     if request.method == 'POST':
-#         form = Add_userForm(request.POST)
-#         email = request.POST.get('email')
-#         if form.is_valid():
-#             user = form.save(commit = False)
-#             user.is_active = False
-#             user.save()
-#             current_site = get_current_site(request)
-#             email_subject = 'Invitation to Alumni Community'
-#             message = render_to_string('invitation.html',
-#                                     {
-#                                         'user': user,
-#                                         'domain': current_site.domain,
-#                                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#                                         'token': generate_token.make_token(user)
-#                                     }
-#                                     )
-#             email_message = EmailMessage(
-#                 email_subject,
-#                 message,
-#                 settings.EMAIL_HOST_USER,
-#                 [email]
-#             )
-#             EmailThread(email_message).start()
-#             messages.add_message(request, messages.SUCCESS,
-#                                 'invaitation sent  succesfully')
-#             return redirect('registration')
+def create_user(request):
+    '''
+    View function to add a new students members into the alumni platform and send them an invitation email
+    '''
+    if request.method == 'POST':
+        form = Add_userForm(request.POST)
+        email = request.POST.get('email')
+        if form.is_valid():
+            user = form.save(commit = False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            email_subject = 'Invitation to Alumni Community'
+            message = render_to_string('invitation.html',
+                                    {
+                                        'user': user,
+                                        'domain': current_site.domain,
+                                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                        'token': generate_token.make_token(user)
+                                    }
+                                    )
+            email_message = EmailMessage(
+                email_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [email]
+            )
+            EmailThread(email_message).start()
+            messages.add_message(request, messages.SUCCESS,
+                                'invaitation sent  succesfully')
+            return redirect('registration')
 
-#             messages.success(request, f'Congratulations! You have succesfully Added a new User!')
-#             return redirect('/user_list/')
-#     else:
-#         form = Add_userForm()
-#     return render(request, 'create_user.html', {"form": form})
+            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+            return redirect('/user_list/')
+    else:
+        form = Add_userForm()
+    return render(request, 'create_user.html', {"form": form})
 
 
-# class InviteUserView(View):
-#     '''
-#     View function that generates a new token for each new user based on their uid
-#     '''
-#     def get(self, request, uidb64, token):
-#         try:
-#             uid = force_text(urlsafe_base64_decode(uidb64))
-#             user = User.objects.get(pk=uid)
-#         except Exception as identifier:
-#             user = None
-#         if user is not None and generate_token.check_token(user, token):
-#             user.is_active = True
-#             user.save()
-#             messages.add_message(request, messages.SUCCESS, 'user is invited successfully')
+class InviteUserView(View):
+    '''
+    View function that generates a new token for each new user based on their uid
+    '''
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except Exception as identifier:
+            user = None
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.add_message(request, messages.SUCCESS, 'user is invited successfully')
 
-#             return redirect('')
-#         return render(request, '')
+            return redirect('')
+        return render(request, '')
 
-# class EmailThread(threading.Thread):
+class EmailThread(threading.Thread):
 
-#     def __init__(self, email_message):
-#         self.email_message = email_message
-#         threading.Thread.__init__(self)
+    def __init__(self, email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
 
-#     def run(self):
-#         self.email_message.send()
-
+    def run(self):
+        self.email_message.send()
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
