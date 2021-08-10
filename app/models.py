@@ -22,13 +22,35 @@ from django.dispatch import receiver
 
 #-----------------------------------------------------------------------
 #User profile model
+class Group(models.Model):
+  name = models.CharField(max_length=100)
+  description = models.TextField()
+  date_created = models.DateTimeField(auto_now_add=True)
+  creator = models.ForeignKey(User, on_delete=CASCADE)
+  admin = models.ForeignKey(User, related_name = 'admin', on_delete= CASCADE, null = True)
+  is_private = models.BooleanField(default=False)
+
+  class Meta:
+    ordering = ['date_created']
+
+  def __str__(self):
+    return self.name
+
+  @classmethod
+  def get_groups(cls):
+    return cls.objects.all()
+
 class UserProfile(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="userprofile")
+  user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="userprofile")
   bio = models.CharField(max_length=250)
   photo_path = models.ImageField(upload_to='Profiles/')
+  group = models.ForeignKey(Group,related_name="group",on_delete=models.CASCADE,null=True)
 
   def __str__(self):
       return self.user.username
+
+  def save_userprofile(self):
+    self.save()
 
   @classmethod
   def get_users(cls):
@@ -62,6 +84,7 @@ class GeneralAdmin(models.Model):
 
 
 #Group/Cohort Model
+<<<<<<< HEAD
 class Group(models.Model):
   name = models.CharField(max_length=100)
   description = models.TextField()
@@ -80,6 +103,9 @@ class Group(models.Model):
   @classmethod
   def get_groups(cls):
     return cls.objects.all()
+=======
+
+>>>>>>> dev
 #message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)

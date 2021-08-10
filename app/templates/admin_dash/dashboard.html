@@ -96,8 +96,8 @@
         {% for group in groups %}
         <div class="group_dets">
           <p class="names col-md-4">{{group.name}}</p>
-          <p class="col-md-4">{{group.admin.profile.user.username}}</p>
-          <p class="col-md-4">{{group.members.count}}</p>
+          <p class="col-md-4">{{group.admin}}</p>
+          <p class="col-md-4">{{group.group.count}}</p>
         </div>
         {%endfor%}
         {%else%}
