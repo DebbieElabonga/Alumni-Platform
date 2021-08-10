@@ -84,7 +84,6 @@ class GeneralAdmin(models.Model):
 
 
 #Group/Cohort Model
-<<<<<<< HEAD
 class Group(models.Model):
   name = models.CharField(max_length=100)
   description = models.TextField()
@@ -103,9 +102,7 @@ class Group(models.Model):
   @classmethod
   def get_groups(cls):
     return cls.objects.all()
-=======
 
->>>>>>> dev
 #message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)
