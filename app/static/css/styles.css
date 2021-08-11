@@ -111,3 +111,25 @@ nav>div>div>ul>li:hover{
   border: 1px solid var(--light_orange);
   border-radius: 5px;
 }
+/*styling story section */
+.tech_news>h3:hover, .alumni_stories>h3:hover, .cohorts>h3:hover{
+  font-weight: lighter;
+  background-color: var(--orange);
+  color: white;
+  padding: 10px;
+  margin: 0px;
+}
+.tech_news>h3, .alumni_stories>h3, .cohorts>h3{
+  margin: 10px;
+  border-radius: 5px 5px 0px 0px;
+}
+.nav-tabs{
+  font-size: 1.4em;
+}
+.cohorts{
+  position: sticky;
+  top: 5vh;
+  background-color: white;
+  border: 1px solid rgba(240, 240, 240, 1);
+  border-radius: 5px;
+}

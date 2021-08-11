@@ -53,7 +53,12 @@ def index(request):
     stories = Stories.objects.order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     current_user = request.user
-    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories,'tech':tech})
+    context = {
+        'logged_user':current_user,
+        'groups':groups,'stories':stories,
+        'tech':tech
+        }
+    return render(request,'index.html',context )
 
     
 # def signup(request):
