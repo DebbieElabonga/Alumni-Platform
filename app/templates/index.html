@@ -63,7 +63,7 @@
                         <a href=""><img src="{{story.image_path.url}}" class="img-responsive" alt=""
                                 style="width:100%;width:100%"></a>
                         <br>
-                        <a href="{{story.link}}" class="btn btn-primary btn-md" target="_blank"
+                        <a href="{{story.link}}" class="btn btn-success btn-md" target="_blank"
                             style="font-family: 'Special Elite', cursive;">Visit Link</a>
                     </div>
                     {% endfor %}
@@ -87,10 +87,10 @@
 
                                         {% if request.user.userprofile.group == group %}
                                         <small class="text-muted"><a href="{% url 'cohortdiscussions' group.id %}"
-                                                class="btn btn-primary btn-sm">More</a></small>
+                                                class="btn btn-success btn-sm">More</a></small>
                                         {% elif not request.user.profile.group %}
                                         <small class="text-muted"><a href="{% url 'joincohort' group.id %}"
-                                                class="btn btn-primary btn-sm">Join Cohort</a></small>
+                                                class="btn btn-success btn-sm">Join Cohort</a></small>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
                                 {%endfor%}
 
                                 <div class="col-md-12 text-center">
-                                    <a href="{% url 'new_cohort' %}" class="btn btn-primary btn-md"
+                                    <a href="{% url 'new_cohort' %}" class="btn btn-success btn-md"
                                         style="text-align: center">
                                         NEW COHORT
                                     </a>
