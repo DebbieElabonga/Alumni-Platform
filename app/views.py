@@ -247,8 +247,8 @@ def cohortdiscussions(request, id):
     return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
             
             
-stripe.api_key = settings.STRIPE_SECRET_KEY
-STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
+# stripe.api_key = settings.STRIPE_SECRET_KEY
+# STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 
           
 def donation(request):
