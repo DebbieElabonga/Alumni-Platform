@@ -63,7 +63,8 @@ class DiscussionForm(forms.ModelForm):
 class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
-        fields = ('__all__')
+        exclude = ['__all__']
+
 
 class ResponseForm(forms.ModelForm):
     class Meta:

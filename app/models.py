@@ -187,8 +187,7 @@ class Fundraiser(models.Model):
   title = models.CharField(max_length=200)
   description = models.TextField()
   image_path = models.ImageField(upload_to = 'Fundraisers/')
-  creator = models.ForeignKey(UserProfile, on_delete=CASCADE)
-  event_date = models.DateField()
+  creator = models.ForeignKey(User, on_delete=CASCADE)
   date_created = models.DateTimeField(auto_now_add=True)
 
   def __str__(self):

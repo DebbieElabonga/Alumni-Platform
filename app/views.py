@@ -20,6 +20,10 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
+from django.http import HttpResponse
+
+
+
 
 from app.forms import (CohortForm, CreateStoryForm, DiscussionForm,
                        FundraiserForm, IdeaCreationForm, InviteUsers,
@@ -298,7 +302,7 @@ def successMsg(request, args):
     form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
 
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
+#@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
 def Fundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
@@ -570,11 +574,11 @@ def edit_details(request):
 
 #     def run(self):
 #         self.email_message.send()
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
+""" @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def Fundraiser(request):
     
     return render(request,'new_fundraiser.html')
-    return render(request,'profile.html',{"profile":profile,"current_user":current_user})
+    return render(request,'profile.html',{"profile":profile,"current_user":current_user}) """
 def profile_update(request):
     current_user = request.user
     if request.method == 'POST':
@@ -588,4 +592,5 @@ def profile_update(request):
     else:
         form = UserProfileForm()
         return render(request,'update_profile.html',{"form":form})
+
 
