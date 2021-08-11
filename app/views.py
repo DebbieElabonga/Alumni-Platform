@@ -243,8 +243,8 @@ def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
     members = UserProfile.objects.filter(group=group)
-    members = group.members.all()
-    discussion.user = current_user
+
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
             
             
 stripe.api_key = settings.STRIPE_SECRET_KEY

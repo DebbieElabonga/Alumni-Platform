@@ -83,7 +83,7 @@ class GeneralAdmin(models.Model):
     return admins
 
 
-
+#Group/Cohort Model
 #message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)
