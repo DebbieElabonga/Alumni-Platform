@@ -84,7 +84,7 @@
 
                     <div id="stories" class="tab-pane fade">
                         <!--show Stories here--><br>
-                        {%if tech%}
+                        {%if stories%}
                         {% for story in stories %}
                         <div class="card">
                             <div class="card-body">
@@ -113,7 +113,31 @@
             <div class="col-md-3 cohorts">
                 <h3 class="bold">
                     Active Cohorts
-                </h3>
+                </h3><hr>
+                <!--loop through groups-->
+                {%if groups%}
+                {% for group in groups %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title bold">{{group.name}}</h5>
+                        <p class="card-text">{{group.description}}</p>
+                        <div class="card-footer d-flex flex-row">
+                            <p class="badge">{{group.date_created|time}}</p>
+                            <p class="badge">{{group.creator.username}}</p>
+                            {% if group.admin%}
+                            <p><i>Admin: {{group.admin}}</i></p>
+                            {%endif%}
+                            {% if group.is_private == False%}
+                            <a href=""><button class="btn-outline-success">Join Group</button></a>
+                            {%endif%}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {%else%}
+                <h4 class="bold">No groups have been Created Yet</h4>
+                {%endif%}
+                
             </div>
         </div>
     </div>
