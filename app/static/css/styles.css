@@ -122,3 +122,19 @@ nav>div>div>ul>li:hover{
   border: 1px solid rgba(240, 240, 240, 1);
   border-radius: 5px;
 }
+.mid_section{
+  max-height: 110vh;
+}
+/*styling footer*/
+.footer{
+  background-color: var(--dark_green);
+  color: white;
+  min-height: 20vh;
+  margin: 0;
+}
+.footer>div>div>a{
+  color: white;
+  font-size: 1.4em;
+  margin: 0;
+}
+
