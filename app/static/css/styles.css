@@ -40,3 +40,16 @@ button{
 .invitee_email>input{
   width: 120%;
 }
+nav{
+  border-radius: 0px;
+}
+nav>div>div>ul>li:hover{
+  font-weight: bolder;
+  text-decoration: underline;
+}
+.bold{
+  font-weight: bold;
+}
+.tagline{
+  color: white;
+}
