@@ -10,7 +10,9 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll d-flex flex-row align-items-center justify-content-center" style="--bs-scroll-height: 100px;">
+      <ul
+        class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll d-flex flex-row align-items-center justify-content-center"
+        style="--bs-scroll-height: 100px;">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/" style="font-size: 20px;">Home</a>
         </li>
@@ -19,16 +21,18 @@
             style="font-size: 20px;">Meet Collegues</a>
         </li>
         {% if user.is_authenticated %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="{% url 'user_profile' %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <p>{{current.user.username}}</p>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{% url 'user_profile' %}">Profile</a>
-              <a class="dropdown-item" href="{% url 'user_profile#ideas' %}">Your Ideas</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </div>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle name" href="{% url 'user_profile' %}" id="navbarDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{request.user.username}}
+          </a>
+        
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'user_profile' %}">Profile</a>
+            <a class="dropdown-item" href="{% url 'user_profile' %}">Your Ideas</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+          </div>
         </li>
         {% else %}
         <li class="ml-auto ">

@@ -54,6 +54,10 @@ nav>div>div>ul>li:hover{
   font-weight: bolder;
   text-decoration: underline;
 }
+a.name{
+  font-size: 1.4em;
+  margin-left: 20px;
+}
 .bold{
   font-weight: bold;
 }
@@ -141,12 +145,6 @@ nav>div>div>ul>li:hover{
   margin: 0;
 }
 /* Profile page styling */
-body{
-  margin-top:20px;
-  color: #1a202c;
-  text-align: left;
-  background-color: #e2e8f0;    
-}
 .main-body {
   padding: 15px;
 }
