@@ -94,8 +94,7 @@ def cohort(request):
             group.creator = request.user
             group.date_created = dt.datetime.now()
             group.save()
-            group.members.add(UserProfile.objects.get(user=request.user))
-            group.members.add(request.POST.get('admin'))
+            group.creator.userprofile.group = group
             group.save()
             messages.success(request, 'A new Cohort has been created')
             return redirect('admin_dashboard')
@@ -108,16 +107,17 @@ def cohort(request):
 
 
 def joincohort(request,id):
-    current_user = request.user.id
+    current_user = request.user
     cohort = get_object_or_404(Group,pk=id)
-    
-    cohort.members.add(current_user)
+    current_user.userprofile.group = cohort
+    request.user.userprofile.save()
+    print(current_user.userprofile.group)
     return redirect("cohortdiscussions",id)
 
 def leavecohort(request,id):
-    current_user = request.user.id
-    cohort = get_object_or_404(Group,pk=id)
-    cohort.members.remove(current_user)
+    current_user = request.user
+    current_user.userprofile.group = None
+    request.user.userprofile.save()
 
     return redirect("index")
 
@@ -229,7 +229,22 @@ def Discussion(request, id):
         form = DiscussionForm(request.POST, request.FILES)
         if form.is_valid():
             discussion = form.save(commit=False)
-            discussion.user = current_user
+            discussion.creator = current_user
+            discussion.group = group
+            discussion.save()
+
+        return redirect('cohortdiscussions',group.id)
+
+    else:
+        form = DiscussionForm()
+    return render(request, 'new_discussion.html', {"form": form ,'group':group})
+
+def cohortdiscussions(request, id):
+    group = get_object_or_404(Group, pk=id)
+    messages = Message.objects.filter(group = group)
+    members = UserProfile.objects.filter(group=group)
+
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
             
             
 # stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -240,6 +255,7 @@ def donation(request):
 
 
     return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
+    
 
 def reply(request, id):
     user = request.user
@@ -302,7 +318,7 @@ def Fundraiser(request):
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.creator = current_user
+            fundraise.user = current_user
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
@@ -566,9 +582,7 @@ class EmailThread(threading.Thread):
 
     def run(self):
         self.email_message.send()
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
-def Fundraiser(request):
-    
-    return render(request,'new_fundraiser.html')
+
+
   
   
