@@ -43,6 +43,7 @@ from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
                     FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
                     UserProfileForm,Add_userForm)
 from .models import Group, Idea, Stories, Tech, UserProfile
+from django.template.loader import render_to_string
 
 # Create your views here.
 
