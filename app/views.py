@@ -8,14 +8,11 @@ from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,C
 from django.shortcuts import render, redirect
 from django.shortcuts import render,redirect
 from django.urls import reverse
-<<<<<<< HEAD
-=======
 from django.http import JsonResponse, request
 from .forms import DiscussionForm, FundraiserForm, TechNewsForm
 from django.conf import settings
 
 
->>>>>>> 7473af7179c2cdd14fe88c67fbbfceaa218a8e19
 import stripe
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
@@ -235,8 +232,8 @@ def Discussion(request, id):
             discussion.user = current_user
             
             
-stripe.api_key = settings.STRIPE_SECRET_KEY
-STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
+# stripe.api_key = settings.STRIPE_SECRET_KEY
+# STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 
           
 def donation(request):
