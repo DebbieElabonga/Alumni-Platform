@@ -12,6 +12,7 @@ from django.urls import path
 
 
 
+
 urlpatterns=[
     # path('', views.donation, name="donation"),
     path('charge/', views.charge, name="charge"),
@@ -26,7 +27,6 @@ urlpatterns=[
   # url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   # url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   # url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
-  url("story/",views.create_story,name="story"),
 
   # url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
@@ -41,11 +41,10 @@ urlpatterns=[
 
 #User Oriented Views ------------------------------------------------------------------------------
   url(r'^user_profile/$', views.profile, name='user_profile'),
-  url('edit/',views.profile_update,name='edit'),
+ # url('edit/',views.profile_update,name='edit'),
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^story/$',views.create_story,name='story'),
-  url(r'^news/$',views.TechNews,name="technews"),
 
   url(r'^edit_creds/$', views.edit_details, name = 'edit_creds'),
   
@@ -75,8 +74,7 @@ urlpatterns=[
 
   url(r"^story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
-  #url(r'^fundraiser', views.Fundraiser, name='fundraiser'),   
-  url(r"^news/",views.TechNews,name="technews"),
+  url(r'^fundraiser', views.Fundraiser, name='fundraiser'),   
   path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
   path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
   
