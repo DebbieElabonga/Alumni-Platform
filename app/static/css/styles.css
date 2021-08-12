@@ -34,7 +34,7 @@ button{
 .invitee>input, .edit_dets>input .invitee_email>input{
   border-width: 0;
   border-bottom: 1px solid  black;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   font-size: 1.3em;
   background-color: rgba(255, 255, 255, 0);
 }
@@ -126,6 +126,10 @@ a.name{
   border: 1px solid rgba(240, 240, 240, 1);
   border-radius: 5px;
   height: 60vh;
+}
+.tab-content{
+  background-color: white;
+  padding: 20px;
 }
 .mid_section{
   max-height: 90vh;
