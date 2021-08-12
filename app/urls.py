@@ -61,7 +61,6 @@ urlpatterns=[
   path('discussion/<int:id>/', views.Discussion, name='discussion'),
   path('cohort/<int:id>/', views.cohortdiscussions, name = 'cohortdiscussions'),
   path('reply/<int:id>/', views.reply, name = 'reply'),
-  #url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   path("news/",views.TechNews,name="technews"),
   # url(r'^create_user/$',user_views.create_user,name='create_user'),
   path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
@@ -74,7 +73,6 @@ urlpatterns=[
 
   url(r"^story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
-  url(r'^fundraiser', views.Fundraiser, name='fundraiser'),   
   path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
   path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
   
