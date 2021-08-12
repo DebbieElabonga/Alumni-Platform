@@ -121,10 +121,11 @@ a.name{
 }
 .cohorts{
   position: sticky;
-  top: 5vh;
+  top: 0;
   background-color: white;
   border: 1px solid rgba(240, 240, 240, 1);
   border-radius: 5px;
+  height: 60vh;
 }
 .mid_section{
   max-height: 90vh;
@@ -146,9 +147,9 @@ a.name{
 }
 /*add news section */
 .add_news{
-  background-color: white; 
   position: sticky;
   top: 10vh;
+  z-index: 3;
 }
 .add_news>a>img{
   z-index: 2;
@@ -156,13 +157,62 @@ a.name{
   border-radius: 50%;
   margin-right: -4px;
 }
+#news>.card>.card-image{
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#news>.card>.card-image>img{
+  width: 100%;
+}
 .form_story{
   position: sticky;
   bottom: 0;
   height: 40vh;
 }
-#stories{
-  margin-bottom: 30vh;
+#stories>.content{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#story_plus{
+  border: 2px solid var(--orange);
+  background-color: var(--light_orange);
+  padding: 5px;
+  border-radius: 10px;
+  color: white;
+}
+.content>.card, #news>.card{
+  height: 70vh;
+  border: 1px solid var(--light_orange  );
+  padding: 0;
+  margin: 10px 0px;
+}
+#news>.card{
+  display: flex;
+  flex-direction: row;
+  height: auto;
+}
+#news>.card>.card-body{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.content>.card>.card-body>.card-text{
+  height: 25vh;
+  overflow-y: scroll;
+}
+#news>.card>.card-body>.card-text{
+  height: 45vh;
+  overflow-y: scroll;
+}
+.content>.card>.card-body>.card-image {
+  height: 30vh;
+  overflow: hidden;
 }
 /*styling footer*/
 .footer{

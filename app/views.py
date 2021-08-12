@@ -62,6 +62,26 @@ def index(request):
         'tech':tech
         }
         return render(request,'index.html',context )
+    
+    if request.method == 'POST' and 'news_add' in request.POST:
+        title = request.POST.get('news_title')
+        desc = request.POST.get('description')
+        image = request.FILES['image']
+        date = dt.datetime.now()
+        creator = request.user
+
+        new_news = Tech(title = title, description = desc, image_path = image, date_created = date, creator = creator)
+        new_news.save()
+
+        context = {
+        'logged_user':current_user,
+        'groups':groups,
+        'stories':stories,
+        'tech':tech
+        }
+        return render(request,'index.html',context )
+
+        
 
     context = {
         'logged_user':current_user,
