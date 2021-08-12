@@ -76,7 +76,9 @@ urlpatterns=[
   path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
   path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
   url(r'^newfundraiser/$',views.newfundraiser, name='fundraiser'),
-  url(r'^userfundraiser/$',views.project_fundraisers,name='fundraisers')
+  url(r'^userfundraiser/$',views.project_fundraisers,name='fundraisers'),
+  path('singlefundraiser/<id>', views.single_fundraiser, name='singlefundraiser'),
+
   
 ]
 if settings.DEBUG:

@@ -8,7 +8,7 @@
 
 <div class="container-fluid" style='background-color: blanchedalmond;'>
     <div class="row">
-        <p>This are </p>
+        
       {% for fundraiser in all_fundraisers %}
         <div class="card m-4" style="width: 28rem;color: white;">
           <img class="card-img-top" src="{{fundraiser.image_path.url}}" alt="Card image cap" height="200px">
@@ -20,7 +20,7 @@
             <p class="card-text"><b> Fundraiser Date :</b><br>{{fundraiser.event_date}}</p>
             <br>
 
-              <a class="btn btn-success" href="#">Donate</a>
+              <a class="btn btn-success" href="{%url 'singlefundraiser' fundraiser.id%}">Donate</a>
                       
           </div>
         </div>

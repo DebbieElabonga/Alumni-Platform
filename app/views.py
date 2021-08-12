@@ -595,6 +595,9 @@ def project_fundraisers(request):
         }
 
     return render(request, 'fundraisers.html',context) 
+def single_fundraiser(request, id):
+    fundraiser = Fundraiser.objects.get(id=id)
+    return render(request, 'single_fundraiser.html', {'fundraiser':fundraiser})
 
 
 
