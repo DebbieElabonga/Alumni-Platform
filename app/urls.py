@@ -30,6 +30,8 @@ urlpatterns=[
 
   # url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
+  url(r'fundraiser', views.project_fundraisers, name='fundraisers'),   
+
 
 
   url(r'^$',views.index,name="index"),
@@ -53,7 +55,7 @@ urlpatterns=[
 # Admin oriented views------------------------------------------------------------------------------ 
   url(r'^admin_dashboard/$', views.summary, name = 'admin_dashboard'),
   url(r'^new_cohort/$', views.cohort, name='new_cohort'),
-  url(r'^fundraiser/$', views.Fundraiser, name='fundraiser'),   
+  url(r'^new_fundraiser/$', views.new_fundraiser, name='new_fundraiser'),   
   
   #url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
   path("story/",views.create_story,name="story"),

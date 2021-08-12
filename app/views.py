@@ -35,7 +35,7 @@ from .email import collaborate_new, send_invite
 from .forms import (Add_userForm, CohortForm, CreateStoryForm, DiscussionForm,
                     FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
                     UserProfileForm)
-from .models import Group, Idea, Stories, Tech, UserProfile
+from .models import Group, Idea, Stories, Tech, UserProfile, Fundraiser
 from .utils import generate_token
 
 
@@ -312,7 +312,7 @@ def successMsg(request, args):
 
 @login_required(login_url= 'login')  
 @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
-def Fundraiser(request):
+def new_fundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
     if request.method == 'POST':
@@ -587,14 +587,15 @@ class EmailThread(threading.Thread):
 
     def run(self):
         self.email_message.send()
-def fundraisers(request):
 
-    fundraisers = Fundraiser.getFundraisers()
+def project_fundraisers(request):
+    all_fundraisers=Fundraiser.getfundraisers()
     context = {
-    'fundraisers': fundraisers
-    }
+        'fundraisers': all_fundraisers
+        }
 
-    return render(request, 'fundraiser.html',context)
+    return render(request, 'fundraisers.html',context) 
+
 
 
   

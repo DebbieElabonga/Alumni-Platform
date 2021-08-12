@@ -149,14 +149,22 @@ class Idea(models.Model):
     return projects
 #Fundraiser Model
 class Fundraiser(models.Model):
-  title = models.CharField(max_length=200)
-  description = models.TextField()
-  image_path = models.ImageField(upload_to = 'Fundraisers/')
-  creator = models.ForeignKey(UserProfile, on_delete=CASCADE)
-  event_date = models.DateField()
-  date_created = models.DateTimeField(auto_now_add=True)
-  def __str__(self):
-    return self.title
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    image_path = models.ImageField(upload_to = 'Fundraisers/')
+    creator = models.ForeignKey(UserProfile, on_delete=CASCADE)
+    event_date = models.DateField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+            return self.title
+      
+    @classmethod
+    def getfundraisers(cls):
+        try:
+          all_fundraisers = cls.objects.all()
+        except cls.DoesNotExist:
+          all_fundraisers = None
+        return all_fundraisers
 # Donor Model- No relation to Already existing users.
 class Donor(models.Model):
   name = models.CharField(max_length=200)

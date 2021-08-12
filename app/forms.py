@@ -67,9 +67,9 @@ class DateInput(forms.DateInput):
 class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
-        exclude = ['creator']
-
-    widgets = {
+  
+        fields = ['title','description','image_path','event_date']
+        widgets = {
             'event_date': DateInput(),
         }
 
