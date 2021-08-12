@@ -41,9 +41,28 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def index(request):
     groups = Group.objects.all()
-    stories = Stories.objects.order_by("-id")
+    stories = Stories.objects.all().order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     current_user = request.user
+
+    #create story form
+    if request.method == 'POST' and 'add_story' in request.POST:
+        title = request.POST.get('story_title')
+        desc = request.POST.get('description')
+        image = request.FILES['image']
+        date = dt.datetime.now()
+        creator = request.user
+
+        new_story = Stories(title = title, description = desc, image_path = image, date_created = date, creator = creator)
+        new_story.save()
+
+        context = {
+        'logged_user':current_user,
+        'groups':groups,'stories':stories,
+        'tech':tech
+        }
+        return render(request,'index.html',context )
+
     context = {
         'logged_user':current_user,
         'groups':groups,'stories':stories,
