@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{{ form.date }}
 {% load static %}
 
 {% load bootstrap4 %}
@@ -12,7 +12,13 @@
     <div class="col-sm-12 col-lg-6 m-auto card" style="background-color: beige;">
         <form action="{%url 'fundraiser'%}" method="post" enctype="multipart/form-data">
             {%csrf_token%}
-
+            <script>
+                $(function () {
+                  $("#id_date").datetimepicker({
+                    format: 'd/m/Y H:i',
+                  });
+                });
+              </script>
             {% bootstrap_form form%}
             <input type="submit" class="btn btn-success btn-lg btn-center" value="Submit"><br><br>
         </form>

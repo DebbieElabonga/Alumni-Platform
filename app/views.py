@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.http import JsonResponse, request
 from .forms import DiscussionForm, FundraiserForm, TechNewsForm
 from django.conf import settings
-
+from email.message import EmailMessage
 
 import stripe
 from django.shortcuts import render, get_object_or_404,redirect
@@ -244,8 +244,8 @@ def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
     members = UserProfile.objects.filter(group=group)
-    members = group.members.all()
-    discussion.user = current_user
+
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
             
             
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -255,7 +255,7 @@ STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 def donation(request):
 
 
-    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
+    return render(request, 'donation.html')
     
 
 def reply(request, id):
@@ -281,7 +281,14 @@ def reply(request, id):
     discussion.user = current_user
             
           
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')   
+
+def cohortdiscussions(request, id):
+    group = get_object_or_404(Group, pk=id)
+    messages = Message.objects.filter(group = group)
+    members = UserProfile.objects.filter(group=group)
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
+         
 def charge(request):
     
     if request.method == 'POST':
@@ -311,7 +318,7 @@ def successMsg(request, args):
     form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
 
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
+# @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
 def Fundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user

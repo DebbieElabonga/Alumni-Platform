@@ -86,3 +86,6 @@ class InviteUsers(forms.ModelForm):
     class Meta:
         model = UploadInvite
         fields = ['file_path']
+
+class DateForm(forms.Form):
+    date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
