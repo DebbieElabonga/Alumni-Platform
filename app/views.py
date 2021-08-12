@@ -173,25 +173,34 @@ def meet_collegues(request):
   if request.method == 'POST':
     form = IdeaCreationForm(request.POST, request.FILES)
     if form.is_valid():
-      new_idea = form.save(commit=False)
-      new_idea.date_created = dt.datetime.now()
-      new_idea.owner = UserProfile.objects.get(id = 1)#change filter to user = request.user
-      new_idea.save()
+        new_idea = form.save(commit=False)
+        new_idea.date_created = dt.datetime.now()
+        try:
+            curr_user_prof = UserProfile.objects.filter(user = request.user).last()
+        except UserProfile.DoesNotExist:
+            curr_user_prof = None
+        if curr_user_prof:
+            new_idea.owner = UserProfile.objects.filter(user = request.user).last()#change filter to 
+            new_idea.save()
+        else:
+            messages.warning(request, 'You need to update your profile to proceed')
+            return redirect('user_profile')
 
-      try:
-        ideas = Idea.objects.all()
-      except Idea.DoesNotExist:
-        ideas = None
 
-      context = {
+        try:
+            ideas = Idea.objects.all()
+        except Idea.DoesNotExist:
+            ideas = None
+
+        context = {
         'form':form,
         'ideas':ideas
         }
-      return render(request, 'meetcollegues.html', context)
+        return render(request, 'meetcollegues.html', context)
 
     else:
-      messages.warning(request, 'Invalid Form')
-      return redirect('meet_collegues')
+        messages.warning(request, 'Invalid Form')
+        return redirect('meet_collegues')
 
   context = {
     'form':form,

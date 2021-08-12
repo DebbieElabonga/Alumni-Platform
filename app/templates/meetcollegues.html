@@ -45,7 +45,7 @@
                                                 background-repeat: no-repeat;
                                                 background-size: contain;
                                                 width: 100%;">
-        <img src="{{idea.image2_path.url}}" alt="" width="300px">
+        <img src="{% if idea.image2_path %}{{idea.image2_path.url}}{%endif%}" alt="" width="300px">
       </div>
     </div>
     {% endfor %}
