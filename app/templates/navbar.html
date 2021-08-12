@@ -1,124 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
-<style>
-	body {
-		background: #fffcfc;
-	}
-    .form-inline {
-        display: inline-block;
-    }
-	.navbar {		
-		background: rgb(0, 0, 0);
-		padding-left: 16px;
-		padding-right: 16px;
-		border-bottom: 1px solid #161616;
-		box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-	}
-	.nav img {
-		border-radius: 50%;
-		width: 36px;
-		height: 36px;
-		margin: -8px 0;
-		float: left;
-		margin-right: 10px;
-	}
-	.navbar .navbar-brand {
-		color: rgb(255, 255, 255);
-		padding-left: 0;
-		font-size: 20px;
-		padding-right: 50px;
-	}
-	.navbar .navbar-brand b {
-		font-weight: bold;
-		color: #6b89c9;
-	}
-	.navbar ul.nav li a:hover, .navbar ul.nav li a:focus {
-		color: #ffffff !important;
-	}
-	.navbar ul.nav li.active a, .navbar ul.nav li.active a:hover, .navbar ul.nav li.active a:focus {
-		color: #ffffff !important;
-		background: transparent !important;
-	}
-	.search-box {
-        position: relative;
-    }	
-    .search-box input.form-control {		
-        padding-right: 35px;
-        border-radius: 0;
-		padding-left: 0;
-		border-width: 0 0 1px 0;
-		box-shadow: none;
-    }
-	.search-box input.form-control:focus {		
-		border-color: #000000;		
-	}
-	.search-box .input-group-addon {
-        min-width: 35px;
-        border: none;
-        position: absolute;
-        right: 0;
-        z-index: 9;
-        padding: 7px 0 7px 7px;
-		height: 100%;
-    }
-    .search-box i {
-        color: #000000;
-		font-size: 30px;
-    }
-	.navbar ul li i {
-		font-size: 25px;
-	}
-	@media (min-width: 992px){
-		.form-inline .input-group {
-			width: 250px;
-			margin-right: 30px;
-		}
-	}
-	@media (max-width: 991px){
-		.form-inline {
-			display: block;
-			margin-bottom: 10px;
-			margin-top: 0;
-		}
-		.input-group {
-			width: 100%;
-		}
-	}
-</style>
-</head> 
-<body>
-<nav class="navbar navbar-default navbar-expand-lg navbar-light">
-	<div class="navbar-header">
-		<a class="navbar-brand" href="#" style="font-size: 45px; font-family: 'Dancing Script', cursive;">Kapsoya<b>Estate</b></a>  		
-		<button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
-			<span class="navbar-toggler-icon"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-	</div>
-	<!-- Collection of nav links, forms, and other content for toggling -->
-	<div id="navbarCollapse" class="collapse navbar-collapse">
-		<ul class="nav navbar-nav">
-			<li><a href="/" style="font-size: 30px; font-family: 'Dancing Script', cursive;">Home</a></li>
-			<li><a href="logout/" style="font-size: 30px; font-family: 'Dancing Script', cursive;">Logout</a></li>			
-			<li><a href="profile/" style="font-size: 30px; font-family: 'Dancing Script', cursive;">Profile</a></li>
-			<li><a href="admin/" style="font-size: 30px; font-family: 'Dancing Script', cursive;">Amin Dash</a></li>
-		</ul>
-		<ul class="nav navbar-nav navbar-right">
-			<li class="navbar-form-wrapper">
-			
-			</li>
-		</ul>
-		
-	</div>
+<nav class="navbar navbar-expand-lg m-0 navbar-custom">
+  <div class="container-fluid d-flex flex-row justify-content-center align-items-center">
+    <img src="https://img.icons8.com/flat-round/60/000000/tree.png" class="m-2" />
+    <div class="d-flex flex-column">
+      <a class="navbar-brand bold" href="/" style="font-size: 30px;"> Moringa Alumni</a>
+      <h6 class="tagline m-0">Meet and Build Ideas...</h6>
+    </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+      aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul
+        class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll d-flex flex-row align-items-center justify-content-center"
+        style="--bs-scroll-height: 100px;">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/" style="font-size: 20px;">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'meet_collegues' %}" tabindex="-1" aria-disabled="true"
+            style="font-size: 20px;">Meet Collegues</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle name" href="{% url 'user_profile' %}" id="navbarDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{request.user.username}}
+          </a>
+        
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'user_profile' %}">Profile</a>
+            <a class="dropdown-item" href="{% url 'user_profile' %}">Your Ideas</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+        {% else %}
+        <li class="ml-auto ">
+          <a href="{% url 'login' %}">
+            <button class="btn btn-outline-warning mr-4 ml-4 bold">Login</button>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+
+      <form class="navbar-form form-inline navbar-right" action="">
+        <div class="input-group search-box">
+          <input type="text" id="search" class="form-control" name="project" placeholder="Search...">
+        </div>
+      </form>
+    </div>
+  </div>
 </nav>
-</body>
-</html>                

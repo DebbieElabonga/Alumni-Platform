@@ -1,42 +1,39 @@
-{%extends "registration/base.html"%}
-{% load bootstrap3 %}
+{% extends 'base.html' %}
+{% load django_bootstrap5%}
+{% load bootstrap4 %}
+{% load static %}
 {% block content %}
-<div class="container">
-  <div class="row">
-    <!-- Empty div -->
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-      {% if form.errors %}
-        <p> Password or Username is incorrect </p>
-      {% endif %}
-      <div class="panel panel-default">
 
-        <div class="panel-heading">
-          <h3 class="text-center">Sign In</h3>
-        </div>
-        <div class="panel-body">
-
-          <form  action="/accounts/login/" method="post">
-            {% csrf_token %}
-            {% bootstrap_form form%}
-
-            <div class="form-group">
-              <input type="submit" class="btn btn-primary btn-sm" value="Login">
-            </div>
-
-            <input type="hidden" name="next" value="{{next}}">
-            <p class="container">You don't have an account? <a href="/register"> Sign Up</a></p>
-          </form>
-
-        </div>
-
-      </div>
-
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="col-md-12 title">
+      <h1>Welcome to Alumni Platform</h1>
+      <h6>Meet people, Build awesome ideas...</h6>
     </div>
-    <!-- empty div -->
-  
-    <div class="col-md-4"></div>
+    {%if user.is_authenticated %}
+    <h3>You are currently Logged in. <a href="{% url 'logout' %}">Log Out</a></h3>
+    {%else%}
+    <div class="login_body">
+      <h4 class="bold">Login</h4>
+      {% for message in messages %}
+      <h4 class="alert">{{message}}</h4>
+      {%endfor%}
+      <form action="{% url 'login' %}" method='POST'>
+        {% csrf_token %}
+        <div class="invitee">
+          {% if form.errors %}
+          <div class="alert alert-danger">Invalid Username or Password</div>
+          {%endif%}
+          <input type="text" name='username' placeholder="username"><br>
+          <input type="password" name="password" id="password" placeholder="password"><br>
+          <button class="btn btn-success" type="submit">Login</button>
+        </div>
+      </form>
+    </div>
+    {%endif%}
   </div>
+  <div class="col-md-3"></div>
 </div>
 
-{% endblock %}
+{%endblock%}

@@ -1,64 +1,221 @@
-{%include 'base.html'%}
+{% extends 'base.html' %}
+{% load django_bootstrap5%}
+{% load bootstrap4 %}
+{% load static %}
+
 {% block content %}
 
-<body style=" background-image: url('');
-    background-size: cover;
-    background-repeat:  no-repeat;
-    font-family: 'Comic Sans MS', cursive, sans-serif;">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
-    
-    <div class="container" id="background">
-        <div id="prog">
-            <h1
-                style="text-align:center; font-size:60px; font-family: 'Dancing Script', cursive; font-weight:bold; color: black;">
-                Moringa Alumni</h1>
-        </div>
+<body>
+    <div class="container-md-fluid">
+        <!--start of banner-->
         <div id="opennote">
-            <h3 style="text-align:center; color: black;">Hello,</h3>
-            <p id="opennote"
-                style="text-align:center; font-family: 'Dancing Script', cursive; font-size: 50px; color: black;">
-                Welcome
-                to Moringa Alumni.</p>
-        </div>
-        <div class="container-fluid">
-            <div class="col-md-12 text-center">
-                <a href="{% url 'new-cohort' %}" class="btn btn-primary btn-md" style="text-align: center"> NEW COHORT
-                </a>
+            <p class="banner_text"> Welcome to Moringa Alumni</p>
+            <div class="split_left col-md-6">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title bold">Lively Discussions</h4>
+                            <p class="card-text">Forums are groups where you get to meet like minded people and discuss
+                                common ideas. </p>
+                            <a href="#cohorts">
+                                <button class="btn-outline-warning">View Forums</button>
+                            </a>
+                        </div>
+                        <p class="card-body">
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                </div>
             </div>
-            <section class="magazine-section">
+            <div class="split_right col-md-6">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title bold">Build Ideas</h4>
+                            <p class="card-text">Propose and idea and let other join in. Build great products wth great
+                                people</p>
+                            <a href="{% url 'meet_collegues'%}">
+                                <button class="btn-outline-warning">Propose an Idea</button>
+                            </a>
+                        </div>
+                        <p class="card-body">
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of banner -->
+        <hr>
+        <!-- Show page tabbng for tech news and success stories -->
+        <div class="row m-2">
+            <div class="col-md-9">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a class="bold" data-toggle="pill" href="#news">What's New</a></li>
+                    <li><a class="bold" data-toggle="pill" href="#stories">Alumni Stories</a></li>
+                </ul>
+
+                <div class="tab-content content">
+                    <div id="news" class="tab-pane fade in active">
+                        <!--add news -->
+                        <div class="add_news">
+                            <a href="" data-toggle="modal" data-target="#add_news"
+                                class="d-flex flex-row justify-content-flex-start align-items-center">
+                                <img src="{% static 'images/PngItem_653761.png' %}" alt="add News" width="42px"
+                                    height="42px">
+                                <button class="btn-success" style="height: 28px; margin-left: -5px;">Add News</button>
+                            </a>
+                        </div>
+
+                        <!-- Add news Form Modal -->
+                        <div class="modal fade" id="add_news" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalCenterTitle">Whats New in Tech</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'index' %}" class="invitee" method="post"
+                                            enctype="multipart/form-data"
+                                            style="background-color: white; padding: 20px;">
+                                            <div class="d-flex flex-row">
+                                                <h4 class="bold">Add News</h4>
+                                            </div>
+                                            {% csrf_token %}
+                                            <input type="text" name="news_title" id="news_ttle" placeholder="Title..."
+                                                required><br>
+                                            <textarea name="description" id="description" cols="34" rows="5"
+                                                placeholder="Share what's New.." required></textarea>
+                                            <input type="file" name="image" id="image" class="mt-3" required><br>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" name="news_add" class="btn btn-success">Post</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Show News Here--><br>
+                        {%if tech%}
+                        {% for news in tech %}
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="{{news.image_path.url}}" alt="">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title bold">{{news.title}}</h5>
+                                <p class="card-text">{{news.description}}</p>
+                                <div class="card-footer d-flex flex-row">
+                                    <p class="badge m-4">{{news.date_created|timesince}} ago</p>
+                                    <p class="badge m-4">{{news.creator.username}}</p>
+                                    {% if news.link%}
+                                    <p><i>For more: {{news.link}}</i></p>
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {%else%}
+                        <h3 class="bold">No News Posted Yet</h3>
+                        {%endif%}
+
+                        <!-- End of stories loop -->
+
+                    </div>
+
+                    <div id="stories" class="tab-pane fade">
+                        <!--show Stories here--><br>
+                        <div class="content">
+                            {%if stories%}
+                            {% for story in stories %}
+                            <div class="card col-md-5">
+                                <div class="card-body">
+                                    <div class="card-image">
+                                        <img src="{{story.image_path.url}}" alt="" class="card-image"
+                                            style="width: 100%;">
+                                    </div>
+                                    <h5 class="card-title bold">{{story.title}}</h5>
+                                    <p class="card-text">{{story.description}}</p>
+                                    <div class="card-footer d-flex flex-row">
+                                        <p class="badge ml-4">{{story.date_created|timesince}} ago</p>
+                                        <p class="badge ml-4">posted by: {{story.creator.username}}</p>
+                                        {% if story.link%}
+                                        <p><i>For more: {{story.link}}</i></p>
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {%else%}
+                            <h3 class="bold">No Stories have been Posted Yet</h3>
+                            {%endif%}
+                        </div>
+                        <div class="story_form d-flex align-items-center justify-content-center col-md-12">
+                            <button class="bold" id="story_plus">Add Story<span id="plus"> &plus;</span></button>
+
+                            <form action="{% url 'index' %}" class="invitee alum_stori" method="post"
+                                enctype="multipart/form-data" style="background-color: white; padding: 20px;">
+                                <div class="d-flex flex-row">
+                                    <h4 class="bold">Add Story</h4>
+                                    <button type="button" class="btn btn-light ml-5" id="story_close">Close</button>
+                                </div>
+                                {% csrf_token %}
+                                <input type="text" name="story_title" id="story_title" placeholder="Title..."
+                                    required><br>
+                                <textarea name="description" id="description" cols="34" rows="5"
+                                    placeholder="What's your story.." required></textarea>
+                                <input type="file" name="image" id="image" class="mt-3" required><br>
+                                <button class="btn btn-success bold" name="add_story">Post</button>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- Show active Cohorts -->
+            <div class="col-md-3 cohorts" id="cohorts">
+                <h3 class="bold">
+                    Public Groups
+                </h3>
+                <hr>
+                <!--loop through groups-->
+                {%if groups%}
                 {% for group in groups %}
-                <div class="col-lg-4">
-                    <div>
-                        
-                        <div class="row" style="padding-top: 1%">
-                            <div class="col-md-12">
-                                <h4 style="font-weight:600; font-family: 'Dancing Script', cursive; font-size: 25px; color: black;">NAME: <a class="text-right"
-                                        style="text-decoration: none; font-family: 'Dancing Script', cursive; color: black;
-                                        ">{{group.name}}</a></h4>
-                            </div>
-                        </div>
-                        <div class="row" style="font-size:10pt;">
-                            <div class="col-md-6" style="padding-bottom: 2%;font-weight:600; font-family: 'Dancing Script', cursive; font-size: 20px; color: rgba(101, 168, 80, 0.692);">Date Created:
-                                {{group.date_created}}
-                                Founder: {{group.creator}}
-                            </div>
-                        </div>
-                        <div style="padding-top:1%;padding-bottom:1%">
-                            {% if request.user.group == groups %}
-                            <a class="btn btn-success btn-small" href="">Explore Cohort</a>
-                                <br>
-                            <a class="btn btn-danger" href="{% url 'leave-cohort' group.id %}">Leave Cohort</a>
-                            {% elif not request.user.group %}
-                            <a class="btn btn-primary" href="{% url 'joincohort' group.id %}">Join Cohort</a>
-                            {% endif %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title bold">{{group.name}}</h5>
+                        <p class="card-text">{{group.description}}</p>
+                        <div class="card-footer d-flex flex-row">
+                            <p class="badge">{{group.date_created|time}}</p>
+                            <p class="badge">{{group.creator.username}}</p>
+                            {% if group.admin%}
+                            <p><i>Admin: {{group.admin}}</i></p>
+                            {%endif%}
+                            {% if group.is_private == False%}
+                            <a href=""><button class="btn-outline-success">Join Group</button></a>
+                            {%endif%}
                         </div>
                     </div>
                 </div>
                 {% endfor %}
-            </section>
+                {%else%}
+                <h4 class="bold">No groups have been Created Yet</h4>
+                {%endif%}
+
+            </div>
         </div>
-        {% endblock %}
     </div>
 </body>
+{% endblock %}

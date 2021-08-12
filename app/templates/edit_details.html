@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content%}
+
+<div class="row-m-5">
+  <div class="col-md-12"></div>
+  <div class="col-md-10 rgba-stylish-strong  p-4">
+    <h3 class="alert alert-success">{% for message in messages%}
+      {{message|safe}}
+      {%endfor%}
+    </h3>
+    <h4 class="alert alert-danger">{{edit_warning}}</h4>
+    {% if user%}
+    {% if not is_expired %}
+    {% if not direct_access%}
+    <form action="{% url 'edit_creds' %}" method="POST" enctype="multipart/form-data">
+      {%csrf_token%}
+      <div class="invitee d-flex flex-row edit_dets">
+        <input type="hidden" name="user_id" id="user_id" value="{{user.id}}">
+        <input class="m-2" type="text" name="username" id="username" value="{{user.username}}" required placeholder="Username">
+      </div>
+      <div class="invitee d-flex flex-row edit_dets">
+        <input class="m-2" type="text" name="f_name" id="f_name" value="{{user.first_name}}" required placeholder="First Name">
+        <input class="m-2" type="text" name="l_name" id="l_name" value="{{user.last_name}}" required placeholder="Last Name">
+        
+      </div>
+      <div class="invitee d-flex flex-row edit_dets">
+        <input class="m-2" type="text" name="bio" id="bio" required placeholder="Enter Bio">
+        <input class="m-2" type="file" name="photo" id="photo" required placeholder="Profile Photo">
+      </div>
+      <div class="invitee d-flex flex-row edit_dets">
+        <input class="m-2" type="password" name="password" id="password" required placeholder="Password">
+        <input class="m-2" type="password" name="confirm_password" id="confirm_password" required placeholder="Confirm Password">
+      </div>
+      <p><span id='message'></span></p>
+
+      <button type="submit" name="save_default_details" class="btn btn-success">Save</button>
+    </form><br>
+    {%else%}
+    {% if current_user %}
+    <h3>Logged in as {{request_user.username}}</h3>
+    {%endif%}
+    {% if not is_expired %}
+    {%endif%}
+    {%else%}
+    <a href="{% url 'user_profile' %}">Edit Your Profile Here</a>
+    {%endif%}
+
+    {%else%}
+    <h2>This Account Does Not exist </h2>
+    {%endif%}
+  </div>
+  <div class="col-md-1"></div>
+</div>
+
+{% endblock %}
