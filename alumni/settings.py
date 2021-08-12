@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'bootstrap4',
     'django_bootstrap5',
+    'bootstrap_datepicker_plus',
     
 ]
 

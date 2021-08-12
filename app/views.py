@@ -182,6 +182,7 @@ def meet_collegues(request):
         if curr_user_prof:
             new_idea.owner = UserProfile.objects.filter(user = request.user).last()#change filter to 
             new_idea.save()
+            form = IdeaCreationForm
         else:
             messages.warning(request, 'You need to update your profile to proceed')
             return redirect('user_profile')

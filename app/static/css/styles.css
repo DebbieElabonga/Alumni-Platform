@@ -184,11 +184,16 @@ a.name{
 }
 
 #story_plus{
-  border: 2px solid var(--orange);
-  background-color: var(--light_orange);
+  border: 2px solid var(--light_orange);
+  background-color: var(--orange);
   padding: 5px;
   border-radius: 10px;
   color: white;
+}
+.badge{
+  background-color: var(--orange);
+  border: 2px solid var(--light_orange);
+  padding: 5px;
 }
 .content>.card, #news>.card{
   height: 70vh;
@@ -284,4 +289,21 @@ a.name{
   backdrop-filter: blur(3px);
   padding: 8px;
 }
-
+/*styling meet colleagues page*/
+.idea_form{
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 78vh;
+  position: sticky;
+  top: 4vh;
+}
+.projects_list{
+  height: 80vh;
+  overflow-y: scroll;
+  width: 100%;
+  padding: 20px;
+  background-color: white;
+  border-left: 1px solid var(--orange);
+}
