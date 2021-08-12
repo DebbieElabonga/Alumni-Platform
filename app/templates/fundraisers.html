@@ -1,1 +1,29 @@
-<h1>coming soon</h1>
+{% extends 'base.html' %}
+{% load django_bootstrap5%}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+
+
+
+<div class="container-fluid" style='background-color: blanchedalmond;'>
+    <div class="row">
+        <p>This are </p>
+      {% for fundraiser in all_fundraisers %}
+        <div class="card m-4" style="width: 22rem;">
+          <img class="card-img-top" src="{{fundraiser.image_path.url}}" alt="Card image cap" height="200px">
+          <div class="card-body" style='background-color: rgb(205, 213, 255);' >
+            <h5 class="card-title" style="font-family: 'Sail', cursive;
+            font-family: 'Vast Shadow', cursive;"><b>Fundraiser Title :</b>{{fundraiser.title}}</h5>
+            <p class="card-text"><b> Fundraiser Decription :</b><br>{{fundraiser.description}}</p>
+            <p class="card-text"><b> Fundraiser Date :</b><br>{{fundraiser.event_date}}</p>
+            <br>
+
+              <a class="btn btn-success" href="#">Donate</a>
+                      
+          </div>
+        </div>
+      {%endfor%}
+    </div>
+</div>
+{%endblock%}

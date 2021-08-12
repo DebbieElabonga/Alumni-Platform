@@ -591,7 +591,7 @@ class EmailThread(threading.Thread):
 def project_fundraisers(request):
     all_fundraisers=Fundraiser.getfundraisers()
     context = {
-        'fundraisers': all_fundraisers
+        'all_fundraisers': all_fundraisers
         }
 
     return render(request, 'fundraisers.html',context) 
