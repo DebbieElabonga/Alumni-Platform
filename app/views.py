@@ -180,7 +180,7 @@ def meet_collegues(request):
         except UserProfile.DoesNotExist:
             curr_user_prof = None
         if curr_user_prof:
-            new_idea.owner = UserProfile.objects.filter(user = request.user).last()#change filter to 
+            new_idea.owner = UserProfile.objects.filter(user = request.user).last()
             new_idea.save()
             form = IdeaCreationForm
         else:
@@ -216,13 +216,16 @@ def single_idea(request, id):
     Renders a found idea object
     '''
     idea = Idea.objects.get(id = id)
-#   if idea.collaborators.userprofile_id == request.user.id:
+#-------------------------------------------------------------------------------------------------------------------
+#   if idea.collaborators.userprofile.id == request.user.id:
 #       messages.success(request, 'You are already a collaborator to this project')
 #   else:  
+#add a check if a user is already in the list of collaborators or interests then skip if so
+#------------------------------------------------------------------------------------------------------------------------------------
     if request.method == 'POST':
         skills = request.POST.get('skills')
         new_join = request.user
-        idea.interests.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
+        idea.interests.add(UserProfile.objects.filter(user = new_join).last())
 
         #send email of a user joining a team
         collaborate_new(new_join, idea, idea.owner.user.email, skills)
@@ -252,7 +255,7 @@ def create_story(request):
     else:
         form = CreateStoryForm()
     return render(request,"storyform.html",{"form":form})
-    return render(request, 'index.html')
+
 
 @login_required(login_url= 'login')  
 def TechNews(request):
