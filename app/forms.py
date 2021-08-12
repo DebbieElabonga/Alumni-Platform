@@ -1,3 +1,4 @@
+from django.db.models import fields
 from app.models import Group, UserProfile, Message, Response
 from django import forms
 from django.contrib.auth.models import User
@@ -60,10 +61,16 @@ class DiscussionForm(forms.ModelForm):
         model = Message
         exclude = ['date_created', 'group', 'creator']
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
 class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
         exclude = ['__all__']
+
+    widgets = {
+            'event_date': DateInput(),
+        }
 
 
 class ResponseForm(forms.ModelForm):

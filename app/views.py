@@ -27,7 +27,7 @@ from app.forms import (CohortForm, CreateStoryForm, DiscussionForm,
                        FundraiserForm, IdeaCreationForm, InviteUsers,
                        ResponseForm, SignupForm, TechNewsForm, UserProfileForm)
 from app.models import (GeneralAdmin, Group, Idea, Message, Response, Stories,
-                        Tech, UploadInvite, User, UserProfile)
+                        Tech, UploadInvite, User, UserProfile,Fundraiser)
 
 from .email import collaborate_new, send_invite
 from .forms import (Add_userForm, CohortForm, CreateStoryForm, DiscussionForm,
@@ -574,6 +574,14 @@ class EmailThread(threading.Thread):
 
     def run(self):
         self.email_message.send()
+def fundraisers(request):
+
+    fundraisers = Fundraiser.getFundraisers()
+    context = {
+    'fundraisers': fundraisers
+    }
+
+    return render(request, 'fundraiser.html',context)
 
 
   
