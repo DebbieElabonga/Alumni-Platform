@@ -63,10 +63,11 @@ class DiscussionForm(forms.ModelForm):
 
 class DateInput(forms.DateInput):
     input_type = 'date'
+
 class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
-        exclude = ['__all__']
+        exclude = ['creator']
 
     widgets = {
             'event_date': DateInput(),
