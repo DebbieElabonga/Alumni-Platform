@@ -212,26 +212,28 @@ def meet_collegues(request):
 
 #view function that renders to single idea page
 def single_idea(request, id):
-  '''
-  Renders a found idea object
-  '''
-  idea = Idea.objects.get(id = id)
-  if idea.collaborators.id == request.user.id:
-      messages.success(request, 'You are already a collaborator to this project')
-  else:  
+    '''
+    Renders a found idea object
+    '''
+    idea = Idea.objects.get(id = id)
+#   if idea.collaborators.userprofile_id == request.user.id:
+#       messages.success(request, 'You are already a collaborator to this project')
+#   else:  
     if request.method == 'POST':
         skills = request.POST.get('skills')
         new_join = request.user
-        idea.collaborators.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
+        idea.interests.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
 
         #send email of a user joining a team
         collaborate_new(new_join, idea, idea.owner.user.email, skills)
+        messages.success(request, 'The owner has been Notified of your Interest. We will inform you once they accept your participation') 
+        return redirect('meet_collegues')
+
     context = {
         'idea':idea
     }
 
-    messages.success(request, 'You are Now a collaborator. The Owner has been Notified')  
-    return redirect('meet_collegues')
+    return render(request, 'singleidea.html', context)
 
 
 

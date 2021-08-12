@@ -5,18 +5,19 @@
 {% block content %}
 
 {% if idea %}
-<div class="card">
-  <div class="card-body col-md-6">
+<div class="card d-flex flex-row">
+  <div class="card-body col-md-5">
     <h3 class="card-title">{{idea.title}}</h3>
     <p class="card-text">
       {{idea.description}}
       <hr>
       <p>Owner: {{idea.owner}}</p>
-      <p>Joined by {{idea.collaborators.count}} members</p>
+      <p>Interests: {{idea.interests.count}} members</p>
+      <p>collaborators: {{idea.collaborators.count}} members</p>
     </p>
     <div class="card-footer">
       <p>{{idea.date_created|timesince}} ago</p>
-      <p>Status: {{idea.is_open}}</p>
+      <p>Status: {%if idea.is_open%}Open{%else%} CLosed {%endif%}</p>
       <p>Valid until: {{idea.validity}}</p>
       <form action="{% url 'single_idea' idea.id %}" method="POST">
         {% csrf_token %}
@@ -28,12 +29,17 @@
     <div class="alert alert-success">{{message}}</div>
     {%endfor%}
   </div>
-  <div class="card-image col-md-6" style="background-image: url('{{idea.image1_path.url}}');
+  <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+    <div class="card-image" style="background-image: url('{{idea.image1_path.url}}');
                                                 background-position: center;
                                                 background-repeat: no-repeat;
                                                 background-size: contain;
-                                                width: 100%;">
-    <img src="{{idea.image2_path.url}}" alt="" width="300px">
+                                                height: 100%;
+                                                width: 100%;
+                                                ;">
+                                                
+    </div>
+    <img src="{%if idea.image2_path %}{{idea.image2_path.url}}{%endif%}" alt="" width="300px">
   </div>
 </div>
 {% endif %}

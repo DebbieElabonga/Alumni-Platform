@@ -32,7 +32,9 @@
             {{idea.description}}
             <hr>
             <p>Owner: {{idea.owner}}</p>
-            <p>Joined by {{idea.collaborators}} members</p>
+            <p>Interests: {{idea.interests.count}} members</p>
+            <p>collaborators: {{idea.collaborators.count}} members</p>
+
           </p>
           <div class="card-footer">
             <p>{{idea.date_created|timesince}} ago</p>
