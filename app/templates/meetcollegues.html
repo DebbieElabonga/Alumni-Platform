@@ -32,8 +32,8 @@
             {{idea.description}}
             <hr>
             <p>Owner: {{idea.owner}}</p>
-            <p>Interests: {{idea.interests.count}} members</p>
-            <p>collaborators: {{idea.collaborators.count}} members</p>
+            <p>Interests: <span class="bold">{{idea.interests.count}}</span></p>
+            <p>collaborators: <span class="bold">{{idea.collaborators.count}}</span></p>
 
           </p>
           <div class="card-footer">
@@ -43,11 +43,12 @@
             <a href="{% url 'single_idea' idea.id %}"><button>Collaborate</button></a>
           </div>
         </div>
-        <div class="card-image col-md-5">
+        <div class="card-image col-md-5 d-flex flex-column">
           <div style="background-image: url('{{idea.image1_path.url}}');
                                                 background-position: center;
                                                 background-repeat: no-repeat;
                                                 background-size: contain;
+                                                height: 100%;
                                                 width: 100%;">
 
           </div>

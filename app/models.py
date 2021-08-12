@@ -163,7 +163,7 @@ class Idea(models.Model):
   date_created = models.DateTimeField(auto_now_add=True)
   owner = models.ForeignKey(UserProfile, related_name='owner', on_delete=CASCADE)
   collaborators = models.ManyToManyField(UserProfile)
-  interests = models.ManyToManyField(UserProfile)
+  interests = models.ManyToManyField(UserProfile, related_name='interests')
   validity = models.DateField()
   is_open = models.BooleanField(default=True)
 
