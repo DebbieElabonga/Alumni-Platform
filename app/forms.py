@@ -69,9 +69,11 @@ class FundraiserForm(forms.ModelForm):
         model = Fundraiser
   
         fields = ['title','description','image_path','event_date']
-        widgets = {
-            'event_date': DateInput(),
-        }
+        
+        event_date = forms.DateField(
+    localize=True,
+    widget=forms.DateInput(format = '%Y-%m-%d',attrs={'type': 'date'}),
+)
 
 
 class ResponseForm(forms.ModelForm):

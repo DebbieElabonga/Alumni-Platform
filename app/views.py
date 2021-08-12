@@ -312,14 +312,14 @@ def successMsg(request, args):
 
 @login_required(login_url= 'login')  
 @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
-def new_fundraiser(request):
+def newfundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
     if request.method == 'POST':
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.user = current_user
+            fundraise.creator = UserProfile.objects.filter(user=current_user).last()
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
 

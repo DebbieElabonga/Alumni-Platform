@@ -1,3 +1,4 @@
+from os import name
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
@@ -28,9 +29,7 @@ urlpatterns=[
   # url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   # url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
 
-  # url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
-  url(r'fundraiser', views.project_fundraisers, name='fundraisers'),   
 
 
 
@@ -55,7 +54,6 @@ urlpatterns=[
 # Admin oriented views------------------------------------------------------------------------------ 
   url(r'^admin_dashboard/$', views.summary, name = 'admin_dashboard'),
   url(r'^new_cohort/$', views.cohort, name='new_cohort'),
-  url(r'^new_fundraiser/$', views.new_fundraiser, name='new_fundraiser'),   
   
   #url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
   path("story/",views.create_story,name="story"),
@@ -77,6 +75,8 @@ urlpatterns=[
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
   path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
   path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
+  url(r'^newfundraiser/$',views.newfundraiser, name='fundraiser'),
+  url(r'^userfundraiser/$',views.project_fundraisers,name='fundraisers')
   
 ]
 if settings.DEBUG:

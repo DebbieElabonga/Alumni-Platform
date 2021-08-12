@@ -165,6 +165,9 @@ class Fundraiser(models.Model):
         except cls.DoesNotExist:
           all_fundraisers = None
         return all_fundraisers
+    @property
+    def lifespan(self):
+      return '%s - present' % self.birthdate.strftime('%m/%d/%Y')
 # Donor Model- No relation to Already existing users.
 class Donor(models.Model):
   name = models.CharField(max_length=200)
