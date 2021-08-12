@@ -5,131 +5,141 @@
 
 {% block content %}
 
-<body style=" background-image: url('');
-    background-size: cover;
-    background-repeat:  no-repeat;
-    font-family: 'Comic Sans MS', cursive, sans-serif;">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
-
-    <div class="container" id="background">
+<body>
+    <div class="container-md-fluid">
+        <!--start of banner-->
         <div id="opennote">
-            <h3 style="text-align:center; color: black;">Hello,{{logged_user.username}}</h3>
-            <p id="opennote" style="text-align:center; font-size: 50px; color: black;"> Welcome to Moringa Alumni.</p>
-        </div>
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <p style="text-align: center; font-size: 25px;">TECH NEWS</p>
-                    <div class="container">
-                        {% for news in tech %}
-                        <div class="card" style="width: 36rem; color: white;">
-                            <div style="background-color:rgb(99,124,51)" class="card-body">
-                                <h5 class="card-title"><b>{{news.title}}</b></h5>
-                                <p class="card-text collapse">{{news.description | truncatechars:200 | safe }}</p>
-                                <p>Posted {{news.date_created  | timesince }} ago</p>
-                                <a class="btn btn-light" data-toggle="collapse" href="#collapseExample" role="button"
-                                    aria-expanded="false" aria-controls="collapseExample">
-                                    Read More ..
-                                </a>
-                                <div class="collapse" id="collapseExample">
-
-                                    <p>{{news.description | safe }}</p>
-
-                                </div>
-                            </div>
+            <p class="banner_text"> Welcome to Moringa Alumni</p>
+            <div class="split_left col-md-6">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title bold">Lively Discussions</h4>
+                            <p class="card-text">Forums are groups where you get to meet like minded people and discuss
+                                common ideas. </p>
+                            <button class="btn-outline-warning">View Forums</button>
                         </div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-md-12">
-                        <a href="{% url 'technews' %}" class="btn btn-success btn-md"> Add Tech News
-                        </a>
-                    </div>
-
-                </div>
-
-                <!-- ******************************************************************************* -->
-                <div class="col-md-4">
-                    <p style="text-align:center; font-size: 25px;">SUCCESS STORIES</p>
-                    <a href="{% url 'story' %}" class="btn btn-success btn-md"
-                        style="text-align: center; margin-left: 130px;"> Share Story</a>
-                    <br>
-                    {% for story in stories %}
-                    <b>Title: </b>{{story.title}}<br>
-                    <b>Desc: </b> {{story.description}}<br>
-                    <div class="">
-                        <a href=""><img src="{{story.image_path.url}}" class="img-responsive" alt=""
-                                style="width:100%;width:100%"></a>
-                        <br>
-                        <a href="{{story.link}}" class="btn btn-success btn-md" target="_blank"
-                            style="font-family: 'Special Elite', cursive;">Visit Link</a>
-                    </div>
-
-                    <div class="modal fade"  tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content" style="background-color: rgb(36, 33, 33);">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-white" id="exampleModalCenterTitle" style="text-align: center; color: white; font-size: 30px; font-family: 'Dancing Script', cursive;">NEW BUSINESS</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"> <i class="fa fa-times-circle text-success"></i></span></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="" method="post" style="color: white;">
-                                    {% csrf_token%}
-                                    {% bootstrap_form form %}
-                                    <button type="submit" class="btn btn-md btn-success">Add</button>
-                                    <button type="button" class="btn btn-md btn-danger "data-dismiss="modal" style="float:right">Cancel</button>
-                                </form>
-                            </div>
-                        </div>
+                        <p class="card-body">
+                        </p>
                     </div>
                 </div>
-                    {% endfor %}
+                <div class="col-md-6">
 
                 </div>
-                <div class="col-md-4">
-                    <p style="text-align: center; font-size: 25px;">COHORTS</p>
-                    {% for group in groups %}
-                    <div class="group_dets mb-3">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-12">
+            </div>
+            <div class="split_right col-md-6">
+                <div class="col-md-6">
 
-
-                                    <div class="card mb-4">
-                                        <img src="data:image/jpeg;base64,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"
-                                            class="card-img-top" alt="{{ group.name }}">
-                                        <p style="font-weight: 700;">Name: {{group.name}}</p>
-                                        <p style="font-weight: 700;">{{group.admin.profile.user.username}}</p>
-                                        <p style="font-weight: 700;"> Members: {{group.group.count}}</p>
-
-                                        {% if request.user.userprofile.group == group %}
-                                        <small class="text-muted"><a href="{% url 'cohortdiscussions' group.id %}"
-                                                class="btn btn-success btn-sm">More</a></small>
-                                        {% elif not request.user.profile.group %}
-                                        <small class="text-muted"><a href="{% url 'joincohort' group.id %}"
-                                                class="btn btn-success btn-sm">Join Cohort</a></small>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                {%endfor%}
-
-                                <div class="col-md-12 text-center">
-                                    <a href="{% url 'new_cohort' %}" class="btn btn-success btn-md"
-                                        style="text-align: center">
-                                        NEW COHORT
-                                    </a>
-                                </div>
-                            </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title bold">Build Ideas</h4>
+                            <p class="card-text">Propose and idea and let other join in. Build great products wth great
+                                people</p>
+                            <button class="btn-outline-warning">Propose an Idea</button>
                         </div>
+                        <p class="card-body">
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- End of banner -->
+        <hr>
+        <!-- Show page tabbng for tech news and success stories -->
+        <div class="row m-2     ">
+            <div class="col-md-9">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a class="bold" data-toggle="pill" href="#news">What's New</a></li>
+                    <li><a class="bold" data-toggle="pill" href="#stories">Alumni Stories</a></li>
+                </ul>
 
+                <div class="tab-content">
+                    <div id="news" class="tab-pane fade in active">
+                        <!--Show News Here--><br>
+                        {%if tech%}
+                        {% for news in tech %}
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="{{news.image_path.url}}" alt="" class="card-image">
+                                <h5 class="card-title bold">{{news.title}}</h5>
+                                <p class="card-text">{{news.description}}</p>
+                                <div class="card-footer d-flex flex-row">
+                                    <p class="badge">{{news.date_created|timesince}}</p>
+                                    <p class="badge">{{news.creator.username}}</p>
+                                    {% if news.link%}
+                                    <p><i>For more: {{news.link}}</i></p>
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {%else%}
+                        <h3 class="bold">No News Posted Yet</h3>
+                        {%endif%}
+                        <!-- End of stories loop -->
+
+                    </div>
+
+                    <div id="stories" class="tab-pane fade">
+                        <!--show Stories here--><br>
+                        {%if stories%}
+                        {% for story in stories %}
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="{{story.image_path.url}}" alt="" class="card-image">
+                                <h5 class="card-title bold">{{story.title}}</h5>
+                                <p class="card-text">{{story.description}}</p>
+                                <div class="card-footer d-flex flex-row">
+                                    <p class="badge">{{story.date_created|timesince}}</p>
+                                    <p class="badge">{{story.creator.username}}</p>
+                                    {% if story.link%}
+                                    <p><i>For more: {{story.link}}</i></p>
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {%else%}
+                        <h3 class="bold">No Stories have been Posted Yet</h3>
+                        {%endif%}
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- Show active Cohorts -->
+            <div class="col-md-3 cohorts">
+                <h3 class="bold">
+                    Active Cohorts
+                </h3><hr>
+                <!--loop through groups-->
+                {%if groups%}
+                {% for group in groups %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title bold">{{group.name}}</h5>
+                        <p class="card-text">{{group.description}}</p>
+                        <div class="card-footer d-flex flex-row">
+                            <p class="badge">{{group.date_created|time}}</p>
+                            <p class="badge">{{group.creator.username}}</p>
+                            {% if group.admin%}
+                            <p><i>Admin: {{group.admin}}</i></p>
+                            {%endif%}
+                            {% if group.is_private == False%}
+                            <a href=""><button class="btn-outline-success">Join Group</button></a>
+                            {%endif%}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {%else%}
+                <h4 class="bold">No groups have been Created Yet</h4>
+                {%endif%}
+                
+            </div>
+        </div>
+    </div>
 </body>
 {% endblock %}

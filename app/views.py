@@ -1,16 +1,17 @@
-import threading
-import os
 import datetime as dt
+import mimetypes
+import os
+import random
+import threading
 from csv import DictReader
 from email.message import EmailMessage
 
-import  mimetypes
-import random
 import stripe
 from alumni.decorators import general_admin_required
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.files.base import File
 from django.http import (HttpResponse, HttpResponseRedirect, JsonResponse,
@@ -26,8 +27,9 @@ from django.views import View
 from app.forms import (CohortForm, CreateStoryForm, DiscussionForm,
                        FundraiserForm, IdeaCreationForm, InviteUsers,
                        ResponseForm, SignupForm, TechNewsForm, UserProfileForm)
-from app.models import (GeneralAdmin, Group, Idea, Message, Response, Stories,
-                        Tech, UploadInvite, User, UserProfile,Fundraiser)
+from app.models import (Fundraiser, GeneralAdmin, Group, Idea, Message,
+                        Response, Stories, Tech, UploadInvite, User,
+                        UserProfile)
 
 from .email import collaborate_new, send_invite
 from .forms import (Add_userForm, CohortForm, CreateStoryForm, DiscussionForm,
@@ -36,16 +38,19 @@ from .forms import (Add_userForm, CohortForm, CreateStoryForm, DiscussionForm,
 from .models import Group, Idea, Stories, Tech, UserProfile
 from .utils import generate_token
 
+
 # Create your views here.
-
-
-
 def index(request):
     groups = Group.objects.all()
     stories = Stories.objects.order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     current_user = request.user
-    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories,'tech':tech})
+    context = {
+        'logged_user':current_user,
+        'groups':groups,'stories':stories,
+        'tech':tech
+        }
+    return render(request,'index.html',context )
 
     
 # def signup(request):
@@ -97,7 +102,7 @@ def cohort(request):
         form = CohortForm()
     return render(request, 'cohort.html', {'title':title,'form': form})
 
-
+@login_required(login_url= 'login')  
 def joincohort(request,id):
     current_user = request.user
     cohort = get_object_or_404(Group,pk=id)
@@ -106,6 +111,7 @@ def joincohort(request,id):
     print(current_user.userprofile.group)
     return redirect("cohortdiscussions",id)
 
+@login_required(login_url= 'login')  
 def leavecohort(request,id):
     current_user = request.user
     current_user.userprofile.group = None
@@ -116,6 +122,7 @@ def leavecohort(request,id):
 
 #-----------------------------------------------------------------------------------------
 #view function that renders to meet_collegues template
+@login_required(login_url= 'login')  
 def meet_collegues(request):
   '''
   renders meet_collegues template
@@ -181,7 +188,7 @@ def single_idea(request, id):
 
 
 
-    
+@login_required(login_url= 'login')     
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -197,7 +204,7 @@ def create_story(request):
     return render(request,"storyform.html",{"form":form})
     return render(request, 'index.html')
 
-
+@login_required(login_url= 'login')  
 def TechNews(request):
     form = TechNewsForm()
     if request.method == 'POST':
@@ -212,6 +219,7 @@ def TechNews(request):
     return render(request,'newsform.html',{"form":form})
 
 # Create your views here.
+@login_required(login_url= 'login')  
 def Discussion(request, id):
 # Start a discussion.
 
@@ -230,7 +238,7 @@ def Discussion(request, id):
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form ,'group':group})
-
+@login_required(login_url= 'login')  
 def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
@@ -271,7 +279,7 @@ def reply(request, id):
 
     discussion.user = current_user
             
-          
+@login_required(login_url= 'login')        
 @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
 def charge(request):
     
@@ -302,7 +310,8 @@ def successMsg(request, args):
     form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form})
 
-#@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
+@login_required(login_url= 'login')  
+@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
 def Fundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
@@ -319,6 +328,8 @@ def Fundraiser(request):
         form = FundraiserForm()
     return render(request, 'new_fundraiser.html', {'title':title,"form": form})
 #views to summary on the admin dashboard
+
+@login_required(login_url= 'login')  
 @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def summary(request):
     '''
@@ -363,6 +374,8 @@ def summary(request):
     return render(request, 'admin_dash/dashboard.html', context)
 
 #view function that renders to invite members page
+
+@login_required(login_url= 'login')  
 @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def invite_members(request):
     '''
@@ -509,43 +522,43 @@ def edit_details(request):
         return render(request, 'edit_details.html', context)
 
 
-def create_user(request):
-    '''
-    View function to add a new students members into the alumni platform and send them an invitation email
-    '''
-    if request.method == 'POST':
-        form = Add_userForm(request.POST)
-        email = request.POST.get('email')
-        if form.is_valid():
-            user = form.save(commit = False)
-            user.is_active = False
-            user.save()
-            current_site = get_current_site(request)
-            email_subject = 'Invitation to Alumni Community'
-            message = render_to_string('invitation.html',
-                                    {
-                                        'user': user,
-                                        'domain': current_site.domain,
-                                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                                        'token': generate_token.make_token(user)
-                                    }
-                                    )
-            email_message = EmailMessage(
-                email_subject,
-                message,
-                settings.EMAIL_HOST_USER,
-                [email]
-            )
-            EmailThread(email_message).start()
-            messages.add_message(request, messages.SUCCESS,
-                                'invaitation sent  succesfully')
-            return redirect('registration')
+# def create_user(request):
+#     '''
+#     View function to add a new students members into the alumni platform and send them an invitation email
+#     '''
+#     if request.method == 'POST':
+#         form = Add_userForm(request.POST)
+#         email = request.POST.get('email')
+#         if form.is_valid():
+#             user = form.save(commit = False)
+#             user.is_active = False
+#             user.save()
+#             current_site = get_current_site(request)
+#             email_subject = 'Invitation to Alumni Community'
+#             message = render_to_string('invitation.html',
+#                                     {
+#                                         'user': user,
+#                                         'domain': current_site.domain,
+#                                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+#                                         'token': generate_token.make_token(user)
+#                                     }
+#                                     )
+#             email_message = EmailMessage(
+#                 email_subject,
+#                 message,
+#                 settings.EMAIL_HOST_USER,
+#                 [email]
+#             )
+#             EmailThread(email_message).start()
+#             messages.add_message(request, messages.SUCCESS,
+#                                 'invaitation sent  succesfully')
+#             return redirect('registration')
 
-            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
-            return redirect('/user_list/')
-    else:
-        form = Add_userForm()
-    return render(request, 'create_user.html', {"form": form})
+#             messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+#             return redirect('/user_list/')
+#     else:
+#         form = Add_userForm()
+#     return render(request, 'create_user.html', {"form": form})
 
 
 class InviteUserView(View):
