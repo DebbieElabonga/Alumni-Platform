@@ -146,7 +146,6 @@ def joincohort(request,id):
     cohort = get_object_or_404(Group,pk=id)
     current_user.userprofile.group = cohort
     request.user.userprofile.save()
-    print(current_user.userprofile.group)
     return redirect("cohortdiscussions",id)
 
 @login_required(login_url= 'login')  

@@ -204,7 +204,7 @@
                             <p><i>Admin: {{group.admin}}</i></p>
                             {%endif%}
                             {% if group.is_private == False%}
-                            <a href=""><button class="btn-outline-success">Join Group</button></a>
+                            <a href="{%url 'joincohort' group.id %}"><button class="btn-outline-success">Join Group</button></a>
                             {%endif%}
                         </div>
                     </div>
