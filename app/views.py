@@ -42,9 +42,48 @@ from .utils import generate_token
 # Create your views here.
 def index(request):
     groups = Group.objects.all()
-    stories = Stories.objects.order_by("-id")
+    stories = Stories.objects.all().order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     current_user = request.user
+
+    #create story form
+    if request.method == 'POST' and 'add_story' in request.POST:
+        title = request.POST.get('story_title')
+        desc = request.POST.get('description')
+        image = request.FILES['image']
+        date = dt.datetime.now()
+        creator = request.user
+
+        new_story = Stories(title = title, description = desc, image_path = image, date_created = date, creator = creator)
+        new_story.save()
+
+        context = {
+        'logged_user':current_user,
+        'groups':groups,'stories':stories,
+        'tech':tech
+        }
+        return render(request,'index.html',context )
+    
+    if request.method == 'POST' and 'news_add' in request.POST:
+        title = request.POST.get('news_title')
+        desc = request.POST.get('description')
+        image = request.FILES['image']
+        date = dt.datetime.now()
+        creator = request.user
+
+        new_news = Tech(title = title, description = desc, image_path = image, date_created = date, creator = creator)
+        new_news.save()
+
+        context = {
+        'logged_user':current_user,
+        'groups':groups,
+        'stories':stories,
+        'tech':tech
+        }
+        return render(request,'index.html',context )
+
+        
+
     context = {
         'logged_user':current_user,
         'groups':groups,'stories':stories,
@@ -135,25 +174,35 @@ def meet_collegues(request):
   if request.method == 'POST':
     form = IdeaCreationForm(request.POST, request.FILES)
     if form.is_valid():
-      new_idea = form.save(commit=False)
-      new_idea.date_created = dt.datetime.now()
-      new_idea.owner = UserProfile.objects.get(id = 1)#change filter to user = request.user
-      new_idea.save()
+        new_idea = form.save(commit=False)
+        new_idea.date_created = dt.datetime.now()
+        try:
+            curr_user_prof = UserProfile.objects.filter(user = request.user).last()
+        except UserProfile.DoesNotExist:
+            curr_user_prof = None
+        if curr_user_prof:
+            new_idea.owner = UserProfile.objects.filter(user = request.user).last()
+            new_idea.save()
+            form = IdeaCreationForm
+        else:
+            messages.warning(request, 'You need to update your profile to proceed')
+            return redirect('user_profile')
 
-      try:
-        ideas = Idea.objects.all()
-      except Idea.DoesNotExist:
-        ideas = None
 
-      context = {
+        try:
+            ideas = Idea.objects.all()
+        except Idea.DoesNotExist:
+            ideas = None
+
+        context = {
         'form':form,
         'ideas':ideas
         }
-      return render(request, 'meetcollegues.html', context)
+        return render(request, 'meetcollegues.html', context)
 
     else:
-      messages.warning(request, 'Invalid Form')
-      return redirect('meet_collegues')
+        messages.warning(request, 'Invalid Form')
+        return redirect('meet_collegues')
 
   context = {
     'form':form,
@@ -164,26 +213,31 @@ def meet_collegues(request):
 
 #view function that renders to single idea page
 def single_idea(request, id):
-  '''
-  Renders a found idea object
-  '''
-  idea = Idea.objects.get(id = id)
-  if idea.collaborators.id == request.user.id:
-      messages.success(request, 'You are already a collaborator to this project')
-  else:  
+    '''
+    Renders a found idea object
+    '''
+    idea = Idea.objects.get(id = id)
+#-------------------------------------------------------------------------------------------------------------------
+#   if idea.collaborators.userprofile.id == request.user.id:
+#       messages.success(request, 'You are already a collaborator to this project')
+#   else:  
+#add a check if a user is already in the list of collaborators or interests then skip if so
+#------------------------------------------------------------------------------------------------------------------------------------
     if request.method == 'POST':
         skills = request.POST.get('skills')
         new_join = request.user
-        idea.collaborators.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
+        idea.interests.add(UserProfile.objects.filter(user = new_join).last())
 
         #send email of a user joining a team
         collaborate_new(new_join, idea, idea.owner.user.email, skills)
+        messages.success(request, 'The owner has been Notified of your Interest. We will inform you once they accept your participation') 
+        return redirect('meet_collegues')
+
     context = {
         'idea':idea
     }
 
-    messages.success(request, 'You are Now a collaborator. The Owner has been Notified')  
-    return redirect('meet_collegues')
+    return render(request, 'singleidea.html', context)
 
 
 
@@ -202,7 +256,7 @@ def create_story(request):
     else:
         form = CreateStoryForm()
     return render(request,"storyform.html",{"form":form})
-    return render(request, 'index.html')
+
 
 @login_required(login_url= 'login')  
 def TechNews(request):

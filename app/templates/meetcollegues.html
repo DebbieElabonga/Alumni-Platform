@@ -1,54 +1,63 @@
 {% extends 'base.html' %}
-{% load django_bootstrap5%}
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
+<div class="ideas_body" style="overflow: hidden;">
+  <h1 class="text-center bold">Welcome to Meet Collegues</h1>
+  <div class="row">
 
-<h1 style="text-align:center;">Welcome to Meet Collegues</h1>
-<div class="row g-3">
 
-  <div class="col-md-6">
-    <form action="" method="POST" enctype="multipart/form-data" style="margin-left: 400px;">
-      {%csrf_token%}
-      {% for message in messages %}
-      <div class="alert alert-warning">{{message}}</div>
+    <div class="col-md-4 idea_form">
+      <form action="" method="POST" enctype="multipart/form-data">
+        {%csrf_token%}
+        {% for message in messages %}
+        <div class="alert alert-warning">{{message}}</div>
+        {%endfor%}
+        {{form.as_p}}
+        {{form.media}}
+
+        <button type="submit">Post</button>
+      </form>
+    </div>
+    <div class="col-md-8 projects_list">
+      <h3 class="bold">Open Projects</h3>
+      {% for message in messages%}
+      <div class="alert alert-success">{{message}}</div>
       {%endfor%}
-      {{form.as_p}}
+      {% for idea in ideas%}
+      <div class="card m-4 d-flex flex-row align-items-center justify-content-center">
+        <div class="card-body col-md-6">
+          <h3 class="card-title">{{idea.title}}</h3>
+          <p class="card-text">
+            {{idea.description}}
+            <hr>
+            <p>Owner: {{idea.owner}}</p>
+            <p>Interests: <span class="bold">{{idea.interests.count}}</span></p>
+            <p>collaborators: <span class="bold">{{idea.collaborators.count}}</span></p>
 
-
-      <button type="submit">Post</button>
-    </form>
-  </div>
-  <div class="col-md-4">
-    {% for message in messages%}
-    <div class="alert alert-success">{{message}}</div>
-    {%endfor%}
-    {% for idea in ideas%}
-    <div class="card">
-      <div class="card-body col-md-6">
-        <h3 class="card-title">{{idea.title}}</h3>
-        <p class="card-text">
-          {{idea.description}}
-          <hr>
-          <p>Owner: {{idea.owner}}</p>
-          <p>Joined by {{idea.collaborators}} members</p>
-        </p>
-        <div class="card-footer">
-          <p>{{idea.date_created|timesince}} ago</p>
-          <p>Status: {{idea.is_open}}</p>
-          <p>Valid until: {{idea.validity}}</p>
-          <a href="{% url 'single_idea' idea.id %}"><button>Collaborate</button></a>
+          </p>
+          <div class="card-footer">
+            <p>{{idea.date_created|timesince}} ago</p>
+            <p>Status: {%if idea.is_open%}Open{%else%} CLosed {%endif%}</p>
+            <p>Valid until: {{idea.validity}}</p>
+            <a href="{% url 'single_idea' idea.id %}"><button>Collaborate</button></a>
+          </div>
         </div>
-      </div>
-      <div class="card-image col-md-6" style="background-image: url('{{idea.image1_path.url}}');
+        <div class="card-image col-md-5 d-flex flex-column">
+          <div style="background-image: url('{{idea.image1_path.url}}');
                                                 background-position: center;
                                                 background-repeat: no-repeat;
                                                 background-size: contain;
+                                                height: 100%;
                                                 width: 100%;">
-        <img src="{{idea.image2_path.url}}" alt="" width="300px">
+
+          </div>
+          <img src="{% if idea.image2_path %}{{idea.image2_path.url}}{%endif%}" alt="" style="width: 100%;">
+        </div>
+
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 </div>
 {%endblock%}

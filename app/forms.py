@@ -13,6 +13,7 @@ from .models import Add_user, Idea
 from .models import Stories,Tech
 from .models import Idea
 from .models import Fundraiser, Message
+from bootstrap_datepicker_plus import DatePickerInput
 
 #edit details form 
 
@@ -38,6 +39,7 @@ class IdeaCreationForm(forms.ModelForm):
     model = Idea
     fields = ('title', 'description','validity', 'image1_path', 'image2_path')
     widgets = {
+      'validity':(DatePickerInput(attrs={'placeholder':'YYYY/MM/DD'})),
       'title':forms.TextInput(attrs={'placeholder':'what idea do you need help...'}),
       'description':forms.Textarea(attrs={'placeholder':'Explain your idea to get more collaborators...'})
     }
