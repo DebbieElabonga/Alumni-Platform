@@ -71,3 +71,4 @@ wcwidth==0.2.5
 whitenoise==5.3.0
 zipp==3.5.0
 zope.interface==5.4.0
+django-bootstrap-datepicker-plus==3.0.5
