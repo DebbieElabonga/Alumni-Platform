@@ -99,3 +99,8 @@ class InviteUsers(forms.ModelForm):
     class Meta:
         model = UploadInvite
         fields = ['file_path']
+
+class UserCohortForm(forms.ModelForm):
+    class Meta:
+        model = Group 
+        fields = [ 'name','description','is_private','admin']

@@ -49,6 +49,7 @@ urlpatterns=[
   #url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
   path("story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
+  url(r'^user_cohort/$', views.user_cohort, name='user-cohort'),
   path('discussion/<int:id>/', views.Discussion, name='discussion'),
   path('cohort/<int:id>/', views.cohortdiscussions, name = 'cohortdiscussions'),
   path('reply/<int:id>/', views.reply, name = 'reply'),
