@@ -121,7 +121,7 @@
                         <h6 class="m-0">Full Name</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        {{current_user.first_name}} {{current_user.last_name}}
+                        {{user.first_name}} {{user.last_name}}
                     </div>
                 </div>
                 <hr>
@@ -157,7 +157,31 @@
                     <div class="card-body">
                         <h6 class="d-flex align-items-center mb-3"><i
                                 class="material-icons text-info mr-2"></i>Collaborations</h6>
-                        <!--posts created here-->
+                        <!--collaborations here-->
+                        {% if collaborations %}
+                        {% for collab in collaborations %}
+                        <div class="card">
+                            <div class="card-body d-flex flex-row align-items-center">
+                                <div class="card-image col-md-3">
+                                    <img src="{{collab.image1_path.url}}" alt="" width="50px">
+                                </div>
+                                <div class="card-title col-md-4 bold">
+                                    {{collab.title}}
+                                </div>
+                                <div class="card-text col-md-5 bold">
+                                    {{collab.description|safe}}
+                                </div>
+                            </div>
+                            <div class="card-footer col-md-12 d-flex flex-row flex-wrap">
+                                <h5>{{collab.date_created|date}}</h5>
+                                <h5>{{collab.collaborators.count}}</h5>
+                                <h5>Status {% if collab.is_open %} Open {%else%} Closed {%endif%}</h5>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {%else%}
+                        <h5 class="bold">No Collaborations Here</h5>
+                        {%endif%}
                     </div>
                 </div>
             </div>
@@ -165,7 +189,7 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <!--Projects details here/ Requests for collaboration-->
-                        <div class="col-md-9">
+                        <div class="col-md-12 p-0">
                             <ul class="nav nav-tabs">
                                 <li class="active">
                                     <h6 class="bold mr-5"><a class="bold" data-toggle="pill" href="#open_projects">Open
@@ -179,11 +203,60 @@
 
                             <div class="tab-content content">
                                 <div id="open_projects" class="tab-pane fade in active p-0 m-0">
-                                    <h5>Open projects</h5>
+                                    {% if projects %}
+                                    {% for project in projects %}
+                                    <div class="card row">
+                                        <div class="card-body d-flex flex-row align-items-center">
+                                            <div class="card-image col-md-3">
+                                                <img src="{{project.image1_path.url}}" alt="" width="50px">
+                                            </div>
+                                            <div class="card-title col-md-4 bold">
+                                                {{project.title}}
+                                            </div>
+                                            <div class="card-text col-md-5">
+                                                {{project.description|safe|truncatechars:50}}
+                                            </div>
+                                        </div>
+                                        <div class="card-footer col-md-12 d-flex flex-row flex-wrap">
+                                            <h6 class="bold m-2">{{project.date_created|date}}</h6>|<br>
+                                            <h6 class="bold m-2">Collaborators {{project.collaborators.count}}</h6>|<br>
+                                            <h6 class="bold m-2">Interests {{project.interests.count}}</h6>|<br>
+                                            <h6 class="bold m-2">Open until {{project.validity|date}}</h6>|<br>
+                                            <button class="pt-0 pb-0">Close</button>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {%else%}
+                                    <h5 class="bold">No Projects Here</h5>
+                                    {%endif%}
                                 </div>
 
                                 <div id="requests" class="tab-pane fade">
-                                    <h5>Requests</h5>
+                                    {% if requests %}
+                                    {% for requester in requests %}
+                                    <div class="card">
+                                        <div class="card-body d-flex flex-row align-items-center">
+                                            <div class="card-image col-md-3">
+                                                <img src="{{requester.image1_path.url}}" alt="" width="50px">
+                                            </div>
+                                            <div class="card-title col-md-4 bold">
+                                                {{requester.title}}
+                                            </div>
+                                            <div class="card-text col-md-5 bold">
+                                                <button type="submit">View Requests</button>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer col-md-12 d-flex flex-row flex-wrap">
+                                            <h5>{{requester.date_created|date}}</h5>
+                                            <h5>{{requester.collaborators.count}}</h5>
+                                            <h5>{{requester.interests.count}}</h5>
+                                            <h5>Open until {{requester.validity|date}}</h5>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {%else%}
+                                    <h5 class="bold">No Sent Requests</h5>
+                                    {%endif%}
                                 </div>
                             </div>
 

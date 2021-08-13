@@ -296,6 +296,10 @@ a.name{
 .image_container, .contact_container{
   height: 46vh;
 }
+#open_projects>.card{
+  padding: 0;
+  width: 100%;
+}
 /*styling meet colleagues page*/
 .idea_form{
   background-color: white;

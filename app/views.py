@@ -151,14 +151,21 @@ def profile(request):
         posts = posts1.union(posts2)
 
         #user projects]
-        projects = Idea.objects.filter(owner = user_profile)
+        projects = Idea.objects.filter(owner = user_profile, is_open = True)
+        closed_projects = Idea.objects.filter(owner = user_profile, is_open = False)
 
         #user collaborations
-        collaborations = Idea.objects.filter(collaborators = user_profile)
+        collaborations = Idea.objects.filter(collaborators__id = user_profile.id)
         profile_form = UserProfileForm
+
+
+        ideas_with_requests = Idea.objects.filter(owner = user_profile, is_open = True, interests = True)
+
         
 
         context = { 
+            'requests':ideas_with_requests,
+            'closed_projects':closed_projects,
             'collaborations':collaborations,
             'projects':projects,
             'posts':posts,
