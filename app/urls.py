@@ -18,16 +18,6 @@ urlpatterns=[
     path('charge/', views.charge, name="charge"),
     path('success/<str:args>/', views.successMsg, name="success"),
 
-  # path("",views.index,name="index"),
-  # url('register/',views.signup, name='registration'),
-  # url('login/', auth_views.LoginView.as_view(), name='login'),
-  # url('logout/',auth_views.LogoutView.as_view(), name='logout'),
-  # url('profile/', views.profile, name='profile'),
-  # url('new-cohort/', views.cohort, name='new-cohort'),
-  # url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
-  # url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
-  # url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
-
   # url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
 
@@ -62,7 +52,7 @@ urlpatterns=[
   path('reply/<int:id>/', views.reply, name = 'reply'),
   url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   path("news/",views.TechNews,name="technews"),
-  url(r'^create_user/$',user_views.create_user,name='create_user'),
+  # url(r'^create_user/$',user_views.create_user,name='create_user'),
   path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
   url(r'^discussion/$', views.Discussion, name='discussion'),
   # # url(r'^create_user/$',user_views.create_user,name='create_user'),

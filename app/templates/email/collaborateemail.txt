@@ -5,6 +5,7 @@ Name:{{new_collab.first_name}} {{new_collab.last_name}}
 Skills: {{skills}}
 Member Since: {{new_collab.date_created|timesince}}
 
+Visit your profile to approve the user as a collaborator
 Contact your admin for more information.
 
 Keep Rocking!
