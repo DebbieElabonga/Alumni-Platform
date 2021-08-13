@@ -1,3 +1,4 @@
+from django.core.files.base import ContentFile, File
 from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
 from app.models import GeneralAdmin, Group, UploadInvite, UserProfile, Stories, Idea, Tech, User
@@ -37,6 +38,7 @@ from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
                        SignupForm, TechNewsForm, UserProfileForm)
 from app.models import Group, Idea, Stories, Tech, UserProfile
 from django.contrib.auth.decorators import login_required
+from itertools import chain
 
 # Create your views here.
 def index(request):
@@ -107,14 +109,59 @@ def index(request):
 
 
 def profile(request):
-    if request.method == 'POST':
-        profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+    if request.method == 'POST' and 'add_profile' in request.POST:
+        profile_form = UserProfileForm(request.POST, request.FILES)
         if  profile_form.is_valid():
-            profile_form.save()
-            return redirect('index')
+            new_profile = profile_form.save(commit = False)
+            new_profile.user = request.user
+            new_profile.save()
+            profile_form = UserProfileForm
+
+            user_profile = UserProfile.objects.filter(user = request.user).last()
+            context = {
+                'profile_form':profile_form,
+                'user_profile':user_profile,
+            }
+
+            return render(request, 'user_profile.html',context)
+    if request.method == 'POST' and 'update_profile' in request.POST:
+        profile_form = UserProfileForm(request.POST, request.FILES)
+        if  profile_form.is_valid():
+
+            to_update = UserProfile.objects.filter(user = request.user)
+            
+            to_update.update(bio = request.POST.get('bio'))        
+
+            profile_form = UserProfileForm
+
+            user_profile = UserProfile.objects.filter(user = request.user).last()
+            context = {
+                'profile_form':profile_form,
+                'user_profile':user_profile,
+            }
+
+            return redirect( 'user_profile')
     else:
-        profile_form = UserProfileForm(instance=request.user)
+        user_profile = UserProfile.objects.filter(user = request.user).last()
+
+        # user posts
+        posts1 = Stories.objects.filter(creator = request.user)
+        posts2 = Tech.objects.filter(creator = request.user)
+        posts = posts1.union(posts2)
+
+        #user projects]
+        projects = Idea.objects.filter(owner = user_profile)
+
+        #user collaborations
+        collaborations = Idea.objects.filter(collaborators = user_profile)
+        profile_form = UserProfileForm
+        
+
         context = { 
+            'collaborations':collaborations,
+            'projects':projects,
+            'posts':posts,
+            'user_profile':user_profile,
             "profile_form": profile_form
             }
     return render(request, 'user_profile.html',context)

@@ -289,6 +289,12 @@ a.name{
   backdrop-filter: blur(3px);
   padding: 8px;
 }
+.user_posts, .project_details, .participation{
+  height: 60vh;
+}
+.image_container, .contact_container{
+  height: 46vh;
+}
 /*styling meet colleagues page*/
 .idea_form{
   background-color: white;
@@ -307,3 +313,4 @@ a.name{
   background-color: white;
   border-left: 1px solid var(--orange);
 }
+

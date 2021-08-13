@@ -41,7 +41,7 @@ class Group(models.Model):
     return cls.objects.all()
 
 class UserProfile(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="userprofile")
+  user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="userprofile")
   bio = models.CharField(max_length=250)
   photo_path = models.ImageField(upload_to='Profiles/')
   group = models.ForeignKey(Group,related_name="group",on_delete=models.CASCADE,null=True)
