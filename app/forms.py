@@ -1,3 +1,4 @@
+from django.db.models import fields
 from app.models import Group, UserProfile, Message, Response
 from django import forms
 from django.contrib.auth.models import User
@@ -25,7 +26,7 @@ class SignupForm(UserCreationForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['user', 'photo_path', 'bio']
+        fields = ['photo_path', 'bio']
 
 class CohortForm(forms.ModelForm):
     class Meta:
@@ -62,10 +63,20 @@ class DiscussionForm(forms.ModelForm):
         model = Message
         exclude = ['date_created', 'group', 'creator']
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class FundraiserForm(forms.ModelForm):
     class Meta:
         model = Fundraiser
-        fields = ('__all__')
+  
+        fields = ['title','description','image_path','event_date']
+        
+        event_date = forms.DateField(
+    localize=True,
+    widget=forms.DateInput(format = '%Y-%m-%d',attrs={'type': 'date'}),
+)
+
 
 class ResponseForm(forms.ModelForm):
     class Meta:

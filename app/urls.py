@@ -1,3 +1,4 @@
+from os import name
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
@@ -22,6 +23,7 @@ urlpatterns=[
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
 
 
+
   url(r'^$',views.index,name="index"),
 
 #user authentication urls-------------------------------------------------------------------------------
@@ -31,6 +33,7 @@ urlpatterns=[
 
 #User Oriented Views ------------------------------------------------------------------------------
   url(r'^user_profile/$', views.profile, name='user_profile'),
+ # url('edit/',views.profile_update,name='edit'),
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
   url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
   url(r'^story/$',views.create_story,name='story'),
@@ -42,7 +45,6 @@ urlpatterns=[
 # Admin oriented views------------------------------------------------------------------------------ 
   url(r'^admin_dashboard/$', views.summary, name = 'admin_dashboard'),
   url(r'^new_cohort/$', views.cohort, name='new_cohort'),
-  url(r'^fundraiser/$', views.Fundraiser, name='fundraiser'),   
   
   #url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
   path("story/",views.create_story,name="story"),
@@ -50,7 +52,6 @@ urlpatterns=[
   path('discussion/<int:id>/', views.Discussion, name='discussion'),
   path('cohort/<int:id>/', views.cohortdiscussions, name = 'cohortdiscussions'),
   path('reply/<int:id>/', views.reply, name = 'reply'),
-  url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   path("news/",views.TechNews,name="technews"),
   # url(r'^create_user/$',user_views.create_user,name='create_user'),
   path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),
@@ -63,9 +64,12 @@ urlpatterns=[
 
   url(r"^story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
-  url(r'^fundraiser', views.Fundraiser, name='fundraiser'),   
   path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
   path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
+  url(r'^newfundraiser/$',views.newfundraiser, name='fundraiser'),
+  url(r'^userfundraiser/$',views.project_fundraisers,name='fundraisers'),
+  path('singlefundraiser/<id>', views.single_fundraiser, name='singlefundraiser'),
+
   
 ]
 if settings.DEBUG:
