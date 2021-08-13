@@ -34,7 +34,7 @@ from app.models import (Fundraiser, GeneralAdmin, Group, Idea, Message,
 from .email import collaborate_new, send_invite
 from .forms import (Add_userForm, CohortForm, CreateStoryForm, DiscussionForm,
                     FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
-                    UserProfileForm)
+                    UserProfileForm,UserCohortForm)
 from .models import Group, Idea, Stories, Tech, UserProfile, Fundraiser
 from .utils import generate_token
 
