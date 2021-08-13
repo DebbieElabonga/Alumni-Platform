@@ -21,7 +21,7 @@ from django.dispatch import receiver
 #password2
 
 #-----------------------------------------------------------------------
-#User profile model
+#Group/Cohort Model
 class Group(models.Model):
   name = models.CharField(max_length=100)
   description = models.TextField()
@@ -40,6 +40,7 @@ class Group(models.Model):
   def get_groups(cls):
     return cls.objects.all()
 
+#User profile model
 class UserProfile(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="userprofile")
   bio = models.CharField(max_length=250)
@@ -83,7 +84,7 @@ class GeneralAdmin(models.Model):
     return admins
 
 
-#Group/Cohort Model
+
 #message/discussion Model
 class Message(models.Model):
   title = models.CharField(max_length=100, blank=True, null=True)

@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load django_bootstrap5%}
 {% load bootstrap4 %}
 {% load static %}
 
@@ -108,18 +107,20 @@
                         <!--Show News Here--><br>
                         {%if tech%}
                         {% for news in tech %}
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="{{news.image_path.url}}" alt="">
+                        <div class="card" style="height: 60vh;">
+                            <div class="card-image col-md-7" style="overflow: hidden;">
+                                <img src="{{news.image_path.url}}" alt="" >
                             </div>
-                            <div class="card-body">
+                            <div class="card-body col-md-5">
                                 <h5 class="card-title bold">{{news.title}}</h5>
-                                <p class="card-text">{{news.description}}</p>
+
+                                <p class="card-text">{{news.description|safe}}</p>
                                 <div class="card-footer d-flex flex-row">
                                     <p class="badge m-4">{{news.date_created|timesince}} ago</p>
                                     <p class="badge m-4">{{news.creator.username}}</p>
-                                    {% if news.link%}
-                                    <p><i>For more: {{news.link}}</i></p>
+                                    {% if news.link %}
+                                    <p class="badge m-4"><a href="{{news.link}}" target="_blank"
+                                            style="color: white;">More</a></p>
                                     {%endif%}
                                 </div>
                             </div>
@@ -145,7 +146,7 @@
                                             style="width: 100%;">
                                     </div>
                                     <h5 class="card-title bold">{{story.title}}</h5>
-                                    <p class="card-text">{{story.description}}</p>
+                                    <p class="card-text">{{story.description|safe}}</p>
                                     <div class="card-footer d-flex flex-row">
                                         <p class="badge ml-4">{{story.date_created|timesince}} ago</p>
                                         <p class="badge ml-4">posted by: {{story.creator.username}}</p>
@@ -191,21 +192,24 @@
                 </h3>
                 <hr>
                 <!--loop through groups-->
-                {%if groups%}
-                {% for group in groups %}
+                {%if public_groups%}
+                {% for group in public_groups %}
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title bold">{{group.name}}</h5>
-                        <p class="card-text">{{group.description}}</p>
-                        <div class="card-footer d-flex flex-row">
-                            <p class="badge">{{group.date_created|time}}</p>
-                            <p class="badge">{{group.creator.username}}</p>
-                            {% if group.admin%}
-                            <p><i>Admin: {{group.admin}}</i></p>
-                            {%endif%}
-                            {% if group.is_private == False%}
-                            <a href=""><button class="btn-outline-success">Join Group</button></a>
-                            {%endif%}
+                        <p class="card-text">{{group.description|safe}}</p>
+                        <div class="card-footer row">
+                            <div class="d-flex flex-column col-md-8">
+                                <p class="badge">Created {{group.date_created|date}}</p>
+                                {% if group.admin%}
+                                <p class="badge"><i>Admin: {{group.admin}}</i></p>
+                                {%endif%}
+                            </div>
+                            <div class="col-md-4">
+                                {% if group.is_private == False%}
+                                <a href=""><button class="btn-outline-success">Join Group</button></a>
+                                {%endif%}
+                            </div>
                         </div>
                     </div>
                 </div>

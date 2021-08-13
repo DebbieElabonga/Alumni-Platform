@@ -42,7 +42,7 @@ from itertools import chain
 
 # Create your views here.
 def index(request):
-    groups = Group.objects.all()
+    public_groups = Group.objects.filter(is_private = False)
     stories = Stories.objects.all().order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     current_user = request.user
@@ -60,7 +60,8 @@ def index(request):
 
         context = {
         'logged_user':current_user,
-        'groups':groups,'stories':stories,
+        'public_groups':public_groups,
+        'stories':stories,
         'tech':tech
         }
         return render(request,'index.html',context )
@@ -77,7 +78,7 @@ def index(request):
 
         context = {
         'logged_user':current_user,
-        'groups':groups,
+        'public_groups':public_groups,
         'stories':stories,
         'tech':tech
         }
@@ -87,7 +88,7 @@ def index(request):
 
     context = {
         'logged_user':current_user,
-        'groups':groups,'stories':stories,
+        'public_groups':public_groups,'stories':stories,
         'tech':tech
         }
     return render(request,'index.html',context )
