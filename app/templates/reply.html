@@ -36,17 +36,19 @@
             </div>
 
         </div>
-        <div class="card mb-4 col-md-5">
+        <div class="col-md-12">
+        <div class="card mb-4 ">
             <h2>Add Your Response</h2>
             <div style="background-color: beige;">
                 <form action="{%url 'reply' message.id %}" method="post" enctype="multipart/form-data">
                     {%csrf_token%}
 
                     {% bootstrap_form form%}
-                    <input type="submit" class="btn btn-success btn-sm btn-center" value="Submit"><br><br>
+                    <input type="submit" class="btn-success btn-sm btn-center" value="Submit"><br><br>
                 </form>
             </div>
             <br>
+        </div>
         </div>
     </div>
 </div>

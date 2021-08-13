@@ -17,7 +17,10 @@
                             <h4 class="card-title bold">Lively Discussions</h4>
                             <p class="card-text">Forums are groups where you get to meet like minded people and discuss
                                 common ideas. </p>
-                            <button class="btn-outline-warning">View Forums</button>
+                            <a href="#cohorts">
+                                <button class="btn-outline-warning">View Forums</button>
+                                <a href="{% url 'user-cohort' %}"><button class="btn-outline-warning">Create Forum</button></a>
+                            </a>
                         </div>
                         <p class="card-body">
                         </p>
@@ -37,7 +40,9 @@
                             <h4 class="card-title bold">Build Ideas</h4>
                             <p class="card-text">Propose and idea and let other join in. Build great products wth great
                                 people</p>
-                            <button class="btn-outline-warning">Propose an Idea</button>
+                            <a href="{% url 'meet_collegues'%}">
+                                <button class="btn-outline-warning">Propose an Idea</button>
+                            </a>
                         </div>
                         <p class="card-body">
                         </p>
@@ -48,26 +53,72 @@
         <!-- End of banner -->
         <hr>
         <!-- Show page tabbng for tech news and success stories -->
-        <div class="row m-2     ">
+        <div class="row m-2">
             <div class="col-md-9">
                 <ul class="nav nav-tabs">
                     <li class="active"><a class="bold" data-toggle="pill" href="#news">What's New</a></li>
                     <li><a class="bold" data-toggle="pill" href="#stories">Alumni Stories</a></li>
                 </ul>
 
-                <div class="tab-content">
+                <div class="tab-content content">
                     <div id="news" class="tab-pane fade in active">
+                        <!--add news -->
+                        <div class="add_news">
+                            <a href="" data-toggle="modal" data-target="#add_news"
+                                class="d-flex flex-row justify-content-flex-start align-items-center">
+                                <img src="{% static 'images/PngItem_653761.png' %}" alt="add News" width="42px"
+                                    height="42px">
+                                <button class="btn-success" style="height: 28px; margin-left: -5px;">Add News</button>
+                            </a>
+                        </div>
+
+                        <!-- Add news Form Modal -->
+                        <div class="modal fade" id="add_news" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalCenterTitle">Whats New in Tech</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'index' %}" class="invitee" method="post"
+                                            enctype="multipart/form-data"
+                                            style="background-color: white; padding: 20px;">
+                                            <div class="d-flex flex-row">
+                                                <h4 class="bold">Add News</h4>
+                                            </div>
+                                            {% csrf_token %}
+                                            <input type="text" name="news_title" id="news_ttle" placeholder="Title..."
+                                                required><br>
+                                            <textarea name="description" id="description" cols="34" rows="5"
+                                                placeholder="Share what's New.." required></textarea>
+                                            <input type="file" name="image" id="image" class="mt-3" required><br>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" name="news_add" class="btn btn-success">Post</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!--Show News Here--><br>
                         {%if tech%}
                         {% for news in tech %}
                         <div class="card">
+                            <div class="card-image">
+                                <img src="{{news.image_path.url}}" alt="">
+                            </div>
                             <div class="card-body">
-                                <img src="{{news.image_path.url}}" alt="" class="card-image">
                                 <h5 class="card-title bold">{{news.title}}</h5>
                                 <p class="card-text">{{news.description}}</p>
                                 <div class="card-footer d-flex flex-row">
-                                    <p class="badge">{{news.date_created|timesince}}</p>
-                                    <p class="badge">{{news.creator.username}}</p>
+                                    <p class="badge m-4">{{news.date_created|timesince}} ago</p>
+                                    <p class="badge m-4">{{news.creator.username}}</p>
                                     {% if news.link%}
                                     <p><i>For more: {{news.link}}</i></p>
                                     {%endif%}
@@ -78,42 +129,68 @@
                         {%else%}
                         <h3 class="bold">No News Posted Yet</h3>
                         {%endif%}
+
                         <!-- End of stories loop -->
 
                     </div>
 
                     <div id="stories" class="tab-pane fade">
                         <!--show Stories here--><br>
-                        {%if stories%}
-                        {% for story in stories %}
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="{{story.image_path.url}}" alt="" class="card-image">
-                                <h5 class="card-title bold">{{story.title}}</h5>
-                                <p class="card-text">{{story.description}}</p>
-                                <div class="card-footer d-flex flex-row">
-                                    <p class="badge">{{story.date_created|timesince}}</p>
-                                    <p class="badge">{{story.creator.username}}</p>
-                                    {% if story.link%}
-                                    <p><i>For more: {{story.link}}</i></p>
-                                    {%endif%}
+                        <div class="content">
+                            {%if stories%}
+                            {% for story in stories %}
+                            <div class="card col-md-5">
+                                <div class="card-body">
+                                    <div class="card-image">
+                                        <img src="{{story.image_path.url}}" alt="" class="card-image"
+                                            style="width: 100%;">
+                                    </div>
+                                    <h5 class="card-title bold">{{story.title}}</h5>
+                                    <p class="card-text">{{story.description}}</p>
+                                    <div class="card-footer d-flex flex-row">
+                                        <p class="badge ml-4">{{story.date_created|timesince}} ago</p>
+                                        <p class="badge ml-4">posted by: {{story.creator.username}}</p>
+                                        {% if story.link%}
+                                        <p><i>For more: {{story.link}}</i></p>
+                                        {%endif%}
+                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
+                            {%else%}
+                            <h3 class="bold">No Stories have been Posted Yet</h3>
+                            {%endif%}
                         </div>
-                        {% endfor %}
-                        {%else%}
-                        <h3 class="bold">No Stories have been Posted Yet</h3>
-                        {%endif%}
+                        <div class="story_form d-flex align-items-center justify-content-center col-md-12">
+                            <button class="bold" id="story_plus">Add Story<span id="plus"> &plus;</span></button>
+
+                            <form action="{% url 'index' %}" class="invitee alum_stori" method="post"
+                                enctype="multipart/form-data" style="background-color: white; padding: 20px;">
+                                <div class="d-flex flex-row">
+                                    <h4 class="bold">Add Story</h4>
+                                    <button type="button" class="btn btn-light ml-5" id="story_close">Close</button>
+                                </div>
+                                {% csrf_token %}
+                                <input type="text" name="story_title" id="story_title" placeholder="Title..."
+                                    required><br>
+                                <textarea name="description" id="description" cols="34" rows="5"
+                                    placeholder="What's your story.." required></textarea>
+                                <input type="file" name="image" id="image" class="mt-3" required><br>
+                                <button class="btn btn-success bold" name="add_story">Post</button>
+                            </form>
+
+                        </div>
 
                     </div>
                 </div>
 
             </div>
             <!-- Show active Cohorts -->
-            <div class="col-md-3 cohorts">
+            <div class="col-md-3 cohorts" id="cohorts">
                 <h3 class="bold">
-                    Active Cohorts
-                </h3><hr>
+                    Public Groups
+                </h3>
+                <hr>
                 <!--loop through groups-->
                 {%if groups%}
                 {% for group in groups %}
@@ -137,7 +214,7 @@
                 {%else%}
                 <h4 class="bold">No groups have been Created Yet</h4>
                 {%endif%}
-                
+
             </div>
         </div>
     </div>

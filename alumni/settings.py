@@ -29,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
 #redirects
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'bootstrap4',
     'django_bootstrap5',
+    'bootstrap_datepicker_plus',
     
 ]
 
@@ -89,7 +91,7 @@ WSGI_APPLICATION = 'alumni.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
+         'NAME': config('DB_NAME'),
         'USER':config('DB_USER'),
         'PASSWORD':config('DB_PASSWORD')
     }
