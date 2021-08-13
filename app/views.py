@@ -153,10 +153,8 @@ def user_cohort(request):
             group.save()
             group.creator.userprofile.group = group
             group.save()
-            messages.success(request, 'A new Cohort has been created')
             return redirect('index')
         else:
-            messages.warning(request, 'Invalid form')
             return render(request, 'user_cohort.html', {'title':title,'form': form})
     else:
         form = UserCohortForm()
