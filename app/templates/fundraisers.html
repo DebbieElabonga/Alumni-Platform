@@ -7,8 +7,17 @@
 
 
 <div class="container-fluid" style='background-color: blanchedalmond;'>
+    <div>
+      <a href= "{% url 'fundraiser' %}"
+          class="d-flex flex-row justify-content-flex-start align-items-center">
+          <img src="{% static 'images/PngItem_653761.png' %}" alt="add News" width="42px"
+              height="42px">
+          <button class="btn-success" style="height: 28px; margin-left: -5px;">START FUNDRAISER</button>
+      </a>
+    </div>
+
     <div class="row">
-        
+      
       {% for fundraiser in all_fundraisers %}
         <div class="card m-4" style="width: 28rem;color: white;">
           <img class="card-img-top" src="{{fundraiser.image_path.url}}" alt="Card image cap" height="200px">
