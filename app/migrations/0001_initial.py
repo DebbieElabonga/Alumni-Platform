@@ -115,6 +115,7 @@ class Migration(migrations.Migration):
                 ('validity', models.DateField()),
                 ('is_open', models.BooleanField(default=True)),
                 ('collaborators', models.ManyToManyField(to='app.UserProfile')),
+                ('interests', models.ManyToManyField(related_name='interests', to='app.UserProfile')),
                 ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='owner', to='app.userprofile')),
             ],
         ),

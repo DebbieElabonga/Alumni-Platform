@@ -19,16 +19,7 @@ urlpatterns=[
     path('charge/', views.charge, name="charge"),
     path('success/<str:args>/', views.successMsg, name="success"),
 
-  # path("",views.index,name="index"),
-  # url('register/',views.signup, name='registration'),
-  # url('login/', auth_views.LoginView.as_view(), name='login'),
-  # url('logout/',auth_views.LogoutView.as_view(), name='logout'),
-  # url('profile/', views.profile, name='profile'),
-  # url('new-cohort/', views.cohort, name='new-cohort'),
-  # url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
-  # url(r'^single_idea/(\d+)/$', views.single_idea, name = 'single_idea'),
-  # url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
-
+  # url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
 
 
@@ -58,6 +49,7 @@ urlpatterns=[
   #url(r'^admin_dashboard/$', views.admin_dashboard, name = 'admin_dashboard'),
   path("story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
+  url(r'^user_cohort/$', views.user_cohort, name='user-cohort'),
   path('discussion/<int:id>/', views.Discussion, name='discussion'),
   path('cohort/<int:id>/', views.cohortdiscussions, name = 'cohortdiscussions'),
   path('reply/<int:id>/', views.reply, name = 'reply'),
