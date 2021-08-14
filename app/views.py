@@ -238,6 +238,7 @@ def meet_collegues(request):
             new_idea.owner = UserProfile.objects.filter(user = request.user).last()
             new_idea.save()
             form = IdeaCreationForm
+            messages.success(request, 'Your Idea has been posted successfully')
         else:
             messages.warning(request, 'You need to update your profile to proceed')
             return redirect('user_profile')

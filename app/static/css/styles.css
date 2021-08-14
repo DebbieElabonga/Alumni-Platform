@@ -299,6 +299,11 @@ a.name{
 #open_projects>.card{
   padding: 0;
   width: 100%;
+  margin-bottom: 10px;
+}
+.project_details>.card>div>div>div{
+  overflow-y: scroll;
+  height: 50vh;
 }
 /*styling meet colleagues page*/
 .idea_form{

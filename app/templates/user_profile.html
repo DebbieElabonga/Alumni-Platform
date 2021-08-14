@@ -90,13 +90,13 @@
         </div>
         <div class="card mt-3 user_posts p-4">
             <h5 class="bold">Your Posts</h5>
-            <ul class="list-group list-group-flush">
+            <ul class="list-group list-group-flush" style="overflow-y: scroll;">
                 {% if posts %}
                 {% for post in posts %}
                 <li>
-                    <div class="card d-flex flex-row align-items-center ">
+                    <div class="card d-flex flex-row align-items-center mb-4">
                         <div class="card-image col-md-3">
-                            <img src="{{post.image_path.url}}" alt="" width="50px">
+                            <img src="{{post.image_path.url}}" alt="" style="width:100%;">
                         </div>
                         <div class="card-title col-md-5 bold">
                             {{post.title}}
@@ -205,8 +205,8 @@
                                 <div id="open_projects" class="tab-pane fade in active p-0 m-0">
                                     {% if projects %}
                                     {% for project in projects %}
-                                    <div class="card row">
-                                        <div class="card-body d-flex flex-row align-items-center">
+                                    <div class="card row mb-4">
+                                        <div class="card-body d-flex flex-row align-items-center flex-wrap">
                                             <div class="card-image col-md-3">
                                                 <img src="{{project.image1_path.url}}" alt="" width="50px">
                                             </div>
