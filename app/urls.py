@@ -66,6 +66,7 @@ urlpatterns=[
   url(r'^fundraiser', views.Fundraiser, name='fundraiser'),   
   path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
   path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
+  path('post/ajax/close_project', views.close_project, name='close_project')
   
 ]
 if settings.DEBUG:

@@ -10,6 +10,7 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from .forms import DiscussionForm, FundraiserForm, TechNewsForm
 from django.conf import settings
+from django.core import serializers
 
 
 import stripe
@@ -170,6 +171,25 @@ def profile(request):
             "profile_form": profile_form
             }
     return render(request, 'user_profile.html',context)
+
+#function for closing projects, added here for re-using
+def close_project():
+    if request.is_ajax and request.method.POST and 'close_proj' in request.POST:
+        project_id = request.POST.get('project_id')
+        project = Idea.objects.filter(id = project_id)
+        if project:
+            project.update(is_open = False)
+            ser_instance = serializers.serialize('json', [project, ])
+            return JsonResponse({'instance':ser_instance}, status = 200)
+        else:
+            return JsonResponse({'errors': 'Project not Found'}, status = 400)
+        
+    return JsonResponse({'error':'Invalid Action'}, status = 400)
+        
+
+        
+
+
 
 def cohort(request):
     title = "Cohorts"

@@ -90,6 +90,7 @@
         </div>
         <div class="card mt-3 user_posts p-4">
             <h5 class="bold">Your Posts</h5>
+            <h5 id="kiko">Kiko</h5>
             <ul class="list-group list-group-flush" style="overflow-y: scroll;">
                 {% if posts %}
                 {% for post in posts %}
@@ -157,7 +158,8 @@
                     <div class="card-body">
 
                         <ul class="nav nav-tabs">
-                            <li class="active"><a class="bold" data-toggle="pill" href="#collaborations">Collaborations</a></li>
+                            <li class="active"><a class="bold" data-toggle="pill"
+                                    href="#collaborations">Collaborations</a></li>
                             <li><a class="bold" data-toggle="pill" href="#closed_projects">Closed Projects</a></li>
                         </ul>
                         <div class="tab-content" id="archives">
@@ -229,27 +231,28 @@
                         <!--Projects details here/ Requests for collaboration-->
                         <div class="col-md-12 p-0">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a class="bold" data-toggle="pill" href="#open_projects">Open Projects</a></li>
+                                <li class="active"><a class="bold" data-toggle="pill" href="#open_projects">Open
+                                        Projects</a></li>
                                 <li>
                                     <a class="bold" data-toggle="pill" href="#requests">
+                                        <div
+                                            style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                            Requests{% if requests.count >= 9 %}
                                             <div
-                                                style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
-                                                Requests{% if requests.count >= 9 %}
-                                                <div
-                                                    style="background-color: red; color: white; font-size: 1em; font-weight: bolder; text-transform: uppercase;width:20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; padding-top: 10px;">
-                                                    <p>
-                                                        9+
-                                                    </p>
-                                                </div>
-                                                {% elif requests.count == 0 %}
-                                                {%else%}
-                                                <div
-                                                    style="background-color: red; font-weight: bolder; text-transform: uppercase;width:20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center;  padding-top: 10px;">
-                                                    <p style="color: white; font-size: 1.2em;"> {{requests.count}} </p>
-                                                </div>
-                                                {%endif%}
+                                                style="background-color: red; color: white; font-size: 1em; font-weight: bolder; text-transform: uppercase;width:20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; padding-top: 10px;">
+                                                <p>
+                                                    9+
+                                                </p>
                                             </div>
-                                        </a>
+                                            {% elif requests.count == 0 %}
+                                            {%else%}
+                                            <div
+                                                style="background-color: red; font-weight: bolder; text-transform: uppercase;width:20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center;  padding-top: 10px;">
+                                                <p style="color: white; font-size: 1.2em;"> {{requests.count}} </p>
+                                            </div>
+                                            {%endif%}
+                                        </div>
+                                    </a>
                                 </li>
                             </ul>
 
@@ -274,7 +277,12 @@
                                             <h6 class="bold m-2">Collaborators {{project.collaborators.count}}</h6>|<br>
                                             <h6 class="bold m-2">Interests {{project.interests.count}}</h6>|<br>
                                             <h6 class="bold m-2">Open until {{project.validity|date}}</h6><br>
-                                            <button class="pt-0 pb-0 ml-auto btn btn-danger">Close</button>
+                                            <form id="close_project_form" method="post">
+                                                {%csrf_token%}
+                                                <input type="hidden" name="project_id" value="{{project.id}}">
+                                                <button id="close_proj" type="submit" name='close_proj'
+                                                    class="pt-0 pb-0 ml-auto btn btn-danger">Close</button>
+                                            </form>
                                         </div>
                                     </div>
                                     {% endfor %}
@@ -391,8 +399,8 @@
         </div>
     </div>
 </div>
-</div>
-
-</div>
-</div>
 {%endblock%}
+{% block scripts %}
+{{block.super}}
+
+{% endblock %}
