@@ -191,24 +191,25 @@
                         <!--Projects details here/ Requests for collaboration-->
                         <div class="col-md-12 p-0">
                             <ul class="nav nav-tabs">
-                                <li class="active">
+                                <li class="active" style="display:flex; align-items: center; justify-content: center;">
                                     <h6 class="bold mr-5"><a class="bold" data-toggle="pill" href="#open_projects">Open
                                             Projects</a></h6>
                                 </li>
                                 <li>
                                     <h6 class="bold ml-5"><a class="bold" data-toggle="pill" href="#requests">
-                                            <div style="display: flex; flex-direction: row;">
-                                                Requests{% if requests >= 9 %}
+                                            <div
+                                                style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                                Requests{% if requests.count >= 9 %}
                                                 <div
-                                                    style="background-color: red; color: white; font-size: .9em; font-weight: bolder; text-transform: uppercase;width:20px; height: 20px; border-radius: 50%; text-align: center; display: flex; justify-content: center; align-items: center;">
+                                                    style="background-color: red; color: white; font-size: 1em; font-weight: bolder; text-transform: uppercase;width:20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; padding-top: 10px;">
                                                     <p>
                                                         9+
                                                     </p>
                                                 </div>
                                                 {%else%}
                                                 <div
-                                                    style="background-color: red; color: white; font-size: .9em; font-weight: bolder; text-transform: uppercase;width:20px; height: 20px; border-radius: 50%; text-align: center; display: flex; justify-content: center; align-items: center;">
-                                                    <p> {{requests.count}} </p>
+                                                    style="background-color: red; font-weight: bolder; text-transform: uppercase;width:20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center;  padding-top: 10px;">
+                                                    <p style="color: white; font-size: 1.2em;"> {{requests.count}} </p>
                                                 </div>
                                                 {%endif%}
                                             </div>
@@ -236,8 +237,8 @@
                                             <h6 class="bold m-2">{{project.date_created|date}}</h6>|<br>
                                             <h6 class="bold m-2">Collaborators {{project.collaborators.count}}</h6>|<br>
                                             <h6 class="bold m-2">Interests {{project.interests.count}}</h6>|<br>
-                                            <h6 class="bold m-2">Open until {{project.validity|date}}</h6>|<br>
-                                            <button class="pt-0 pb-0">Close</button>
+                                            <h6 class="bold m-2">Open until {{project.validity|date}}</h6><br>
+                                            <button class="pt-0 pb-0 ml-auto btn btn-danger">Close</button>
                                         </div>
                                     </div>
                                     {% endfor %}
@@ -255,7 +256,7 @@
                                                 <img src="{{requester.photo_path.url}}" alt="" width="50px">
                                             </div>
                                             <div class="card-title col-md-4 bold"
-                                                style="display: flex; flex-direction: row;">
+                                                style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
                                                 <div>
                                                     {{requester.user.first_name}} {{requester.user.last_name}}
                                                     {% if requester.user.is_active %}
@@ -269,97 +270,87 @@
                                                 </div>
                                                 {%endif%}
                                             </div>
-                                            <div class="card-text col-md-5 bold">
-                                                <form action="{% url 'user_profile'%}" method="post">
+                                            <div class="bold">
+                                                <form action="" method="post">
                                                     {%csrf_token%}
                                                     <input type="hidden" name="user_prof_id" value="{{requester.id}}">
                                                     <!--Find a userprofile idea interests and make them collaborators///trigger button-->
+                                                    <div data-toggle="modal" data-target="#interests_form">
 
-                                                    <button type="submit" name="view_requests" data-toggle="modal"
-                                                        data-target="#interests_form">view</button>
+                                                        <button type="button" name="view_requests">view</button>
+                                                    </div>
                                                 </form>
                                             </div>
-
-                                            <!--Find a userprofile idea interests and make them collaborators/// modal form-->
-                                            <div class="modal fade" id="interests_form" tabindex="-1" role="dialog"
-                                                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                                <!--modal title for user interests-->
-
-                                                                <div class="card-title col-md-4 bold"
-                                                                    style="display: flex; flex-direction: row;">
-                                                                    <div>
-                                                                        {{requester.user.first_name}}
-                                                                        {{requester.user.last_name}}
-                                                                        {% if requester.user.is_active %}
-                                                                    </div>
-                                                                    <div
-                                                                        style="width: 10px; height: 10px; background-color: green; border-radius: 50%;">
-                                                                    </div>
-                                                                    {%else%}
-                                                                    <div
-                                                                        style="width: 10px; height: 10px; background-color: red; border-radius: 50%;">
-                                                                    </div>
-                                                                    {%endif%}
-                                                                </div>
-                                                            </h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="{% url 'user_profile' %}" method="post"
-                                                                enctype="multipart/form-data">
-                                                                {%csrf_token%}
-
-                                                                <!--more contents here-->
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary"
-                                                                name="add_profile">Save
-                                                                changes</button>
-                                                        </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-
-
-
-
-
-
-
-
-
+                                        </div>
+                                        <div class="card-footer col-md-12 d-flex flex-row flex-wrap">
+                                            <h5>Joined {{requester.user.date_joined|timesince}}</h5>
                                         </div>
                                     </div>
-                                    <div class="card-footer col-md-12 d-flex flex-row flex-wrap">
-                                        <h5>Joined {{requester.user.date_joined|timesince}}</h5>
+
+                                    {% endfor %}
+                                    {%else%}
+                                    <h5 class="bold">No Sent Requests</h5>
+                                    {%endif%}
+
+                                    <!--Find a userprofile idea interests and make them collaborators/// modal form-->
+                                    <div class="modal fade" id="interests_form" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                        <!--modal title for user interests-->
+
+                                                        <div class="card-title col-md-4 bold"
+                                                            style="display: flex; flex-direction: row;">
+                                                            <div>
+                                                                {{requester.user.first_name}}
+                                                                {{requester.user.last_name}}
+                                                                {% if requester.user.is_active %}
+                                                            </div>
+                                                            <div
+                                                                style="width: 10px; height: 10px; background-color: green; border-radius: 50%;">
+                                                            </div>
+                                                            {%else%}
+                                                            <div
+                                                                style="width: 10px; height: 10px; background-color: red; border-radius: 50%;">
+                                                            </div>
+                                                            {%endif%}
+                                                        </div>
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{% url 'user_profile' %}" method="post"
+                                                        enctype="multipart/form-data">
+                                                        {%csrf_token%}
+
+                                                        <!--more contents here-->
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Decline</button>
+                                                    <button type="submit" class="btn btn-primary"
+                                                        name="add_profile">Approve</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                {% endfor %}
-                                {%else%}
-                                <h5 class="bold">No Sent Requests</h5>
-                                {%endif%}
                             </div>
                         </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 </div>
