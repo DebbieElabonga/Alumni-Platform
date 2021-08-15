@@ -148,7 +148,7 @@ def profile(request):
         # user posts
         posts1 = Stories.objects.filter(creator = request.user)
         posts2 = Tech.objects.filter(creator = request.user)
-        posts = posts1.union(posts2)
+        posts = (posts1.union(posts2)).order_by('-date_created')
 
         #user projects]
         projects = Idea.objects.filter(owner = user_profile, is_open = True)
@@ -158,13 +158,10 @@ def profile(request):
         collaborations = Idea.objects.filter(collaborators__id = user_profile.id)
         profile_form = UserProfileForm
 
-
-        ideas_with_requests = Idea.objects.filter(owner = user_profile, is_open = True, interests = True)
-
-        
-
+        requests = UserProfile.objects.filter(interests__in = [project.id for project in projects ]).distinct()
+      
         context = { 
-            'requests':ideas_with_requests,
+            'requests':requests,
             'closed_projects':closed_projects,
             'collaborations':collaborations,
             'projects':projects,
