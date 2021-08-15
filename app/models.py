@@ -31,11 +31,6 @@ class Group(models.Model):
   @classmethod
   def get_groups(cls):
     return cls.objects.all()
-<<<<<<< HEAD
-
-#User profile model
-=======
->>>>>>> dev
 class UserProfile(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="userprofile")
   bio = models.CharField(max_length=250)

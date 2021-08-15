@@ -1,24 +1,3 @@
-<<<<<<< HEAD
-from django.core.files.base import ContentFile, File
-from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
-from app.models import GeneralAdmin, Group, UploadInvite, UserProfile, Stories, Idea, Tech, User
-from app.forms import CohortForm, InviteUsers, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
-from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, Tech, User
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
-from django.shortcuts import render, redirect
-from django.shortcuts import render,redirect
-from django.urls import reverse
-from .forms import DiscussionForm, FundraiserForm, TechNewsForm
-from django.conf import settings
-
-
-import stripe
-from django.shortcuts import render, get_object_or_404,redirect
-from django.contrib.auth import login, authenticate
-from django.contrib import messages
-=======
->>>>>>> dev
 import datetime as dt
 import mimetypes
 import os
