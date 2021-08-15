@@ -16,7 +16,7 @@ from django.dispatch import receiver
 #password1
 #password2
 #-----------------------------------------------------------------------
-#User profile model
+#Group/Cohort Model
 class Group(models.Model):
   name = models.CharField(max_length=100)
   description = models.TextField()
@@ -31,8 +31,13 @@ class Group(models.Model):
   @classmethod
   def get_groups(cls):
     return cls.objects.all()
+<<<<<<< HEAD
+
+#User profile model
+=======
+>>>>>>> dev
 class UserProfile(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="userprofile")
+  user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="userprofile")
   bio = models.CharField(max_length=250)
   photo_path = models.ImageField(upload_to='Profiles/')
   group = models.ForeignKey(Group,related_name="group",on_delete=models.CASCADE,null=True)

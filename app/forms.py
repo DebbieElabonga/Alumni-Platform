@@ -7,7 +7,6 @@ from .models import Idea
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import widgets
 from .models import Idea, UploadInvite, Stories,Tech, Fundraiser, Message, Group, UserProfile
 from .models import Add_user, Idea
 from .models import Stories,Tech
