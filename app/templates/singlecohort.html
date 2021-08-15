@@ -38,21 +38,25 @@
                         </h6>
                     </form>
                     <hr>
-                    <a href="{% url 'reply' message.id %}" class="btn btn-success btn-sm">REPLY</a>
+                    <a href="{% url 'reply' message.id %}" class="btn-success btn-sm">REPLY</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-</div>
-<div>
-    <a href="{% url 'leavecohort' group.id %}" class="btn btn-success btn-sm">Leave Cohort</a>
-</div>
-</div>
-<br>
-<div class="col-md-12">
-    <a href="{% url 'discussion' group.id %}" class="btn btn-success btn-md"
-        style="text-align: center; align-items: center;"> ADD DISCUSSION
-    </a>
+
+    <div class="row">
+        <div class="col-md-6 ml-5 pl-5">
+            <a href="{% url 'discussion' group.id %}" class="btn btn-success btn-md" class="bold" id="story_plus"
+                style="text-align: center; align-items: center;"> ADD DISCUSSION
+            </a>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-6 mx-auto">
+            <a href="{% url 'leavecohort' group.id %}" class="btn btn-success btn-sm" class="bold" id="story_plus">Leave
+                Cohort</a>
+        </div>
+    </div>
 </div>
 {% endblock %}
