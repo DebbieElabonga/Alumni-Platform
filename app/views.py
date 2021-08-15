@@ -153,8 +153,8 @@ def leavecohort(request,id):
     current_user = request.user
     current_user.userprofile.group = None
     request.user.userprofile.save()
-
     return redirect("index")
+
 
 
 #-----------------------------------------------------------------------------------------

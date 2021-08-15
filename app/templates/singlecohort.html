@@ -46,8 +46,7 @@
     </div>
 </div>
 <div>
-    <a href="{% url 'leavecohort' group.id %}" class="btn btn-success btn-sm">Leave Cohort</a>
-</div>
+    <a href="{%url 'leavecohort' group.id %}"><button class="btn-outline-success"  onclick="M.toast({html: 'You have Successfully Left The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})"id="join">Leave Group</button></a>
 </div>
 <br>
 <div class="col-md-12">

@@ -204,8 +204,14 @@
                             <p><i>Admin: {{group.admin}}</i></p>
                             {%endif%}
                             {% if group.is_private == False%}
-                            <a href="{%url 'joincohort' group.id %}"><button class="btn-outline-success">Join Group</button></a>
+                            {% if request.user.userprofile.group == group %}
+                            <a href="{%url 'leavecohort' group.id %}"><button class="btn-outline-success"  onclick="M.toast({html: 'You have Successfully Left The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Leave Group</button></a>
+                                  
+                                {%else%}
+                            <a href="{%url 'joincohort' group.id %}"><button class="btn-outline-success"id="join"  onclick="M.toast({html: 'You have Successfully Joined The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Join Group</button></a>
                             {%endif%}
+                            {%endif%}
+
                         </div>
                     </div>
                 </div>
@@ -213,9 +219,32 @@
                 {%else%}
                 <h4 class="bold">No groups have been Created Yet</h4>
                 {%endif%}
-
+ 
             </div>
         </div>
     </div>
 </body>
+<!-- <script>
+    $('#leave').on('click',function(){
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        toastr['info']("You,ve Successfully left the group","success")
+    })
+</script> -->
+
 {% endblock %}
