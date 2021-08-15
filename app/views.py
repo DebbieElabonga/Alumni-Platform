@@ -41,6 +41,9 @@ from app.models import Group, Idea, Stories, Tech, UserProfile
 from django.contrib.auth.decorators import login_required
 from itertools import chain
 
+# global varianle- message to display for none general admins
+gen_warning_message = 'Access denied. You are not an Admin. Update your Profile and try again '
+
 # Create your views here.
 def index(request):
     public_groups = Group.objects.filter(is_private = False)
@@ -154,6 +157,10 @@ def profile(request):
         #user projects]
         projects = Idea.objects.filter(owner = user_profile, is_open = True)
         closed_projects = Idea.objects.filter(owner = user_profile, is_open = False)
+        try:
+            general_admin = GeneralAdmin.objects.get(profile = UserProfile.objects.filter(user = request.user).last())
+        except GeneralAdmin.DoesNotExist:
+            general_admin = None
 
         #user collaborations
         collaborations = Idea.objects.filter(collaborators__id = user_profile.id)
@@ -162,6 +169,7 @@ def profile(request):
         requests = UserProfile.objects.filter(interests__in = [project.id for project in projects ]).distinct()
       
         context = { 
+            'general_admin':general_admin,
             'requests':requests,
             'closed_projects':closed_projects,
             'collaborations':collaborations,
@@ -406,7 +414,7 @@ def reply(request, id):
     discussion.user = current_user
             
 @login_required(login_url= 'login')        
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
+@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)            
 def charge(request):
     
     if request.method == 'POST':
@@ -437,7 +445,7 @@ def successMsg(request, args):
     return render(request, 'new_discussion.html', {"form": form})
 
 @login_required(login_url= 'login')  
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
+@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)  
 def Fundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
@@ -456,7 +464,7 @@ def Fundraiser(request):
 #views to summary on the admin dashboard
 
 @login_required(login_url= 'login')  
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
+@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)
 def summary(request):
     '''
     renders summary on admin dashboard
@@ -502,7 +510,7 @@ def summary(request):
 #view function that renders to invite members page
 
 @login_required(login_url= 'login')  
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
+@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)
 def invite_members(request):
     '''
     renders invite member form

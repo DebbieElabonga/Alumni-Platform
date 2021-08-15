@@ -25,11 +25,16 @@
                         {%endif%}
                         <!--profile form modal triger button-->
                         {% if user_profile %}
-                        <button class="btn btn-outline-success" data-toggle="modal" data-target="#update_profile">Update
+                        <button class="btn btn-success" data-toggle="modal" data-target="#update_profile">Update
                             Profile</button>
                         {%else%}
-                        <button class="btn btn-outline-success" data-toggle="modal" data-target="#user_profile">Add
+                        <button class="btn btn-success" data-toggle="modal" data-target="#user_profile">Add
                             Profile</button>
+                        {%endif%}
+
+                        <!--Admin dashboard button-->
+                        {% if general_admin %}
+                        <a href="{% url 'admin_dashboard' %}"><button class="btn btn-primary">Admin Dashboard</button></a>
                         {%endif%}
                     </div>
 
@@ -115,6 +120,13 @@
         </div>
     </div>
     <div class="col-md-8">
+        {% if messages %}
+        <div class="alert">
+            {% for message in messages%}
+            <h3>{{message}}</h3>
+        </div>
+        {%endfor%}
+        {%endif%}
         <div class="card mb-3 contact_container">
             <div class="card-body">
                 <div class="row">
@@ -210,8 +222,8 @@
                                     </div>
                                     <div class="card-footer col-md-12 d-flex flex-row flex-wrap">
                                         <h5>{{project.date_created|date}}</h5>
-                                        <h5>{{project.collaborators.count}}</h5>
-                                        <h5>Status {% if project.is_open %} Open {%else%} Closed {%endif%}</h5>
+                                        <h5>{{project.collaborators.count}}</h5>___<br>
+                                        <h5 class="bold">Status {% if project.is_open %} Open {%else%} Closed {%endif%}</h5>
                                     </div>
                                 </div>
                                 {% endfor %}
