@@ -4,9 +4,10 @@
 {% load static %}
 
 {% block content %}
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/donation.css' %}" />
 <a href="{% url 'index'%}">
-	<button type="button" class="btn btn-outline-warning">Back to hompage</button>
+	<button type="button" class="btn btn-outline-warning" style="color: white; border-radius: 5px;">Back to homepage</button>
 </a>
 <style type="text/css">
 	/**
@@ -99,7 +100,7 @@
 				<div style="clear:left"></div>
 				<hr>
 
-				<input class="myButton" style="background-color:#10a195" type="submit" value="Submit Payment" name="">
+				<input class="myButton" style="color:rgb(44, 59, 26); background-color: rgb(255, 245, 226); width:200px ;" type="submit" value="Submit Payment" name="">
 
 			</form>
 

@@ -6,23 +6,36 @@
 
 
 
-<div class="container-fluid" style='background-color: blanchedalmond;'>
-    <div class="row">
-        
-      {% for fundraiser in all_fundraisers %}
-        <div class="card m-4" style="width: 28rem;color: white;">
-          <img class="card-img-top" src="{{fundraiser.image_path.url}}" alt="Card image cap" height="200px">
-          <div class="card-body" style='background-color:  rgb(96, 108, 56);' >
-            <h5 class="card-title" style="font-family: 'Sail', cursive;
-            font-family: 'Vast Shadow', cursive;"><b>Fundraiser Title :</b>{{fundraiser.title}}</h5>
-            
-            <br>
+<div class="container-fluid" style='background-color: white; padding: 10px;'>
+  {% if all_fundraisers %}
+  <div class="d-flex flex-row align-items-center justify-content-center">
+    <h5 class="text-center bold mr-5" style="text-decoration: underline;">Open Fundraiser Events</h5>
+    {% if general_admin %}
+    <a href="{% url 'fundraiser' %}"><button class="ml-auto">Start Fundraiser</button></a>
+    {%endif%}
+  </div>
+  <div class="row" style="display: flex; align-items: center; justify-content: space-evenly;">
 
-              <a class="btn btn-success" href="{%url 'singlefundraiser' fundraiser.id%}">View Fundraiser Details</a>
-                      
-          </div>
-        </div>
-      {%endfor%}
+    {% for fundraiser in all_fundraisers %}
+    <div class="card" style="width: 28rem;color: white; height: 50vh;">
+      <img class="card-img-top" src="{{fundraiser.image_path.url}}" alt="Card image cap" style="height: 50%;">
+      <div class="card-body" style='background-color:  rgb(96, 108, 56); height: 20vh;' >
+        <h5 class="card-title" style="font-family: 'Sail', cursive;
+            font-family: 'Vast Shadow', cursive;"><b>Fundraiser Title :</b>{{fundraiser.title}}</h5>
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-center">
+        <a href="{%url 'singlefundraiser' fundraiser.id%}">
+          <button> View Fundraiser Details</button>
+        </a>
+
+      </div>
     </div>
+    {%endfor%}
+    {%else%}
+    <h5 class="text-center" style="background-color: white; padding: 20px; border-radius: 5px; border: 1px soid grey;">
+      No Fundraiser events are available at the moment</h5>
+    {%endif%}
+  </div>
+
 </div>
 {%endblock%}
