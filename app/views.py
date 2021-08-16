@@ -500,6 +500,7 @@ def newfundraiser(request):
             fundraise.creator = UserProfile.objects.filter(user=current_user).last()
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
+            return redirect("index")
 
             messages.success(request, 'Fundraiser event has been created successfully')
             return redirect('admin_dashboard')
@@ -577,7 +578,7 @@ def invite_members(request):
         
         send_invite(email, domain , uid, token)
 
-        messages.success(request,'Congratulations! You have succesfully Invited New users!')
+        messages.success(request,'Congratulations! You have succesfully Invited A New User!')
         return redirect('invite_members')
     title = 'Invite Members'
     if 'single_invite' in request.POST and request.method == "POST":
