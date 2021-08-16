@@ -38,7 +38,7 @@ class IdeaCreationForm(forms.ModelForm):
     model = Idea
     fields = ('title', 'description','validity', 'image1_path', 'image2_path')
     widgets = {
-      'validity':(DatePickerInput(attrs={'placeholder':'YYYY-MM-DD'})),
+      'validity':(DatePickerInput(attrs={'placeholder':'YYYY-MM-DD', 'input_format' : '%Y-%m-%d'})),
       'title':forms.TextInput(attrs={'placeholder':'what idea do you need help...'}),
       'description':forms.Textarea(attrs={'placeholder':'Explain your idea to get more collaborators...'})
     }

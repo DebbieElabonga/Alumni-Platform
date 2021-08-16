@@ -324,7 +324,7 @@ def meet_collegues(request):
         return render(request, 'meetcollegues.html', context)
 
     else:
-        messages.warning(request, 'Invalid Form')
+        messages.warning(request, 'Invalid Form. Ensure your date format is "YYYY-MM-DD" and try again')
         return redirect('meet_collegues')
 
   context = {
