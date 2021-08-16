@@ -19,7 +19,8 @@
                 });
               </script>
             {% bootstrap_form form%}
-            <input type="submit" class="btn btn-success btn-lg btn-center" value="Submit"><br><br>
+            <input type="submit" class="btn btn-success btn-lg btn-center" value="Submit" onclick="M.toast({html: 'Fundraiser created Successfully',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})"><br><br>
+
         </form>
     </div>
     <br>

@@ -496,6 +496,7 @@ def newfundraiser(request):
             fundraise.creator = UserProfile.objects.filter(user=current_user).last()
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
+            return redirect("index")
 
 
     else:
@@ -504,7 +505,6 @@ def newfundraiser(request):
 #views to summary on the admin dashboard
 
 @login_required(login_url= 'login')  
-@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)
 # @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def summary(request):
     '''
