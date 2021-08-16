@@ -1,3 +1,4 @@
+from django.core.files.base import ContentFile, File
 from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
 from app.models import GeneralAdmin, Group, UploadInvite, UserProfile, Stories, Idea, Tech, User
@@ -16,31 +17,50 @@ from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 import datetime as dt
-from django.http import HttpResponseRedirect
-from django.contrib.sites.shortcuts import get_current_site
-from .email import collaborate_new, send_invite
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from .utils import generate_token
-from django.utils.encoding import force_bytes, force_text
-from django.views import View
 import mimetypes
 import os
-from django.http.response import HttpResponse
-import pandas as pd
-from csv import DictReader
 import random
-from alumni.decorators import general_admin_required
 import threading
-from django.http import HttpResponseRedirect,request,JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
-                       SignupForm, TechNewsForm, UserProfileForm)
-from app.models import Group, Idea, Stories, Tech, UserProfile
+from csv import DictReader
+from email.message import EmailMessage
+
+import stripe
+from alumni.decorators import general_admin_required
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from itertools import chain
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.files.base import File
+from django.http import (HttpResponse, HttpResponseRedirect, JsonResponse,
+                         request)
+from django.http.response import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.views import View
+
+from app.forms import (CohortForm, CreateStoryForm, DiscussionForm,
+                       FundraiserForm, IdeaCreationForm, InviteUsers,
+                       ResponseForm, SignupForm, TechNewsForm, UserProfileForm)
+from app.models import (Fundraiser, GeneralAdmin, Group, Idea, Message,
+                        Response, Stories, Tech, UploadInvite, User,
+                        UserProfile)
+
+from .email import collaborate_new, send_invite
+from .forms import (Add_userForm, CohortForm, CreateStoryForm, DiscussionForm,
+                    FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
+                    UserProfileForm,UserCohortForm)
+from .models import Group, Idea, Stories, Tech, UserProfile, Fundraiser
+from .utils import generate_token
+
 
 # Create your views here.
 def index(request):
-    groups = Group.objects.all()
+    public_groups = Group.objects.filter(is_private = False)
     stories = Stories.objects.all().order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     current_user = request.user
@@ -58,7 +78,8 @@ def index(request):
 
         context = {
         'logged_user':current_user,
-        'groups':groups,'stories':stories,
+        'public_groups':public_groups,
+        'stories':stories,
         'tech':tech
         }
         return render(request,'index.html',context )
@@ -75,7 +96,7 @@ def index(request):
 
         context = {
         'logged_user':current_user,
-        'groups':groups,
+        'public_groups':public_groups,
         'stories':stories,
         'tech':tech
         }
@@ -85,7 +106,7 @@ def index(request):
 
     context = {
         'logged_user':current_user,
-        'groups':groups,'stories':stories,
+        'public_groups':public_groups,'stories':stories,
         'tech':tech
         }
     return render(request,'index.html',context )
@@ -107,14 +128,66 @@ def index(request):
 
 
 def profile(request):
-    if request.method == 'POST':
-        profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+    if request.method == 'POST' and 'add_profile' in request.POST:
+        profile_form = UserProfileForm(request.POST, request.FILES)
         if  profile_form.is_valid():
-            profile_form.save()
-            return redirect('index')
+            new_profile = profile_form.save(commit = False)
+            new_profile.user = request.user
+            new_profile.save()
+            profile_form = UserProfileForm
+
+            user_profile = UserProfile.objects.filter(user = request.user).last()
+            context = {
+                'profile_form':profile_form,
+                'user_profile':user_profile,
+            }
+
+            return render(request, 'user_profile.html',context)
+    if request.method == 'POST' and 'update_profile' in request.POST:
+        profile_form = UserProfileForm(request.POST, request.FILES)
+        if  profile_form.is_valid():
+
+            to_update = UserProfile.objects.filter(user = request.user)
+            
+            to_update.update(bio = request.POST.get('bio'))        
+
+            profile_form = UserProfileForm
+
+            user_profile = UserProfile.objects.filter(user = request.user).last()
+            context = {
+                'profile_form':profile_form,
+                'user_profile':user_profile,
+            }
+
+            return redirect( 'user_profile')
     else:
-        profile_form = UserProfileForm(instance=request.user)
+        user_profile = UserProfile.objects.filter(user = request.user).last()
+
+        # user posts
+        posts1 = Stories.objects.filter(creator = request.user)
+        posts2 = Tech.objects.filter(creator = request.user)
+        posts = posts1.union(posts2)
+
+        #user projects]
+        projects = Idea.objects.filter(owner = user_profile, is_open = True)
+        closed_projects = Idea.objects.filter(owner = user_profile, is_open = False)
+
+        #user collaborations
+        collaborations = Idea.objects.filter(collaborators__id = user_profile.id)
+        profile_form = UserProfileForm
+
+
+        ideas_with_requests = Idea.objects.filter(owner = user_profile, is_open = True, interests = True)
+
+        
+
         context = { 
+            'requests':ideas_with_requests,
+            'closed_projects':closed_projects,
+            'collaborations':collaborations,
+            'projects':projects,
+            'posts':posts,
+            'user_profile':user_profile,
             "profile_form": profile_form
             }
     return render(request, 'user_profile.html',context)
@@ -139,6 +212,25 @@ def cohort(request):
     else:
         form = CohortForm()
     return render(request, 'cohort.html', {'title':title,'form': form})
+
+def user_cohort(request):
+    title = "Cohorts"
+    if request.method == 'POST':
+        
+        form = UserCohortForm(request.POST, request.FILES)
+        if form.is_valid():
+            group = form.save(commit=False)
+            group.creator = request.user
+            group.date_created = dt.datetime.now()
+            group.save()
+            group.creator.userprofile.group = group
+            group.save()
+            return redirect('index')
+        else:
+            return render(request, 'user_cohort.html', {'title':title,'form': form})
+    else:
+        form = UserCohortForm()
+    return render(request, 'user_cohort.html', {'title':title,'form': form})
 
 @login_required(login_url= 'login')  
 def joincohort(request,id):
@@ -182,6 +274,7 @@ def meet_collegues(request):
             new_idea.owner = UserProfile.objects.filter(user = request.user).last()
             new_idea.save()
             form = IdeaCreationForm
+            messages.success(request, 'Your Idea has been posted successfully')
         else:
             messages.warning(request, 'You need to update your profile to proceed')
             return redirect('user_profile')
@@ -303,10 +396,10 @@ def cohortdiscussions(request, id):
 # STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 
           
-def donation(request):
+""" ef donation(request):
 
 
-    return render(request, 'singlecohort.html', {'messages':messages,})
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members}) """
     
 
 def reply(request, id):
@@ -364,14 +457,14 @@ def successMsg(request, args):
 
 @login_required(login_url= 'login')  
 @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
-def Fundraiser(request):
+def newfundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
     if request.method == 'POST':
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.user = current_user
+            fundraise.creator = UserProfile.objects.filter(user=current_user).last()
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
@@ -639,6 +732,18 @@ class EmailThread(threading.Thread):
 
     def run(self):
         self.email_message.send()
+
+def project_fundraisers(request):
+    all_fundraisers=Fundraiser.getfundraisers()
+    context = {
+        'all_fundraisers': all_fundraisers
+        }
+
+    return render(request, 'fundraisers.html',context) 
+def single_fundraiser(request, id):
+    fundraiser = Fundraiser.objects.get(id=id)
+    return render(request, 'single_fundraiser.html', {'fundraiser':fundraiser})
+
 
 
   

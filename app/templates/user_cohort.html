@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content%}
+
+    <div class="row-m-5">
+        <div class="col-md-12"></div>
+        <div class="col-md-10 rgba-stylish-strong  p-4">
+            <h3>NEW COHORT
+            </h3>
+            <form  action="" method="post" enctype="multipart/form-data" novalidate style="margin-left: 200px;">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button class="btn btn-primary btn-sm" onclick="M.toast({html: 'You have Successfully Joined The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Add new Cohort</button>
+            </form><br>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+{% endblock %}
