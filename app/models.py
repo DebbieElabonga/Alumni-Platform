@@ -54,6 +54,7 @@ class UserProfile(models.Model):
   def save_user(sender, instance, created, **kwargs):
     if created:
       UserProfile.objects.create(user=instance)
+
 #General Admin Model
 class GeneralAdmin(models.Model):
   profile = models.ForeignKey(UserProfile, on_delete = CASCADE)
@@ -67,6 +68,7 @@ class GeneralAdmin(models.Model):
     except cls.DoesNotExist:
       admins = None
     return admins
+    
 #Group/Cohort Model
 #message/discussion Model
 class Message(models.Model):
