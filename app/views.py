@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.core.files.base import ContentFile, File
 from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
@@ -17,8 +16,6 @@ import stripe
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
-=======
->>>>>>> 1a843426374d2dd1aec6b9cee3102d3841c3f062
 import datetime as dt
 import mimetypes
 import os
