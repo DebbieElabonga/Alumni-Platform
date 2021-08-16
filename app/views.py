@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.core.files.base import ContentFile, File
 from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
 from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
@@ -11,14 +10,13 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from .forms import DiscussionForm, FundraiserForm, TechNewsForm
 from django.conf import settings
+from django.core import serializers
 
 
 import stripe
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
-=======
->>>>>>> dev
 import datetime as dt
 import mimetypes
 import os
@@ -60,6 +58,9 @@ from .forms import (Add_userForm, CohortForm, CreateStoryForm, DiscussionForm,
 from .models import Group, Idea, Stories, Tech, UserProfile, Fundraiser
 from .utils import generate_token
 
+
+# global varianle- message to display for none general admins
+gen_warning_message = 'Access denied. You are not an Admin. Update your Profile and try again '
 
 # Create your views here.
 def index(request):
@@ -163,29 +164,41 @@ def profile(request):
             }
 
             return redirect( 'user_profile')
+    #approve or decline requests a specific user has made on different projects
+    
+    if request.method == 'POST' and 'view_requests' in request.POST:
+        userprof = request.POST.get('user_prof_id')
+        req_ideas = Idea.objects.filter(collaborators__in = userprof)
+        
+        context = {
+            'req_ideas':req_ideas
+        }
+        return redirect('user_profile')
     else:
         user_profile = UserProfile.objects.filter(user = request.user).last()
 
         # user posts
         posts1 = Stories.objects.filter(creator = request.user)
         posts2 = Tech.objects.filter(creator = request.user)
-        posts = posts1.union(posts2)
+        posts = (posts1.union(posts2)).order_by('-date_created')
 
         #user projects]
         projects = Idea.objects.filter(owner = user_profile, is_open = True)
         closed_projects = Idea.objects.filter(owner = user_profile, is_open = False)
+        try:
+            general_admin = GeneralAdmin.objects.get(profile = UserProfile.objects.filter(user = request.user).last())
+        except GeneralAdmin.DoesNotExist:
+            general_admin = None
 
         #user collaborations
         collaborations = Idea.objects.filter(collaborators__id = user_profile.id)
         profile_form = UserProfileForm
 
-
-        ideas_with_requests = Idea.objects.filter(owner = user_profile, is_open = True, interests = True)
-
-        
-
+        requests = UserProfile.objects.filter(interests__in = [project.id for project in projects ]).distinct()
+      
         context = { 
-            'requests':ideas_with_requests,
+            'general_admin':general_admin,
+            'requests':requests,
             'closed_projects':closed_projects,
             'collaborations':collaborations,
             'projects':projects,
@@ -195,6 +208,20 @@ def profile(request):
             }
     return render(request, 'user_profile.html',context)
 
+#function for closing projects, added here for re-using
+def close_project(request):
+    if request.is_ajax and request.method.POST and 'close_proj' in request.POST:
+        project_id = request.POST.get('project_id')
+        project = Idea.objects.filter(id = project_id)
+        if project:
+            project.update(is_open = False)
+            ser_instance = serializers.serialize('json', [project, ])
+            return JsonResponse({'instance':ser_instance}, status = 200)
+        else:
+            return JsonResponse({'errors': 'Project not Found'}, status = 400)
+        
+    return JsonResponse({'error':'Invalid Action'}, status = 400)
+        
 def cohort(request):
     title = "Cohorts"
     if request.method == 'POST':
@@ -429,7 +456,7 @@ def reply(request, id):
     discussion.user = current_user
             
 @login_required(login_url= 'login')        
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
+@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)            
 def charge(request):
     
     if request.method == 'POST':
@@ -479,7 +506,7 @@ def newfundraiser(request):
 #views to summary on the admin dashboard
 
 @login_required(login_url= 'login')  
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
+@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)
 def summary(request):
     '''
     renders summary on admin dashboard
@@ -525,7 +552,7 @@ def summary(request):
 #view function that renders to invite members page
 
 @login_required(login_url= 'login')  
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
+@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)
 def invite_members(request):
     '''
     renders invite member form
