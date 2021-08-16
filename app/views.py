@@ -130,7 +130,7 @@ def index(request):
 #         form = SignupForm()
 #     return render(request, 'registration/registration_form.html', {'form': form})
 
-
+@login_required(login_url= 'login')        
 def profile(request):
     if request.method == 'POST' and 'add_profile' in request.POST:
         profile_form = UserProfileForm(request.POST, request.FILES)
@@ -209,6 +209,7 @@ def profile(request):
     return render(request, 'user_profile.html',context)
 
 #function for closing projects, added here for re-using
+@login_required(login_url= 'login')                   
 def close_project(request):
     if request.is_ajax and request.method.POST and 'close_proj' in request.POST:
         project_id = request.POST.get('project_id')
@@ -221,7 +222,8 @@ def close_project(request):
             return JsonResponse({'errors': 'Project not Found'}, status = 400)
         
     return JsonResponse({'error':'Invalid Action'}, status = 400)
-        
+
+@login_required(login_url= 'login')                     
 def cohort(request):
     title = "Cohorts"
     if request.method == 'POST':
@@ -243,6 +245,7 @@ def cohort(request):
         form = CohortForm()
     return render(request, 'cohort.html', {'title':title,'form': form})
 
+@login_required(login_url= 'login')                  
 def user_cohort(request):
     title = "Cohorts"
     if request.method == 'POST':
@@ -333,6 +336,7 @@ def meet_collegues(request):
   return render(request, 'meetcollegues.html', context)
 
 #view function that renders to single idea page
+@login_required(login_url= 'login')                  
 def single_idea(request, id):
     '''
     Renders a found idea object
@@ -429,7 +433,7 @@ STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 def donation(request):
     return render(request, 'donation.html')
     
-
+@login_required(login_url= 'login')                   
 def reply(request, id):
     user = request.user
     message = get_object_or_404(Message, pk=id)
@@ -484,7 +488,8 @@ def successMsg(request, args):
     # form = DiscussionForm()
     # return render(request, 'new_discussion.html', {"form": form})
 
-@login_required(login_url= 'login')  
+@login_required(login_url= 'login')        
+@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)            
 # @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
 def newfundraiser(request):
     title = 'Start A Fundraiser'
@@ -497,6 +502,9 @@ def newfundraiser(request):
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
+            messages.success(request, 'Fundraiser event has been created successfully')
+            return redirect('admin_dashboard')
+
 
     else:
         form = FundraiserForm()
@@ -504,11 +512,8 @@ def newfundraiser(request):
 #views to summary on the admin dashboard
 
 @login_required(login_url= 'login')  
-<<<<<<< HEAD
 @general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)
-=======
 # @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
->>>>>>> dev
 def summary(request):
     '''
     renders summary on admin dashboard
@@ -639,6 +644,7 @@ class InviteUserView(View):
         return render(request, 'edit_details.html', context)
 #--------------------------------------------------------------------------------------------
 #function enabling dowloading of user csv file
+@login_required(login_url= 'login')                 
 def download_csv(request):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     filename = 'Invite_users.csv'
@@ -655,6 +661,7 @@ def download_csv(request):
     return render(request, 'admin_dash/dashboard.html', context)
 
 # view function that edits a users details when they accept initation.
+@login_required(login_url= 'login')                  
 def edit_details(request):
     '''
     renders to edit page
@@ -766,13 +773,23 @@ class EmailThread(threading.Thread):
     def run(self):
         self.email_message.send()
 
+@login_required(login_url= 'login')                  
 def project_fundraisers(request):
     all_fundraisers=Fundraiser.getfundraisers()
+
+    try:
+        general_admin = GeneralAdmin.objects.get(profile = UserProfile.objects.filter(user = request.user).last())
+    except GeneralAdmin.DoesNotExist:
+        general_admin = None
+
     context = {
+        'general_admin':general_admin,
         'all_fundraisers': all_fundraisers
         }
 
     return render(request, 'fundraisers.html',context) 
+
+@login_required(login_url= 'login')              
 def single_fundraiser(request, id):
     fundraiser = Fundraiser.objects.get(id=id)
     return render(request, 'single_fundraiser.html', {'fundraiser':fundraiser})
