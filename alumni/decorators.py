@@ -43,9 +43,9 @@ def user_passes_test(test_func, login_url = None, redirect_field_name = REDIRECT
   return decorator
 
 
-def is_general_admin(user):
+def is_general_admin(userP):
     try:
-        GeneralAdmin.objects.get(profile = UserProfile.objects.get(user = user))
+        GeneralAdmin.objects.get(profile = UserProfile.objects.filter(user = userP).last().id)
         is_general = True
     except GeneralAdmin.DoesNotExist:
         is_general = False

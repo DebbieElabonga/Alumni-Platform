@@ -71,6 +71,7 @@ urlpatterns=[
   url(r'^userfundraiser/$',views.project_fundraisers,name='fundraisers'),
   path('singlefundraiser/<id>', views.single_fundraiser, name='singlefundraiser'),
 
+  path('post/ajax/close_project', views.close_project, name='close_project'),
   
 ]
 if settings.DEBUG:
