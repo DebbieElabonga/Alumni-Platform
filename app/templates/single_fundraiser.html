@@ -3,37 +3,26 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Singlehood</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
 
 <div class="container p-4">
-    <p style="font-size: 18px;">We are requesting for your support towards the <b>{{fundraiser.title}} fundraiser</b>, kindly assist where you can</p>
+  <p style="font-size: 18px;">We are requesting for your support towards the <b>{{fundraiser.title}} fundraiser</b>,
+    kindly assist where you can</p>
   <div class="row">
     <div class="col-md-6">
-        <img src="{{fundraiser.image_path.url}}" class="card-img-top" alt="{{fundraiser.title }}" height="100%" width="100%">
+      <img src="{{fundraiser.image_path.url}}" class="card-img-top" alt="{{fundraiser.title }}" height="100%"
+        width="100%">
     </div>
     <div class="col-md-6" style='background-color:  rgb(96, 108, 56);color: white;font-size: 18px;'>
-        <h5 class="card-title" style="font-family: 'Sail', cursive;
+      <h5 class="card-title" style="font-family: 'Sail', cursive;
             font-family: 'Vast Shadow', cursive;"><b>Fundraiser Title :</b>{{fundraiser.title}}</h5>
-            <p class="card-text"><b> Fundraiser Decription :</b><br>{{fundraiser.description}}</p>
-            <p class="card-text"><b> Fundraiser Date :</b><br>{{fundraiser.event_date}}</p>
-            <p class="card-text"><b> Fundraiser was published on :</b><br>{{fundraiser.date_created}}</p>
-    
-            <a class="btn btn-warning" href="{%url 'donation' %}">Donate</a>
-            
+      <p class="card-text"><b> Fundraiser Decription :</b><br>{{fundraiser.description}}</p>
+      <p class="card-text"><b> Fundraiser Date :</b><br>{{fundraiser.event_date}}</p>
+      <p class="card-text"><b> Fundraiser was published on :</b><br>{{fundraiser.date_created}}</p>
+
+      <a class="btn btn-warning" href="{%url 'donation' %}">Donate</a>
+
     </div>
   </div>
 </div>
 
-</body>
-</html>
 {%endblock%}
