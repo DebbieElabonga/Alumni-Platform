@@ -11,7 +11,7 @@
   <div class="d-flex flex-row align-items-center justify-content-center">
     <h5 class="text-center bold mr-5" style="text-decoration: underline;">Open Fundraiser Events</h5>
     {% if general_admin %}
-    <a href="{% url 'fundraiser' %}"><button class="btn btn-success ml-auto">Start Fundraiser</button></a>
+    <a href="{% url 'fundraiser' %}"><button class="ml-auto">Start Fundraiser</button></a>
     {%endif%}
   </div>
   <div class="row" style="display: flex; align-items: center; justify-content: space-evenly;">
@@ -24,7 +24,9 @@
             font-family: 'Vast Shadow', cursive;"><b>Fundraiser Title :</b>{{fundraiser.title}}</h5>
       </div>
       <div class="card-footer d-flex align-items-center justify-content-center">
-        <a class="btn btn-success" href="{%url 'singlefundraiser' fundraiser.id%}">View Fundraiser Details</a>
+        <a href="{%url 'singlefundraiser' fundraiser.id%}">
+          <button> View Fundraiser Details</button>
+        </a>
 
       </div>
     </div>

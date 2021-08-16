@@ -19,8 +19,8 @@
                                 common ideas. </p>
                             <a href="#cohorts">
                         
-                                <button class="btn-outline-warning">View Forums</button>
-                                <a href="{% url 'user-cohort' %}"><button class="btn-outline-warning">Create Forum</button></a>
+                                <button class="">View Forums</button>
+                                <a href="{% url 'user-cohort' %}"><button class="">Create Forum</button></a>
                     
 
                             </a>
@@ -44,7 +44,7 @@
                             <p class="card-text">Propose and idea and let other join in. Build great products wth great
                                 people</p>
                             <a href="{% url 'meet_collegues'%}">
-                                <button class="btn-warning">Meet colleagues</button>
+                                <button class="">Meet colleagues</button>
                             </a>
                         </div>
                         <p class="card-body">
@@ -217,7 +217,7 @@
                                 {% if request.user.userprofile.group == group %}
                             <a href="{%url 'leavecohort' group.id %}"><button class="btn-outline-success"  onclick="M.toast({html: 'You have Successfully Left The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Leave Group</button></a>
                             {%else%}
-                            <a href="{%url 'joincohort' group.id %}"><button class="btn-outline-success"id="join"  onclick="M.toast({html: 'You have Successfully Joined The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Join Group</button></a>
+                            <a href="{%url 'joincohort' group.id %}"><button class=""id="join"  onclick="M.toast({html: 'You have Successfully Joined The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Join Group</button></a>
                                 {%endif%}
                                 {%endif%}
                             </div>
