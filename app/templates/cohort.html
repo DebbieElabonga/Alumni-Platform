@@ -12,7 +12,7 @@
             <form  action="" method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 {% bootstrap_form form %}
-                <button class="btn btn-primary btn-sm" onclick="M.toast({html: 'Cohort created successfully',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Add new Cohort</button>
+                <button class="btn btn-success btn-sm" onclick="M.toast({html: 'Cohort created successfully',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Add new Cohort</button>
 
             </form><br>
         </div>
