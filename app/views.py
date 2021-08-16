@@ -496,6 +496,7 @@ def newfundraiser(request):
             fundraise.creator = UserProfile.objects.filter(user=current_user).last()
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
+            return redirect("index")
 
 
     else:
