@@ -1,6 +1,10 @@
 $(document).ready(function () {
   $('button#jstest').click(function (event) {
     event.preventDefault()
+    /*Reset all forms after submission */
+  $('form').submit(function(){
+    $('form').trigger('reset')
+  })
 
   })
   $('#kiko').hide()

@@ -146,6 +146,16 @@ def profile(request):
             }
 
             return redirect( 'user_profile')
+    #approve or decline requests a specific user has made on different projects
+    
+    if request.method == 'POST' and 'view_requests' in request.POST:
+        userprof = request.POST.get('user_prof_id')
+        req_ideas = Idea.objects.filter(collaborators__in = userprof)
+        
+        context = {
+            'req_ideas':req_ideas
+        }
+        return redirect('user_profile')
     else:
         user_profile = UserProfile.objects.filter(user = request.user).last()
 
@@ -181,7 +191,7 @@ def profile(request):
     return render(request, 'user_profile.html',context)
 
 #function for closing projects, added here for re-using
-def close_project():
+def close_project(request):
     if request.is_ajax and request.method.POST and 'close_proj' in request.POST:
         project_id = request.POST.get('project_id')
         project = Idea.objects.filter(id = project_id)
@@ -194,11 +204,6 @@ def close_project():
         
     return JsonResponse({'error':'Invalid Action'}, status = 400)
         
-
-        
-
-
-
 def cohort(request):
     title = "Cohorts"
     if request.method == 'POST':

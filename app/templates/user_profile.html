@@ -289,7 +289,7 @@
                                             <h6 class="bold m-2">Collaborators {{project.collaborators.count}}</h6>|<br>
                                             <h6 class="bold m-2">Interests {{project.interests.count}}</h6>|<br>
                                             <h6 class="bold m-2">Open until {{project.validity|date}}</h6><br>
-                                            <form id="close_project_form" method="post">
+                                            <form id="close_project_form" method="post" class="ml-auto">
                                                 {%csrf_token%}
                                                 <input type="hidden" name="project_id" value="{{project.id}}">
                                                 <button id="close_proj" type="submit" name='close_proj'
@@ -327,13 +327,13 @@
                                                 {%endif%}
                                             </div>
                                             <div class="bold">
-                                                <form action="" method="post">
+                                                <form action="{% url 'user_profile' %}" method="POST" id="view_request_form">
                                                     {%csrf_token%}
                                                     <input type="hidden" name="user_prof_id" value="{{requester.id}}">
                                                     <!--Find a userprofile idea interests and make them collaborators///trigger button-->
-                                                    <div data-toggle="modal" data-target="#interests_form">
+                                                    <div>
 
-                                                        <button type="button" name="view_requests">view</button>
+                                                        <button type="button" name="view_requests" data-toggle="modal" data-target="#interests_form">view</button>
                                                     </div>
                                                 </form>
                                             </div>
