@@ -570,7 +570,7 @@ def invite_members(request):
         
         send_invite(email, domain , uid, token)
 
-        messages.success(request,'Congratulations! You have succesfully Invited New users!')
+        messages.success(request,'Congratulations! You have succesfully Invited A New User!')
         return redirect('invite_members')
     title = 'Invite Members'
     if 'single_invite' in request.POST and request.method == "POST":
