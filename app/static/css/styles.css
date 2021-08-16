@@ -311,7 +311,7 @@ a.name{
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  height: 78vh;
+  height: 90vh;
   position: sticky;
   top: 4vh;
 }
