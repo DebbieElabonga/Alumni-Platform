@@ -99,6 +99,8 @@ class InviteUsers(forms.ModelForm):
         model = UploadInvite
         fields = ['file_path']
 
+class DateForm(forms.Form):
+    date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
 class UserCohortForm(forms.ModelForm):
     class Meta:
         model = Group 
