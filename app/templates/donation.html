@@ -1,6 +1,13 @@
 {% extends 'template.html' %}
+{% load bootstrap4 %}
+{% load bootstrap3 %}
 {% load static %}
+
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/donation.css' %}" />
+<a href="{% url 'index'%}">
+	<button type="button" class="btn btn-outline-warning">Back to hompage</button>
+</a>
 	<style type="text/css">
 		/**
 		 * The CSS shown here will not be introduced in the Quickstart guide, but shows

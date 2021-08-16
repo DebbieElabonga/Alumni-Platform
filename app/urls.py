@@ -19,10 +19,6 @@ urlpatterns=[
     path('charge/', views.charge, name="charge"),
     path('success/<str:args>/', views.successMsg, name="success"),
 
-<<<<<<< HEAD
-  
-=======
->>>>>>> 0595ee53bd0e53ff649ce447ad3e2c1c462b5275
   # url(r'fundraiser', views.Fundraiser, name='fundraiser'),   
   url(r'^meet_collegues/$', views.meet_collegues, name = 'meet_collegues'),
 
@@ -56,11 +52,7 @@ urlpatterns=[
   url(r'^user_cohort/$', views.user_cohort, name='user-cohort'),
   path('discussion/<int:id>/', views.Discussion, name='discussion'),
   path('cohort/<int:id>/', views.cohortdiscussions, name = 'cohortdiscussions'),
-<<<<<<< HEAD
-  path('reply/<int:id>/', views.reply, name = 'reply'),  
-=======
   path('reply/<int:id>/', views.reply, name = 'reply'),
->>>>>>> 0595ee53bd0e53ff649ce447ad3e2c1c462b5275
   path("news/",views.TechNews,name="technews"),
   # url(r'^create_user/$',user_views.create_user,name='create_user'),
   path('invitation/<uidb64>/<token>',  views.InviteUserView.as_view(), name='invitation'),

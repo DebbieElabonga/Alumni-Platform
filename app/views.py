@@ -1,60 +1,95 @@
-from app.models import Group, UserProfile, Stories,Idea,Tech, Message, Response
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm,TechNewsForm, ResponseForm
-from django.core.files.base import File
-from app.models import GeneralAdmin, Group, UploadInvite, UserProfile, Stories, Idea, Tech, User
-from app.forms import CohortForm, InviteUsers, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
-from app.models import GeneralAdmin, Group, UserProfile, Stories, Idea, Tech, User
-from app.forms import CohortForm, SignupForm, UserProfileForm,IdeaCreationForm,CreateStoryForm, DiscussionForm, FundraiserForm, TechNewsForm
-from django.shortcuts import render, redirect
-from django.shortcuts import render,redirect
-from django.urls import reverse
-from django.http import JsonResponse, request
-from .forms import DiscussionForm, FundraiserForm, TechNewsForm
-from django.conf import settings
+import datetime as dt
+import mimetypes
+import os
+import random
+import threading
+from csv import DictReader
 from email.message import EmailMessage
 
 import stripe
-from django.shortcuts import render, get_object_or_404,redirect
-from django.contrib.auth import login, authenticate
-from django.contrib import messages
-import datetime as dt
-from django.http import HttpResponseRedirect
-from django.contrib.sites.shortcuts import get_current_site
-from .email import collaborate_new, send_invite
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from .utils import generate_token
-from django.utils.encoding import force_bytes, force_text
-from django.views import View
-import mimetypes
-import os
-from django.http.response import HttpResponse
-import pandas as pd
-from csv import DictReader
-import random
 from alumni.decorators import general_admin_required
-import threading
-from django.http import HttpResponseRedirect,request,JsonResponse
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.files.base import File
+from django.http import (HttpResponse, HttpResponseRedirect, JsonResponse,
+                         request)
+from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from app.forms import (CohortForm, CreateStoryForm, IdeaCreationForm,
-                       SignupForm, TechNewsForm, UserProfileForm)
-from app.models import Group, Idea, Stories, Tech, UserProfile
-
-from .forms import (CohortForm, CreateStoryForm, DiscussionForm,
-                    FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
-                    UserProfileForm,Add_userForm)
-from .models import Group, Idea, Stories, Tech, UserProfile
 from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.views import View
+
+from app.forms import (CohortForm, CreateStoryForm, DiscussionForm,
+                       FundraiserForm, IdeaCreationForm, InviteUsers,
+                       ResponseForm, SignupForm, TechNewsForm, UserProfileForm)
+from app.models import (Fundraiser, GeneralAdmin, Group, Idea, Message,
+                        Response, Stories, Tech, UploadInvite, User,
+                        UserProfile)
+
+from .email import collaborate_new, send_invite
+from .forms import (Add_userForm, CohortForm, CreateStoryForm, DiscussionForm,
+                    FundraiserForm, IdeaCreationForm, SignupForm, TechNewsForm,
+                    UserProfileForm,UserCohortForm)
+from .models import Group, Idea, Stories, Tech, UserProfile, Fundraiser
+from .utils import generate_token
+
 
 # Create your views here.
-
-
-
 def index(request):
     groups = Group.objects.all()
-    stories = Stories.objects.order_by("-id")
+    stories = Stories.objects.all().order_by("-id")
     tech = Tech.objects.all().order_by("-id")
     current_user = request.user
-    return render(request,'index.html', {'logged_user':current_user,'groups':groups,'stories':stories,'tech':tech})
+
+    #create story form
+    if request.method == 'POST' and 'add_story' in request.POST:
+        title = request.POST.get('story_title')
+        desc = request.POST.get('description')
+        image = request.FILES['image']
+        date = dt.datetime.now()
+        creator = request.user
+
+        new_story = Stories(title = title, description = desc, image_path = image, date_created = date, creator = creator)
+        new_story.save()
+
+        context = {
+        'logged_user':current_user,
+        'groups':groups,'stories':stories,
+        'tech':tech
+        }
+        return render(request,'index.html',context )
+    
+    if request.method == 'POST' and 'news_add' in request.POST:
+        title = request.POST.get('news_title')
+        desc = request.POST.get('description')
+        image = request.FILES['image']
+        date = dt.datetime.now()
+        creator = request.user
+
+        new_news = Tech(title = title, description = desc, image_path = image, date_created = date, creator = creator)
+        new_news.save()
+
+        context = {
+        'logged_user':current_user,
+        'groups':groups,
+        'stories':stories,
+        'tech':tech
+        }
+        return render(request,'index.html',context )
+
+        
+
+    context = {
+        'logged_user':current_user,
+        'groups':groups,'stories':stories,
+        'tech':tech
+        }
+    return render(request,'index.html',context )
 
     
 # def signup(request):
@@ -106,7 +141,28 @@ def cohort(request):
         form = CohortForm()
     return render(request, 'cohort.html', {'title':title,'form': form})
 
+def user_cohort(request):
+    title = "Cohorts"
+    if request.method == 'POST':
+        
+        form = UserCohortForm(request.POST, request.FILES)
+        if form.is_valid():
+            group = form.save(commit=False)
+            group.creator = request.user
+            group.date_created = dt.datetime.now()
+            group.save()
+            group.creator.userprofile.group = group
+            group.save()
+            messages.success(request, 'A new Cohort has been created')
+            return redirect('index')
+        else:
+            messages.warning(request, 'Invalid form')
+            return render(request, 'user_cohort.html', {'title':title,'form': form})
+    else:
+        form = UserCohortForm()
+    return render(request, 'user_cohort.html', {'title':title,'form': form})
 
+@login_required(login_url= 'login')  
 def joincohort(request,id):
     current_user = request.user
     cohort = get_object_or_404(Group,pk=id)
@@ -115,6 +171,7 @@ def joincohort(request,id):
     print(current_user.userprofile.group)
     return redirect("cohortdiscussions",id)
 
+@login_required(login_url= 'login')  
 def leavecohort(request,id):
     current_user = request.user
     current_user.userprofile.group = None
@@ -125,6 +182,7 @@ def leavecohort(request,id):
 
 #-----------------------------------------------------------------------------------------
 #view function that renders to meet_collegues template
+@login_required(login_url= 'login')  
 def meet_collegues(request):
   '''
   renders meet_collegues template
@@ -137,25 +195,35 @@ def meet_collegues(request):
   if request.method == 'POST':
     form = IdeaCreationForm(request.POST, request.FILES)
     if form.is_valid():
-      new_idea = form.save(commit=False)
-      new_idea.date_created = dt.datetime.now()
-      new_idea.owner = UserProfile.objects.get(id = 1)#change filter to user = request.user
-      new_idea.save()
+        new_idea = form.save(commit=False)
+        new_idea.date_created = dt.datetime.now()
+        try:
+            curr_user_prof = UserProfile.objects.filter(user = request.user).last()
+        except UserProfile.DoesNotExist:
+            curr_user_prof = None
+        if curr_user_prof:
+            new_idea.owner = UserProfile.objects.filter(user = request.user).last()
+            new_idea.save()
+            form = IdeaCreationForm
+        else:
+            messages.warning(request, 'You need to update your profile to proceed')
+            return redirect('user_profile')
 
-      try:
-        ideas = Idea.objects.all()
-      except Idea.DoesNotExist:
-        ideas = None
 
-      context = {
+        try:
+            ideas = Idea.objects.all()
+        except Idea.DoesNotExist:
+            ideas = None
+
+        context = {
         'form':form,
         'ideas':ideas
         }
-      return render(request, 'meetcollegues.html', context)
+        return render(request, 'meetcollegues.html', context)
 
     else:
-      messages.warning(request, 'Invalid Form')
-      return redirect('meet_collegues')
+        messages.warning(request, 'Invalid Form')
+        return redirect('meet_collegues')
 
   context = {
     'form':form,
@@ -166,31 +234,36 @@ def meet_collegues(request):
 
 #view function that renders to single idea page
 def single_idea(request, id):
-  '''
-  Renders a found idea object
-  '''
-  idea = Idea.objects.get(id = id)
-  if idea.collaborators.id == request.user.id:
-      messages.success(request, 'You are already a collaborator to this project')
-  else:  
+    '''
+    Renders a found idea object
+    '''
+    idea = Idea.objects.get(id = id)
+#-------------------------------------------------------------------------------------------------------------------
+#   if idea.collaborators.userprofile.id == request.user.id:
+#       messages.success(request, 'You are already a collaborator to this project')
+#   else:  
+#add a check if a user is already in the list of collaborators or interests then skip if so
+#------------------------------------------------------------------------------------------------------------------------------------
     if request.method == 'POST':
         skills = request.POST.get('skills')
         new_join = request.user
-        idea.collaborators.add(1) #use user profile query UserProfile.objects.filter(user = new_join).last()
+        idea.interests.add(UserProfile.objects.filter(user = new_join).last())
 
         #send email of a user joining a team
         collaborate_new(new_join, idea, idea.owner.user.email, skills)
+        messages.success(request, 'The owner has been Notified of your Interest. We will inform you once they accept your participation') 
+        return redirect('meet_collegues')
+
     context = {
         'idea':idea
     }
 
-    messages.success(request, 'You are Now a collaborator. The Owner has been Notified')  
-    return redirect('meet_collegues')
+    return render(request, 'singleidea.html', context)
 
 
 
 
-    
+@login_required(login_url= 'login')     
 def create_story(request):
     form = CreateStoryForm()
     if request.method == 'POST':
@@ -204,9 +277,9 @@ def create_story(request):
     else:
         form = CreateStoryForm()
     return render(request,"storyform.html",{"form":form})
-    return render(request, 'index.html')
 
 
+@login_required(login_url= 'login')  
 def TechNews(request):
     form = TechNewsForm()
     if request.method == 'POST':
@@ -221,6 +294,7 @@ def TechNews(request):
     return render(request,'newsform.html',{"form":form})
 
 # Create your views here.
+@login_required(login_url= 'login')  
 def Discussion(request, id):
 # Start a discussion.
 
@@ -239,7 +313,7 @@ def Discussion(request, id):
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form ,'group':group})
-
+@login_required(login_url= 'login')  
 def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
@@ -253,8 +327,6 @@ STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 
           
 def donation(request):
-
-
     return render(request, 'donation.html')
     
 
@@ -280,15 +352,8 @@ def reply(request, id):
 
     discussion.user = current_user
             
-          
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')   
-
-def cohortdiscussions(request, id):
-    group = get_object_or_404(Group, pk=id)
-    messages = Message.objects.filter(group = group)
-    members = UserProfile.objects.filter(group=group)
-    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
-         
+@login_required(login_url= 'login')        
+# @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
 def charge(request):
     
     if request.method == 'POST':
@@ -315,18 +380,19 @@ def successMsg(request, args):
     amount = args
     return render(request, 'success.html', {'amount':amount})
 
-    form = DiscussionForm()
-    return render(request, 'new_discussion.html', {"form": form})
+    # form = DiscussionForm()
+    # return render(request, 'new_discussion.html', {"form": form})
 
+@login_required(login_url= 'login')  
 # @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
-def Fundraiser(request):
+def newfundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
     if request.method == 'POST':
         form = FundraiserForm(request.POST, request.FILES)
         if form.is_valid():
             fundraise = form.save(commit=False)
-            fundraise.user = current_user
+            fundraise.creator = UserProfile.objects.filter(user=current_user).last()
             fundraise.date_created = dt.datetime.now()
             fundraise.save()
 
@@ -335,7 +401,9 @@ def Fundraiser(request):
         form = FundraiserForm()
     return render(request, 'new_fundraiser.html', {'title':title,"form": form})
 #views to summary on the admin dashboard
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
+
+@login_required(login_url= 'login')  
+# @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def summary(request):
     '''
     renders summary on admin dashboard
@@ -379,6 +447,8 @@ def summary(request):
     return render(request, 'admin_dash/dashboard.html', context)
 
 #view function that renders to invite members page
+
+@login_required(login_url= 'login')  
 @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
 def invite_members(request):
     '''
@@ -525,43 +595,43 @@ def edit_details(request):
         return render(request, 'edit_details.html', context)
 
 
-def create_user(request):
-    '''
-    View function to add a new students members into the alumni platform and send them an invitation email
-    '''
-    if request.method == 'POST':
-        form = Add_userForm(request.POST)
-        email = request.POST.get('email')
-        if form.is_valid():
-            user = form.save(commit = False)
-            user.is_active = False
-            user.save()
-            current_site = get_current_site(request)
-            email_subject = 'Invitation to Alumni Community'
-            message = render_to_string('invitation.html',
-                                    {
-                                        'user': user,
-                                        'domain': current_site.domain,
-                                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                                        'token': generate_token.make_token(user)
-                                    }
-                                    )
-            email_message = EmailMessage(
-                email_subject,
-                message,
-                settings.EMAIL_HOST_USER,
-                [email]
-            )
-            EmailThread(email_message).start()
-            messages.add_message(request, messages.SUCCESS,
-                                'invaitation sent  succesfully')
-            return redirect('registration')
+# def create_user(request):
+#     '''
+#     View function to add a new students members into the alumni platform and send them an invitation email
+#     '''
+#     if request.method == 'POST':
+#         form = Add_userForm(request.POST)
+#         email = request.POST.get('email')
+#         if form.is_valid():
+#             user = form.save(commit = False)
+#             user.is_active = False
+#             user.save()
+#             current_site = get_current_site(request)
+#             email_subject = 'Invitation to Alumni Community'
+#             message = render_to_string('invitation.html',
+#                                     {
+#                                         'user': user,
+#                                         'domain': current_site.domain,
+#                                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+#                                         'token': generate_token.make_token(user)
+#                                     }
+#                                     )
+#             email_message = EmailMessage(
+#                 email_subject,
+#                 message,
+#                 settings.EMAIL_HOST_USER,
+#                 [email]
+#             )
+#             EmailThread(email_message).start()
+#             messages.add_message(request, messages.SUCCESS,
+#                                 'invaitation sent  succesfully')
+#             return redirect('registration')
 
-            messages.success(request, f'Congratulations! You have succesfully Added a new User!')
-            return redirect('/user_list/')
-    else:
-        form = Add_userForm()
-    return render(request, 'create_user.html', {"form": form})
+#             messages.success(request, f'Congratulations! You have succesfully Added a new User!')
+#             return redirect('/user_list/')
+#     else:
+#         form = Add_userForm()
+#     return render(request, 'create_user.html', {"form": form})
 
 
 class InviteUserView(View):
@@ -590,6 +660,18 @@ class EmailThread(threading.Thread):
 
     def run(self):
         self.email_message.send()
+
+def project_fundraisers(request):
+    all_fundraisers=Fundraiser.getfundraisers()
+    context = {
+        'all_fundraisers': all_fundraisers
+        }
+
+    return render(request, 'fundraisers.html',context) 
+def single_fundraiser(request, id):
+    fundraiser = Fundraiser.objects.get(id=id)
+    return render(request, 'single_fundraiser.html', {'fundraiser':fundraiser})
+
 
 
   

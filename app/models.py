@@ -65,8 +65,6 @@ class GeneralAdmin(models.Model):
     except cls.DoesNotExist:
       admins = None
     return admins
-
-
 #Group/Cohort Model
 #message/discussion Model
 class Message(models.Model):
