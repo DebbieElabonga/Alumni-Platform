@@ -268,7 +268,6 @@ def joincohort(request,id):
     cohort = get_object_or_404(Group,pk=id)
     current_user.userprofile.group = cohort
     request.user.userprofile.save()
-    print(current_user.userprofile.group)
     return redirect("cohortdiscussions",id)
 
 @login_required(login_url= 'login')  
@@ -276,8 +275,8 @@ def leavecohort(request,id):
     current_user = request.user
     current_user.userprofile.group = None
     request.user.userprofile.save()
-
     return redirect("index")
+
 
 
 #-----------------------------------------------------------------------------------------
@@ -423,14 +422,12 @@ def cohortdiscussions(request, id):
     return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
             
             
-# stripe.api_key = settings.STRIPE_SECRET_KEY
-# STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
+stripe.api_key = settings.STRIPE_SECRET_KEY
+STRIPE_PUBLIC_KEY: settings.STRIPE_PUBLIC_KEY
 
           
-""" ef donation(request):
-
-
-    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members}) """
+def donation(request):
+    return render(request, 'donation.html')
     
 
 def reply(request, id):
@@ -457,6 +454,7 @@ def reply(request, id):
             
 @login_required(login_url= 'login')        
 @general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)            
+# @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
 def charge(request):
     
     if request.method == 'POST':
@@ -483,11 +481,11 @@ def successMsg(request, args):
     amount = args
     return render(request, 'success.html', {'amount':amount})
 
-    form = DiscussionForm()
-    return render(request, 'new_discussion.html', {"form": form})
+    # form = DiscussionForm()
+    # return render(request, 'new_discussion.html', {"form": form})
 
 @login_required(login_url= 'login')  
-@general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
+# @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')  
 def newfundraiser(request):
     title = 'Start A Fundraiser'
     current_user = request.user
@@ -506,7 +504,11 @@ def newfundraiser(request):
 #views to summary on the admin dashboard
 
 @login_required(login_url= 'login')  
+<<<<<<< HEAD
 @general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)
+=======
+# @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')
+>>>>>>> dev
 def summary(request):
     '''
     renders summary on admin dashboard

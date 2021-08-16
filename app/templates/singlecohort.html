@@ -44,6 +44,15 @@
         </div>
         {% endfor %}
     </div>
+</div>
+<div>
+    <a href="{%url 'leavecohort' group.id %}"><button class="btn-outline-success"  onclick="M.toast({html: 'You have Successfully Left The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})"id="join">Leave Group</button></a>
+</div>
+<br>
+<div class="col-md-12">
+    <a href="{% url 'discussion' group.id %}" class="btn btn-success btn-md"
+        style="text-align: center; align-items: center;"> ADD DISCUSSION
+    </a>
 
     <div class="row">
         <div class="col-md-6 ml-5 pl-5">

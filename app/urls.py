@@ -15,7 +15,7 @@ from django.urls import path
 
 
 urlpatterns=[
-    # path('', views.donation, name="donation"),
+    path('donation/', views.donation, name="donation"),
     path('charge/', views.charge, name="charge"),
     path('success/<str:args>/', views.successMsg, name="success"),
 
@@ -66,7 +66,7 @@ urlpatterns=[
   url(r"^story/",views.create_story,name="story"),
   url(r'^new_cohort/$', views.cohort, name='new-cohort'),
   path("joincohort/<int:id>/",views.joincohort,name="joincohort"),
-  path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"),
+  path("leavecohort/<int:id>/",views.leavecohort,name="leavecohort"), 
   url(r'^newfundraiser/$',views.newfundraiser, name='fundraiser'),
   url(r'^userfundraiser/$',views.project_fundraisers,name='fundraisers'),
   path('singlefundraiser/<id>', views.single_fundraiser, name='singlefundraiser'),

@@ -31,15 +31,19 @@ class Group(models.Model):
   @classmethod
   def get_groups(cls):
     return cls.objects.all()
+
+#User profile model
 class UserProfile(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="userprofile")
+  user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="userprofile")
   bio = models.CharField(max_length=250)
   photo_path = models.ImageField(upload_to='Profiles/')
   group = models.ForeignKey(Group,related_name="group",on_delete=models.CASCADE,null=True)
   def __str__(self):
       return self.user.username
+
   def save_userprofile(self):
     self.save()
+
   @classmethod
   def get_users(cls):
     try:
@@ -47,11 +51,15 @@ class UserProfile(models.Model):
     except cls.DoesNotExist:
       users = None
     return users
+
+
+
   #auto creates a user's profile once the user has registered
   @receiver(post_save, sender=User)
   def save_user(sender, instance, created, **kwargs):
     if created:
       UserProfile.objects.create(user=instance)
+
 #General Admin Model
 class GeneralAdmin(models.Model):
   profile = models.ForeignKey(UserProfile, on_delete = CASCADE)
@@ -65,6 +73,7 @@ class GeneralAdmin(models.Model):
     except cls.DoesNotExist:
       admins = None
     return admins
+    
 #Group/Cohort Model
 #message/discussion Model
 class Message(models.Model):
