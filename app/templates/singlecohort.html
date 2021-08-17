@@ -12,22 +12,15 @@
             {% for member in members %}
             {{member.user}}
             {%endfor%}
-
-
         </div>
         <br>
-
-
-
         <div class="col-md-10">
         </div>
     </div>
     <div class="row">
         {% for message in messages %}
         <div class="col-md-4">
-
             <div class="card mb-4" style="min-height:340px">
-
                 <div class="card-body">
                     <form>
                         <div class="form-group">
@@ -36,24 +29,16 @@
                                     style="text-decoration: none; color: black; " class="card-title">{{ message.title}}
                             </h5>
                         </div>
-
-
                         <div class="form-group">
                             <label for="comment">Description:</label>
                             <textarea class="form-control" rows="5" id="comment">{{message.description}}</textarea>
                         </div>
-
-
                         <h6 style="font-weight:100; font-size: 15px; color: black;"><a class="text-right"
                                 style="text-decoration: none; color: black; " class="card-text">{{message.date_created}}
                         </h6>
                     </form>
-
                     <hr>
-
-                    <a href="{% url 'reply' message.id %}" class="btn btn-success btn-sm">REPLY</a>
-
-
+                    <a href="{% url 'reply' message.id %}" class="btn-success btn-sm">REPLY</a>
                 </div>
             </div>
         </div>
@@ -61,21 +46,14 @@
     </div>
 </div>
 <div>
-    <a href="{% url 'leavecohort' group.id %}" class="btn btn-success btn-sm">Leave Cohort</a>
+    <a href="{%url 'leavecohort' group.id %}"><button class="btn-outline-success"
+            onclick="M.toast({html: 'You have Successfully Left The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})"
+            id="join">Leave Group</button></a>
 </div>
-</div>
-
-
-
-
 <br>
 <div class="col-md-12">
-
-
     <a href="{% url 'discussion' group.id %}" class="btn btn-success btn-md"
         style="text-align: center; align-items: center;"> ADD DISCUSSION
     </a>
 </div>
-
-
 {% endblock %}

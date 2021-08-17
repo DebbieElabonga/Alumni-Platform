@@ -3,8 +3,8 @@
 {% load static %}
 {% block content %}
 <div class="ideas_body" style="overflow: hidden;">
-  <h1 class="text-center bold">Welcome to Meet Collegues</h1>
-  <div class="row">
+  <h3 class="text-center bold">Welcome to Meet Collegues</h3>
+  <div class="row p-4" style="background-color: white;">
 
 
     <div class="col-md-4 idea_form">
@@ -14,13 +14,13 @@
         <div class="alert alert-warning">{{message}}</div>
         {%endfor%}
         {{form.as_p}}
-        {{form.media}}
+        
 
         <button type="submit">Post</button>
       </form>
     </div>
     <div class="col-md-8 projects_list">
-      <h3 class="bold">Open Projects</h3>
+      <h4 class="bold">Open Projects</h4>
       {% for message in messages%}
       <div class="alert alert-success">{{message}}</div>
       {%endfor%}

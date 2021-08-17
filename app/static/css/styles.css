@@ -117,7 +117,7 @@ a.name{
 }
 /*styling story section */
 .nav-tabs{
-  font-size: 1.4em;
+  font-size: 1em;
 }
 .cohorts{
   position: sticky;
@@ -126,6 +126,7 @@ a.name{
   border: 1px solid rgba(240, 240, 240, 1);
   border-radius: 5px;
   height: 60vh;
+  overflow-y: scroll;
 }
 .tab-content{
   background-color: white;
@@ -289,13 +290,28 @@ a.name{
   backdrop-filter: blur(3px);
   padding: 8px;
 }
+.user_posts, .project_details, .participation{
+  height: 60vh;
+}
+.image_container, .contact_container{
+  height: 46vh;
+}
+#open_projects>.card{
+  padding: 0;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.project_details>.card>div>div>div{
+  overflow-y: scroll;
+  height: 50vh;
+}
 /*styling meet colleagues page*/
 .idea_form{
   background-color: white;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  height: 78vh;
+  height: 90vh;
   position: sticky;
   top: 4vh;
 }
@@ -307,3 +323,4 @@ a.name{
   background-color: white;
   border-left: 1px solid var(--orange);
 }
+

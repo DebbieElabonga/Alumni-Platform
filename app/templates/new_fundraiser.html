@@ -1,20 +1,24 @@
-{% extends 'base.html' %}
-
+{% extends 'admin_dash/admin_dashboard.html' %}
 {% load static %}
-
 {% load bootstrap4 %}
-{% load bootstrap3 %}
 
 {% block content%}
 
-<div class="container">
+<div class="container p-4">
     <h3>CREATE A FUNDRAISER</h3>
     <div class="col-sm-12 col-lg-6 m-auto card" style="background-color: beige;">
         <form action="{%url 'fundraiser'%}" method="post" enctype="multipart/form-data">
             {%csrf_token%}
-
+            <script>
+                $(function () {
+                  $("#id_date").datetimepicker({
+                    format: 'd/m/Y H:i',
+                  });
+                });
+              </script>
             {% bootstrap_form form%}
-            <input type="submit" class="btn btn-success btn-lg btn-center" value="Submit"><br><br>
+            <input type="submit" class="btn btn-success btn-lg btn-center" value="Submit" onclick="M.toast({html: 'Fundraiser created Successfully',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})"><br><br>
+
         </form>
     </div>
     <br>
