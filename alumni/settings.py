@@ -89,13 +89,14 @@ WSGI_APPLICATION = 'alumni.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # if config('MODE')=="dev":
-DATABASES = {
+if config('MODE')=="dev":
+   DATABASES = {
        'default': {
            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-           'NAME': 'alumni',
-           'USER': 'postgres',
-           'PASSWORD': 'chebichii1',
-           'HOST': 'localhost',
+           'NAME': config('DB_NAME'),
+           'USER': config('DB_USER'),
+           'PASSWORD': config('DB_PASSWORD'),
+           'HOST': config('DB_HOST'),
            'PORT': '',
        }
        
