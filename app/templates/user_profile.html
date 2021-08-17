@@ -16,6 +16,7 @@
                     {%else%}
                     <img src="{% static 'images/avatar_image.png' %}" alt="Admin" class="rounded-circle" width="150">
                     {%endif%}
+                    <div>
                         <!--profile form modal triger button-->
                         {% if user_profile %}
                         <button class="btn btn-success" data-toggle="modal" data-target="#update_profile">Update
@@ -27,7 +28,8 @@
 
                         <!--Admin dashboard button-->
                         {% if general_admin %}
-                        <a href="{% url 'admin_dashboard' %}"><button class="btn btn-primary">Admin Dashboard</button></a>
+                        <a href="{% url 'admin_dashboard' %}"><button class="btn btn-primary">Admin
+                                Dashboard</button></a>
                         {%endif%}
                     </div>
 
@@ -216,7 +218,8 @@
                                     <div class="card-footer col-md-12 d-flex flex-row flex-wrap">
                                         <h5>{{project.date_created|date}}</h5>
                                         <h5>{{project.collaborators.count}}</h5>___<br>
-                                        <h5 class="bold">Status {% if project.is_open %} Open {%else%} Closed {%endif%}</h5>
+                                        <h5 class="bold">Status {% if project.is_open %} Open {%else%} Closed {%endif%}
+                                        </h5>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -320,13 +323,15 @@
                                                 {%endif%}
                                             </div>
                                             <div class="bold">
-                                                <form action="{% url 'user_profile' %}" method="POST" id="view_request_form">
+                                                <form action="{% url 'user_profile' %}" method="POST"
+                                                    id="view_request_form">
                                                     {%csrf_token%}
                                                     <input type="hidden" name="user_prof_id" value="{{requester.id}}">
                                                     <!--Find a userprofile idea interests and make them collaborators///trigger button-->
                                                     <div>
 
-                                                        <button type="button" name="view_requests" data-toggle="modal" data-target="#interests_form">view</button>
+                                                        <button type="button" name="view_requests" data-toggle="modal"
+                                                            data-target="#interests_form">view</button>
                                                     </div>
                                                 </form>
                                             </div>

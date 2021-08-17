@@ -268,15 +268,17 @@ def user_cohort(request):
 def joincohort(request,id):
     current_user = request.user
     cohort = get_object_or_404(Group,pk=id)
-    current_user.userprofile.group = cohort
-    request.user.userprofile.save()
+    now_profile = UserProfile.objects.filter(user = current_user).last()
+    now_profile.group = cohort
+    now_profile.save()
     return redirect("cohortdiscussions",id)
 
 @login_required(login_url= 'login')  
 def leavecohort(request,id):
     current_user = request.user
-    current_user.userprofile.group = None
-    request.user.userprofile.save()
+    now_profile = UserProfile.objects.filter(user = current_user)
+    now_profile.update(group = None)
+
     return redirect("index")
 
 
