@@ -3,19 +3,42 @@
 {% load bootstrap3 %}
 
 {% block content%}
+<a href="" data-toggle="modal" data-target="#add_news">
+    <button class="btn-success" style="height: 28px; margin-left: -5px;">Create Group</button>
+</a>
 
-    <div class="row-m-5">
-        <div class="col-md-12"></div>
-        <div class="col-md-10">
-            <h3 style="color: white;">NEW COHORT
-            </h3>
-            <form  action="" method="post" enctype="multipart/form-data" novalidate style="margin-left: 200px;">
-                {% csrf_token %}
-                {% bootstrap_form form %}
-                <button class="btn btn-success btn-sm" onclick="M.toast({html: 'You have Successfully Joined The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Add new Cohort</button>
-            </form><br>
+<!-- Create Group Modal -->
+<div class="modal fade" id="add_news" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Create Group</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <form action="" method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                </div>
+
+                <div class="col-md-1"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-success btn-sm"
+                    onclick="M.toast({html: 'You have Successfully Joined The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Add
+                    new Cohort</button>
+                </form>
+            </div>
         </div>
-        
     </div>
+</div>
+
+
 
 {% endblock %}

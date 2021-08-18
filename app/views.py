@@ -239,6 +239,7 @@ def user_cohort(request):
             group = form.save(commit=False)
             group.creator = request.user
             group.date_created = dt.datetime.now()
+            group.admin= request.user
             group.save()
             group.creator.userprofile.group = group
             group.save()

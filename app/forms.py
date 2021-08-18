@@ -104,4 +104,4 @@ class DateForm(forms.Form):
 class UserCohortForm(forms.ModelForm):
     class Meta:
         model = Group 
-        fields = [ 'name','description','is_private','admin']
+        fields = [ 'name','description']
