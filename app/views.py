@@ -662,7 +662,7 @@ def download_csv(request):
     return render(request, 'admin_dash/dashboard.html', context)
 
 # view function that edits a users details when they accept initation.
-@login_required(login_url= 'login')                  
+                
 def edit_details(request):
     '''
     renders to edit page
