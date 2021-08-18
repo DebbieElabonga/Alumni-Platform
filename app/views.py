@@ -418,7 +418,7 @@ def Discussion(request, id):
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form ,'group':group})
-@login_required(login_url= 'login')  
+@login_required(login_url= 'login') 
 def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
@@ -457,8 +457,7 @@ def reply(request, id):
 
     discussion.user = current_user
             
-@login_required(login_url= 'login')        
-@general_admin_required(login_url='user_profile', redirect_field_name='', message= gen_warning_message)            
+           
 # @general_admin_required(login_url='user_profile', redirect_field_name='', message='You are not authorised to view this page.')            
 def charge(request):
     
