@@ -324,3 +324,13 @@ a.name{
   border-left: 1px solid var(--orange);
 }
 
+/*styling groups*/
+.groups{
+  height: 100vh;
+}
+.group_list{
+  background-color: white;
+  height: 100%;
+  border-right: 2px solid rgb(224, 224, 224);
+}
+
