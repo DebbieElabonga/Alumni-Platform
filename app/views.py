@@ -231,7 +231,7 @@ def cohort(request):
 
 @login_required(login_url= 'login')                  
 def user_cohort(request):
-    title = "Cohorts"
+    title = "Group"
     if request.method == 'POST':
         
         form = UserCohortForm(request.POST, request.FILES)
@@ -241,15 +241,21 @@ def user_cohort(request):
             group.date_created = dt.datetime.now()
             group.admin= request.user
             group.save()
-            group.creator.userprofile.group = group
+            now_prof = UserProfile.objects.filter(user = request.user).last()
+            now_prof.group = group
             group.save()
+            now_prof.save()
             return redirect('user-cohort')
         else:
             return render(request, 'user_cohort.html', {'title':title,'form': form})
     else:
         form = UserCohortForm()
-        group_id = (UserProfile.objects.filter(user = request.user).last()).group.id
-        groups = Group.objects.filter(id = group_id)
+        prof_user = UserProfile.objects.filter(user = request.user).last()
+        if prof_user.group:
+            group_id = prof_user.group.id
+            groups = Group.objects.filter(id = group_id)
+        else:
+            groups = None
 
         context = {
             'groups':groups,
@@ -420,7 +426,7 @@ def cohortdiscussions(request, id):
     messages = Message.objects.filter(group = group)
     members = UserProfile.objects.filter(group=group)
     form = UserCohortForm()
-    
+
     return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members, 'form':form})
             
             

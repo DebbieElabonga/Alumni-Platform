@@ -53,6 +53,13 @@
                 </div>
             </div>
         </div>
+        {% if messages %}
+        {% for message in messages%}
+        <div class="index_messages alert alert-warning" style="position: absolute; left: 40%; top: 40%; padding: 10px;">
+        {{message}}
+        </div>
+        {% endfor%}
+        {%endif%}
         <!-- End of banner -->
         <hr>
         <!-- Show page tabbng for tech news and success stories -->

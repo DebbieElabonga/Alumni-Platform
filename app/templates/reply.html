@@ -3,54 +3,50 @@
 
 
 {%block content%}
-<h2 style="font-weight:600; font-size: 25px; color: black;text-align: center;">Message : {{ message.title}}</h2>
-<br>
-<br>
-
-<div class="container">
+<div class="bg-white p-4">
+    <h4>Discussion title: {{ message.title}}</h4>
+    <p class="card-title">Description: {{ message.description}}</p>
     <div class="row">
-        <div class="col-md-7">
-            <div class="card mb-4" style="min-height:340px">
-                <form>
-                    <p style="font-weight:500; font-size: 25px; color: black;"><a class="text-right"
-                            style="text-decoration: none; color: black; " class="card-title">{{ message.description}}
-                    </p>
-
-                    <hr>
-
-
-                    <h6 style="font-weight:100; font-size: 15px; color: black;"><a class="text-right"
-                            style="text-decoration: none; color: black; " class="card-text">{{message.date_created}}
-                    </h6>
-                    <div class="form-group">
-                        <label for="replies">Reply:</label>
-                        <textarea class="form-control" rows="12" style="font-weight:600; font-size: 15px;">
-                            
-
-                            {% for response in all_responses %}
-                            {{ message.creator}}: {{response.reply}}
-                             {% endfor %}
-                         </textarea>
-                    </div>
-                </form>
+        <div class="col-md-7" style="background-color: var(--lighter_orange);">
+            <h4 class="bold">Thread:</h4>
+            <div style="height:50vh; max-height:100vh; overflow-y: scroll;">
+                {% if all_responses%}
+                {% for response in all_responses %}
+                {% if response.creator == request.user %}
+                <div class="replies m-4 p-2 d-flex flex-column ml-auto"
+                    style="background-color: var(--white); border: 2px solid white; width: 60%; border-radius: 5px;">
+                    <p>{{response.reply}}</p>
+                    <h6 class="bold text-muted mb-auto ml-auto">{{ response.creator}}</h6>
+                    <h6 class="text-muted">{{ response.date_created|time}}</h6>
+                </div>
+                {% else %}
+                <div class="replies m-4 p-2 d-flex flex-column"
+                    style="background-color: var(--light_green); color: white; font-size: 1.2em; border: 2px solid white; width: 60%; border-radius: 5px; ">
+                    <p>{{response.reply}}</p>
+                    <h6 class="bold mb-auto ml-auto mr-2">{{ response.creator}}</h6>
+                    <h6 class="">{{ response.date_created|time}}</h6>
+                </div>
+                {%endif%}
+                {% endfor %}
+                {%else%}
+                <p class="text-muted">No Responses here</p>
             </div>
 
-        </div>
-        <div class="col-md-12">
-        <div class="card mb-4 ">
-            <h2>Add Your Response</h2>
-            <div style="background-color: beige;">
-                <form action="{%url 'reply' message.id %}" method="post" enctype="multipart/form-data">
-                    {%csrf_token%}
-
-                    {% bootstrap_form form%}
-                    <input type="submit" class="btn-success btn-sm btn-center" value="Submit"><br><br>
-                </form>
-            </div>
-            <br>
-        </div>
+            {%endif%}
         </div>
     </div>
+    <div class="col-md-4">
+        <h4>Add Your Response</h4>
+        <div style="background-color: beige;">
+            <form action="{%url 'reply' message.id %}" method="post" enctype="multipart/form-data">
+                {%csrf_token%}
+
+                {% bootstrap_form form%}
+                <input type="submit" class="btn-success btn-sm btn-center" value="Submit"><br><br>
+            </form>
+        </div>
+    </div>
+</div>
 </div>
 
 {% endblock %}
