@@ -1,0 +1,45 @@
+{% extends 'user_cohort.html' %}
+{% load bootstrap4 %}
+{% block content%}
+<div class="col-md-12 d-flex flex-row" style="background-color: white;">
+    <div>
+        <h2 class="mb-0">{{group.name}}</h2>
+        <h6 class="bold text-muted"> {{members.count}} Members</h6>
+        <!-- {% for member in members %}
+            {{member.user}}
+            {%endfor%} -->
+    </div>
+    <div class="ml-auto mt-5">
+        <a href="{% url 'discussion' group.id %}">
+            <button class="btn btn-outline-success" style="text-align: center; align-items: center;">
+                <h6 class="bold">Add Discussion <span style="font-size: 1.4em;">+</span></h6>
+            </button>
+        </a>
+        <a href="{%url 'leavecohort' group.id %}"><button class="btn btn-outline-danger"
+                onclick="M.toast({html: 'You have Successfully Left The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})"
+                id="join">Leave Group</button></a>
+
+        
+    </div>
+</div>
+<div class="row p-0 disc_chat">
+    {% for message in messages %}
+    <div class="col-md-12">
+        <div class="card mb-2">
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput" class="bold text-muted">Discussion {{forloop.counter}}</label>
+                        <h5  class="bold">Title: {{ message.title}}</h5>
+                        <h6 class=''>Description: {{message.description}}</h6>
+                        <h6 class ="">Created: {{message.date_created|timesince}} ago</h6>
+                    </div>
+                    
+                </form>
+                <a href="{% url 'reply' message.id %}" class="btn-outline-success btn-sm">REPLY</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

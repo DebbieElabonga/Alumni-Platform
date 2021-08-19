@@ -1,0 +1,18 @@
+<h2>You have a New Collaborator </h2>
+<h4>Hello, {{idea.owner.user.username}}</h4>
+<p>{{new_collab.username}} is interested in your project</p>
+<h4>Idea</h4>
+<p>{{idea.title}}</p>
+
+{% if new_collab.first_name %}
+<h3>Name:<p>{{new_collab.first_name}} {{new_collab.last_name}}</p></h3>
+{%else%}
+<h3>Name: {{new_collab.username}}</h3>
+{%endif%}
+<p>Skills: {{skills}}</p>
+<p>Member Since: {{new_collab.date_joined|timesince}} ago</p> 
+
+<p>Visit your profile to approve the user as a collaborator<br>
+  You can contact your admin for more information</p>
+
+<p>Keep Rocking!</p>

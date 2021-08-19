@@ -1,0 +1,126 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    {% if title %}
+    <title> Moringa Alumni - {{title}}</title>
+    {% else %}
+    <title> Moringa Alumni - {{title}}</title>
+    {% endif %}
+
+    {% block styles%}
+    {% bootstrap_css %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {%endblock%}
+
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <div class="groups row">
+        <div class="col-md-3 group_list">
+            <a href="" data-toggle="modal" data-target="#add_group">
+                <button class="btn-default col-md-12 mb-4" style="height: 28px;">Create Group</button>
+            </a>
+            <div class="m-5 list_grp">
+                {% if groups %}
+
+                {% for group in groups %}
+                <div class="grp_name">
+                    <a href="{% url 'cohortdiscussions' group.id %}">
+                        <div class="dropdown-divider"></div>
+
+                        <h5 class="bold p-4">{{group.name}}</h5>
+
+                        <div class="dropdown-divider"></div>
+                    </a>
+                </div>
+                {%endfor%}
+                {%else%}
+                {%if group.name%}
+                <a href="{% url 'cohortdiscussions' group.id %}">
+                    <div class="dropdown-divider"></div>
+
+                    <h5 class="bold p-4">{{group.name}}</h5>
+
+                    <div class="dropdown-divider"></div>
+                </a>
+                {%else%}
+                <h5 class="bold p-4">{{group.name}}</h5>
+                {%endif%}
+                <h6 class="bold text-muted m-4">No Groups Here</h6>
+                {%endif%}
+            </div>
+        </div>
+        <div class="col-md-9 m-0">
+            {% if group.name %}
+            {% block content %}
+
+            {%endblock%}
+            {%else%}
+            <div class="d-flex align-items-center justify-content-center align-items-center p-5">
+                <h4 class="bold text-muted text-center m-5">Select Group to continue</h4>
+            </div>
+            {%endif%}
+        </div>
+    </div>
+
+    <!-- Create Group Modal -->
+    <div class="modal fade" id="add_group" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Create Group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <form action="{% url 'user-cohort' %}" method="post" enctype="multipart/form-data" novalidate>
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                    </div>
+
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-success btn-sm"
+                        onclick="M.toast({html: 'You have Successfully Joined The Group',inDuration:700, completeCallback: function(){alert('Your toast was dismissed')}})">Create Group</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block scripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    {%bootstrap_javascript%}
+    <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
+    {%endblock%}
+
+    {% include 'footer.html' %}
+
+</body>
+
+</html>

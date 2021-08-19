@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg m-0 navbar-custom">
+  <div class="container-fluid d-flex flex-row justify-content-center align-items-center">
+    <img src="https://img.icons8.com/flat-round/60/000000/tree.png" class="m-2" />
+    <div class="d-flex flex-column">
+      <a class="navbar-brand bold" href="/" style="font-size: 30px;"> Moringa Alumni</a>
+      <h6 class="tagline m-0">Meet and Build Ideas...</h6>
+    </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+      aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul
+        class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll d-flex flex-row align-items-center justify-content-center"
+        style="--bs-scroll-height: 100px;">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/" style="font-size: 20px;">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'meet_collegues' %}" tabindex="-1" aria-disabled="true"
+            style="font-size: 20px;">Meet Colleagues</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'fundraisers' %}"  tabindex="-1" aria-disabled="true"
+            style="font-size: 20px;">Fundraisers</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle name" href="{% url 'user_profile' %}" id="navbarDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{request.user.username}}
+          </a>
+        
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'user_profile' %}">Profile</a>
+            <a class="dropdown-item" href="{% url 'user-cohort' %}">Groups</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+        {% else %}
+        <li class="ml-auto ">
+          <a href="{% url 'login' %}">
+            <button class="btn btn-outline-warning mr-4 ml-4 bold">Login</button>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+
+      <form class="navbar-form form-inline navbar-right" action="">
+        <div class="input-group search-box">
+          <input type="text" id="search" class="form-control" name="project" placeholder="Search...">
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
