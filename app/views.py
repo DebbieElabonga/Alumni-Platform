@@ -243,12 +243,20 @@ def user_cohort(request):
             group.save()
             group.creator.userprofile.group = group
             group.save()
-            return redirect('index')
+            return redirect('user-cohort')
         else:
             return render(request, 'user_cohort.html', {'title':title,'form': form})
     else:
         form = UserCohortForm()
-    return render(request, 'user_cohort.html', {'title':title,'form': form})
+        group_id = (UserProfile.objects.filter(user = request.user).last()).group.id
+        groups = Group.objects.filter(id = group_id)
+
+        context = {
+            'groups':groups,
+            'title':title,
+            'form': form
+        }
+    return render(request, 'user_cohort.html', context)
 
 @login_required(login_url= 'login')  
 def joincohort(request,id):
@@ -404,13 +412,16 @@ def Discussion(request, id):
     else:
         form = DiscussionForm()
     return render(request, 'new_discussion.html', {"form": form ,'group':group})
+
+#opens single cohort
 @login_required(login_url= 'login') 
 def cohortdiscussions(request, id):
     group = get_object_or_404(Group, pk=id)
     messages = Message.objects.filter(group = group)
     members = UserProfile.objects.filter(group=group)
-
-    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members})
+    form = UserCohortForm()
+    
+    return render(request, 'singlecohort.html', {'group':group , 'messages':messages,"members":members, 'form':form})
             
             
 stripe.api_key = settings.STRIPE_SECRET_KEY

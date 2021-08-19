@@ -1,6 +1,4 @@
-{% load django_bootstrap5 %}
 {% load bootstrap4 %}
-{% load bootstrap3 %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -34,20 +32,46 @@
             <a href="" data-toggle="modal" data-target="#add_group">
                 <button class="btn-default col-md-12 mb-4" style="height: 28px;">Create Group</button>
             </a>
-            <div class="list_grp">
+            <div class="m-5 list_grp">
                 {% if groups %}
+
                 {% for group in groups %}
-                <h5 class="bold">{{group.name}}</h5>
+                <div class="grp_name">
+                    <a href="{% url 'cohortdiscussions' group.id %}">
+                        <div class="dropdown-divider"></div>
+
+                        <h5 class="bold p-4">{{group.name}}</h5>
+
+                        <div class="dropdown-divider"></div>
+                    </a>
+                </div>
                 {%endfor%}
                 {%else%}
+                {%if group.name%}
+                <a href="{% url 'cohortdiscussions' group.id %}">
+                    <div class="dropdown-divider"></div>
+
+                    <h5 class="bold p-4">{{group.name}}</h5>
+
+                    <div class="dropdown-divider"></div>
+                </a>
+                {%else%}
+                <h5 class="bold p-4">{{group.name}}</h5>
+                {%endif%}
                 <h6 class="bold text-muted m-4">No Groups Here</h6>
                 {%endif%}
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9 m-0">
+            {% if group.name %}
             {% block content %}
 
             {%endblock%}
+            {%else%}
+            <div class="d-flex align-items-center justify-content-center align-items-center p-5">
+                <h4 class="bold text-muted text-center m-5">Select Group to continue</h4>
+            </div>
+            {%endif%}
         </div>
     </div>
 

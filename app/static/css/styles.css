@@ -332,5 +332,11 @@ a.name{
   background-color: white;
   height: 100%;
   border-right: 2px solid rgb(224, 224, 224);
+  margin-right: -18px;
 }
-
+.grp_name:hover{
+  background-color: rgb(243, 243, 243);
+}
+.disc_chat{
+  overflow-y: scroll;
+}
