@@ -34,19 +34,18 @@
 
             {%endif%}
         </div>
-    </div>
-    <div class="col-md-4">
-        <h4>Add Your Response</h4>
-        <div style="background-color: beige;">
-            <form action="{%url 'reply' message.id %}" method="post" enctype="multipart/form-data">
-                {%csrf_token%}
+        <div class="col-md-4">
+            <h4>Add Your Response</h4>
+            <div style="background-color: beige;">
+                <form action="{%url 'reply' message.id %}" method="post" enctype="multipart/form-data">
+                    {%csrf_token%}
 
-                {% bootstrap_form form%}
-                <input type="submit" class="btn-success btn-sm btn-center" value="Submit"><br><br>
-            </form>
+                    {% bootstrap_form form%}
+                    <input type="submit" class="btn-success btn-sm btn-center" value="Submit"><br><br>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 {% endblock %}
